@@ -1,0 +1,22 @@
+# This is a sample build configuration for Other.
+# Check our guides at https://confluence.atlassian.com/x/5Q4SMw for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: atlassian/default-image:2
+
+pipelines:
+  branches:
+    master:
+    - step:
+        script:
+          - pipe: atlassian/aws-sam-deploy:0.3.3
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN
+              AWS_DEFAULT_REGION: 'us-east-1'
+              S3_BUCKET: 'my-s3-bucket'
+              STACK_NAME: 'sam-app'
+              SAM_TEMPLATE: 'template.yaml'
+              CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
