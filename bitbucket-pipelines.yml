@@ -20,3 +20,4 @@ pipelines:
               STACK_NAME: 'sam-app'
               SAM_TEMPLATE: 'template.yaml'
               CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
+              COMMAND: 'deploy-only'
