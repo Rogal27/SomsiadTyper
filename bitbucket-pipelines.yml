@@ -19,6 +19,4 @@ pipelines:
               AWS_DEFAULT_REGION: 'us-east-1'
               S3_BUCKET: 'my-s3-bucket'
               STACK_NAME: 'sam-app'
-              SAM_TEMPLATE: 'template.yaml'
               CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
-              COMMAND: 'package-only'
