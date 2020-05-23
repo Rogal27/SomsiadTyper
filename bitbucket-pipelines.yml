@@ -3,12 +3,13 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: atlassian/default-image:2
+image: python:3.7.3
 
 pipelines:
   branches:
     master:
     - step:
+        name: Deploy to AWS
         script:
           - pipe: atlassian/aws-sam-deploy:0.3.3
             variables:
