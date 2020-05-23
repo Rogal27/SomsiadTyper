@@ -19,4 +19,5 @@ pipelines:
               AWS_DEFAULT_REGION: 'us-east-1'
               S3_BUCKET: 'somsiadtypertestbucket'
               STACK_NAME: 'sam-app'
+              SAM_TEMPLATE: 'template.yaml'
               CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
