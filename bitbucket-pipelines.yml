@@ -18,6 +18,6 @@ pipelines:
               AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN
               AWS_DEFAULT_REGION: 'us-east-1'
               S3_BUCKET: 'somsiadtypertestbucket'
-              STACK_NAME: 'sam-app'
+              STACK_NAME: 'SomsiadTyper'
               SAM_TEMPLATE: 'template.yaml'
               CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
