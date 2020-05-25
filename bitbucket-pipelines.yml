@@ -17,7 +17,7 @@ pipelines:
               AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
               AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN
               AWS_DEFAULT_REGION: 'us-east-1'
-              S3_BUCKET: 'somsiadtypertestbucket'
+              S3_BUCKET: 'aws-sam-cli-managed-default-samclisourcebucket-7splgan1i87v'
               STACK_NAME: 'SomsiadTyper'
               SAM_TEMPLATE: 'template.yaml'
               CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
