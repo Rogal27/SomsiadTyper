@@ -21,3 +21,17 @@ pipelines:
               STACK_NAME: 'SomsiadTyper'
               SAM_TEMPLATE: 'template.yaml'
               CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
+    s3connection:
+    - step:
+        name: Deploy to AWS
+        script:
+          - pipe: atlassian/aws-sam-deploy:0.3.3
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN
+              AWS_DEFAULT_REGION: 'us-east-1'
+              S3_BUCKET: 'aws-sam-cli-managed-default-samclisourcebucket-7splgan1i87v'
+              STACK_NAME: 'SomsiadTyper'
+              SAM_TEMPLATE: 'template.yaml'
+              CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
