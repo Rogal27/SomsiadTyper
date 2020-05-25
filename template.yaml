@@ -39,7 +39,7 @@ Resources:
 
       # point to directory with the assets so cloudformation can
       # package and upload them
-      CodeUri: website/      
+      CodeUri: website/
 
       # really important: this will ensure that any change in 
       # the bundled files gets deployed again. we're abusing
@@ -132,5 +132,3 @@ Outputs:
     Value: !Ref TargetBucket
   DestinationUrl:
     Value: !GetAtt TargetBucket.WebsiteURL
-  Parameter:
-    Value: !Ref BuildType
