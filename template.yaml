@@ -100,7 +100,7 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /hello
-            Method: get
+            Method: GET
 
   GoodbyeWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -113,7 +113,46 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /goodbye
-            Method: get
+            Method: GET
+
+  InsertUserFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: add-person/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersTestDBTable
+      Events:
+        GoodbyeWorld:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /insertuser
+            Method: POST
+  
+  UsersTestDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "Name"
+          AttributeType: "S"
+        - 
+          AttributeName: "Surname"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "Surname"
+          KeyType: "HASH"
+        - 
+          AttributeName: "Name"
+          KeyType: "RANGE"
+      ProvisionedThroughput: 
+        ReadCapacityUnits: "5"
+        WriteCapacityUnits: "5"
+      TableName: !Sub 'userstest-${AWS::StackName}'
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
