@@ -128,5 +128,8 @@ $RECYCLE.BIN/
 #AWS SAM
 .aws-sam
 
+#vs-code
+*.code-workspace
+
 
 # End of https://www.gitignore.io/api/osx,node,linux,windows
