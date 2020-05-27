@@ -126,11 +126,24 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref UsersTestDBTable
       Events:
-        GoodbyeWorld:
+        InsertUser:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /insertuser
             Method: POST
+
+  SampleHandlerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: handlers/sample-handler/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Events:
+        SampleHandler:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /samplehandler
+            Method: GET
   
   UsersTestDBTable:
     Type: AWS::DynamoDB::Table
