@@ -287,63 +287,6 @@ Resources:
         WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
       TableName: !Sub 'contests-${AWS::StackName}'
 
-  # contests_matches
-  # ContestsMatchesDynamoDBTable:
-  #   Type: AWS::DynamoDB::Table
-  #   DependsOn: "ContestsDynamoDBTable"
-  #   Properties:
-  #     AttributeDefinitions:
-  #       - 
-  #         AttributeName: "id"
-  #         AttributeType: "N"
-  #       - 
-  #         AttributeName: "contest_id"
-  #         AttributeType: "N"
-  #       - 
-  #         AttributeName: "match_id"
-  #         AttributeType: "N"
-  #     KeySchema:
-  #       - 
-  #         AttributeName: "id"
-  #         KeyType: "HASH"
-  #     GlobalSecondaryIndexes:
-  #       - 
-  #         IndexName: "contest_index"
-  #         KeySchema:
-  #           - 
-  #             AttributeName: "contest_id"
-  #             KeyType: "HASH"
-  #           - 
-  #             AttributeName: "match_id"
-  #             KeyType: "RANGE"
-  #         Projection:
-  #           NonKeyAttributes:
-  #             - "id"
-  #           ProjectionType: "INCLUDE"
-  #         ProvisionedThroughput: 
-  #           ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
-  #           WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
-  #       - 
-  #         IndexName: "match_index"
-  #         KeySchema:
-  #           - 
-  #             AttributeName: "match_id"
-  #             KeyType: "HASH"
-  #           - 
-  #             AttributeName: "contest_id"
-  #             KeyType: "RANGE"
-  #         Projection:
-  #           NonKeyAttributes:
-  #             - "id"
-  #           ProjectionType: "INCLUDE"
-  #         ProvisionedThroughput: 
-  #           ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
-  #           WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
-  #     ProvisionedThroughput: 
-  #       ReadCapacityUnits: !Ref DynamoDBReadCapacityUnits
-  #       WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
-  #     TableName: !Sub 'contests_matches-${AWS::StackName}'
-
   # matches
   MatchesDynamoDBTable:
     Type: AWS::DynamoDB::Table
