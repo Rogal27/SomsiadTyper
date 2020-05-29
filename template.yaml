@@ -23,6 +23,9 @@ Parameters:
   DynamoDBWriteCapacityUnitsIndex:
     Type: Number
     Default: 1
+  Version:
+    Type: String
+    Default: 1.0.0
 
 Resources:
   TargetBucket:
@@ -415,6 +418,51 @@ Resources:
         ReadCapacityUnits: !Ref DynamoDBReadCapacityUnits
         WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
       TableName: !Sub 'users_scores-${AWS::StackName}'
+
+  # Cognito
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: False
+      UserPoolName: 'userpool-${AWS::StackName}'
+      UsernameAttributes:
+        - email
+        - name
+      AutoVerifiedAttributes:
+        - email
+      #EmailVerificationMessage: 'Your code is {####}'
+      EmailVerificationSubject: 'Welcome to Somsiad Typer'
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: True
+          RequireNumbers: True
+          RequireSymbols: True
+          RequireUppercase: True
+          TemporaryPasswordValidityDays: 7
+
+  UserPoolTokenClient:
+    Type: AWS:Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: 'SomsiadTyperApp'
+      GenerateSecret: False
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+
+  #api for cognito
+  ServiceApi:
+    DependsOn: UserPool
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: ServiceApi
+      StageName: !Ref Version
+      Auth:
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt "UserPool.Arn"
+      
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
