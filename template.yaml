@@ -221,7 +221,7 @@ Resources:
       AttributeDefinitions:
         - 
           AttributeName: "user_id"
-          AttributeType: "N"
+          AttributeType: "S"
         - 
           AttributeName: "email"
           AttributeType: "S"
@@ -256,13 +256,13 @@ Resources:
       AttributeDefinitions:
         - 
           AttributeName: "id"
-          AttributeType: "N"
+          AttributeType: "S"
         - 
           AttributeName: "user_id"
-          AttributeType: "N"
+          AttributeType: "S"
         - 
           AttributeName: "contest_id" 
-          AttributeType: "N"
+          AttributeType: "S"
       KeySchema:
         - 
           AttributeName: "id"
@@ -313,7 +313,7 @@ Resources:
       AttributeDefinitions:
         - 
           AttributeName: "contest_id"
-          AttributeType: "N"
+          AttributeType: "S"
         - 
           AttributeName: "name"
           AttributeType: "S"
@@ -348,13 +348,13 @@ Resources:
       AttributeDefinitions:
         - 
           AttributeName: "match_id"
-          AttributeType: "N"
+          AttributeType: "S"
         - 
           AttributeName: "match_info"
           AttributeType: "S"
         - 
           AttributeName: "contest_id"
-          AttributeType: "N"
+          AttributeType: "S"
       KeySchema:
         - 
           AttributeName: "match_id"
@@ -420,13 +420,13 @@ Resources:
       AttributeDefinitions:
         - 
           AttributeName: "id"
-          AttributeType: "N"
+          AttributeType: "S"
         - 
           AttributeName: "user_id"
-          AttributeType: "N"
+          AttributeType: "S"
         - 
           AttributeName: "match_id"
-          AttributeType: "N"
+          AttributeType: "S"
       KeySchema:
         - 
           AttributeName: "id"
