@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 10
 
 Parameters:
   DynamoDBReadCapacityUnits:
@@ -44,14 +44,6 @@ Resources:
       Location:
         ApplicationId: arn:aws:serverlessrepo:us-east-1:375983427419:applications/deploy-to-s3
         SemanticVersion: 2.4.2
-  
-  # WebsiteContent:
-  #   Type: Custom::S3Objects
-  #   Properties:
-  #     ServiceToken: !GetAtt UpdateCognitoConfigFunction.Arn
-  #     SourceBucket: !Ref TargetBucket
-  #     SourcePrefix: "website/"
-  #     Bucket: !Ref TargetBucket
 
   # Cognito
   UserPool:
@@ -476,148 +468,14 @@ Resources:
         ReadCapacityUnits: !Ref DynamoDBReadCapacityUnits
         WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
       TableName: !Sub 'users_scores-${AWS::StackName}'
-  
-  # UpdateCognitoConfigFunction:
-  #   Type: AWS::Serverless::Function
-  #   Properties:
-  #     Description: Copies objects from a source S3 bucket to a destination
-  #     Handler: index.handler
-  #     Runtime: python3.7
-  #     Policies:
-  #       - S3FullAccessPolicy:
-  #           BucketName: !Ref TargetBucket
-  #       - AmazonCognitoPowerUser
-  #     Timeout: 300
-  #     InlineCode: |
-  #         import json
-  #         import boto3
-  #         import cfnresponse
 
-  #         s3 = boto3.resource('s3')
-
-  #         def create(properties, physical_id):
-  #           userPoolId = properties['UserPool']
-  #           clientId = properties['Client']
-  #           region = properties['Region']
-  #           bucket = properties['Bucket']
-
-  #           object = s3.Object(bucket, 'js/config.js')
-  #           config_content = """
-  #         var _config = {
-  #             cognito: {
-  #                 userPoolId: '%s', // e.g. us-east-2_uXboG5pAb
-  #                 userPoolClientId: '%s', // e.g. 25ddkmj4v6hfsfvruhpfi7n4hv
-  #                 region: '%s', // e.g. us-east-2
-  #             },
-  #             api: {
-  #                 invokeUrl: 'Base URL of your API including the stage', // e.g. https://rc7nyt4tql.execute-api.us-west-2.amazonaws.com/prod'
-  #             }
-  #         };
-  #             """
-  #           config_content = config_content % (userPoolId, clientId, region)
-  #           print "Writing config content: %s" % config_content
-  #           print "Writing to bucket: %s" % bucket
-  #           config = s3.Object(bucket,'js/config.js')
-  #           config.put(Body=config_content)
-  #           return cfnresponse.SUCCESS, None
-
-  #         def update(properties, physical_id):
-  #           return create(properties, physical_id)
-
-  #         def delete(properties, physical_id):
-  #           return cfnresponse.SUCCESS, physical_id
-
-  #         def handler(event, context):
-  #           print "Received event: %s" % json.dumps(event)
-
-  #           status = cfnresponse.FAILED
-  #           new_physical_id = None
-
-  #           try:
-  #             properties = event.get('ResourceProperties')
-  #             physical_id = event.get('PhysicalResourceId')
-
-  #             status, new_physical_id = {
-  #               'Create': create,
-  #               'Update': update,
-  #               'Delete': delete
-  #             }.get(event['RequestType'], lambda x, y: (cfnresponse.FAILED, None))(properties, physical_id)
-  #           except Exception as e:
-  #             print "Exception: %s" % e
-  #             status = cfnresponse.FAILED
-  #           finally:
-  #             cfnresponse.send(event, context, status, {}, new_physical_id)
-
-  # UpdateApiConfigFunction:
-  #   Type: AWS::Serverless::Function
-  #   DependsOn: UpdateCognitoConfigFunction
-  #   Properties:
-  #     Description: Adds the API endpoint to the config.js file
-  #     Handler: index.handler
-  #     Runtime: python3.7
-  #     Policies:
-  #       - S3FullAccessPolicy:
-  #           BucketName: !Ref TargetBucket
-  #       - AmazonCognitoPowerUser
-  #     Timeout: 300
-  #     InlineCode: |
-  #         import json
-  #         import boto3
-  #         import cfnresponse
-
-  #         s3 = boto3.resource('s3')
-
-  #         def create(properties, physical_id):
-  #           bucket = properties['Bucket']
-  #           config_object = s3.Object(bucket, 'js/config.js').get()
-  #           config_data = config_object["Body"].read()
-  #           print "Current config: %s" % config_data
-  #           config_data = config_data.replace("Base URL of your API including the stage", properties["InvokeUrl"])
-  #           print "Modified config: %s" % config_data
-  #           config = s3.Object(bucket,'js/config.js')
-  #           config.put(Body=config_data)
-  #           return cfnresponse.SUCCESS, None
-
-  #         def update(properties, physical_id):
-  #           return create(properties, physical_id)
-
-  #         def delete(properties, physical_id):
-  #           return cfnresponse.SUCCESS, physical_id
-
-  #         def handler(event, context):
-  #           print "Received event: %s" % json.dumps(event)
-
-  #           status = cfnresponse.FAILED
-  #           new_physical_id = None
-
-  #           try:
-  #             properties = event.get('ResourceProperties')
-  #             physical_id = event.get('PhysicalResourceId')
-
-  #             status, new_physical_id = {
-  #               'Create': create,
-  #               'Update': update,
-  #               'Delete': delete
-  #             }.get(event['RequestType'], lambda x, y: (cfnresponse.FAILED, None))(properties, physical_id)
-  #           except Exception as e:
-  #             print "Exception: %s" % e
-  #             status = cfnresponse.FAILED
-  #           finally:
-  #             cfnresponse.send(event, context, status, {}, new_physical_id)
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${SomsiadTyperApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
-  DestinationBucket:
-    Value: !Ref TargetBucket
+    Description: "API Gateway endpoint URL for selected stage"
+    Value: !Sub "https://${SomsiadTyperApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/"
   DestinationStaticUrl:
+    Description: "Static S3 website URL:"
     Value: !GetAtt TargetBucket.WebsiteURL
