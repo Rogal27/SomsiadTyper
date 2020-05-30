@@ -1,7 +1,6 @@
 
 
 const dynamodb = require('aws-sdk/clients/dynamodb');
-var uuid = require('uuid');
 const docClient = new dynamodb.DocumentClient();
 
 const tableName = 'contests-SomsiadTyper';
@@ -13,12 +12,12 @@ exports.lambdaHandler = async (event) => {
 
     console.info('received:', event);
 
-    var name = "Turniej testowy";
+    var name = "Turniej testowy 2";
 
     var params = {
         TableName : tableName,
         Item: {
-            contest_id : uuid.v1(),
+            contest_id : 123,
             name: name
         }
     };
@@ -29,7 +28,7 @@ exports.lambdaHandler = async (event) => {
     const response = {
         statusCode: 200,
         body: `Created toruname ${name}`
-    }
+    };
 
     // All log statements are written to CloudWatch
     console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);

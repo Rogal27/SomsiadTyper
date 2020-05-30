@@ -4,8 +4,7 @@
   "description": "Simple torunament inserting code",
   "main": "app.js",
   "dependencies": {
-    "aws-sdk": "^2.437.0",
-    "uuid": "8.1.0"
+    "aws-sdk": "^2.437.0"
   },
   "devDependencies": {
     "jest": "^24.7.1"
