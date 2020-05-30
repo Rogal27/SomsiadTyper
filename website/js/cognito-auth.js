@@ -1,9 +1,9 @@
 /*global WildRydes _config AmazonCognitoIdentity AWSCognito*/
 
-var WildRydes = window.WildRydes || {};
+var somsiadTyper = window.somsiadTyper || {};
 
 (function scopeWrapper($) {
-    var signinUrl = 'signin.html';
+    var signinUrl = 'login.html';
 
     var poolData = {
         UserPoolId: _config.cognito.userPoolId,
@@ -25,11 +25,11 @@ var WildRydes = window.WildRydes || {};
         AWSCognito.config.region = _config.cognito.region;
     }
 
-    WildRydes.signOut = function signOut() {
+    somsiadTyper.signOut = function signOut() {
         userPool.getCurrentUser().signOut();
     };
 
-    WildRydes.authToken = new Promise(function fetchCurrentAuthToken(resolve, reject) {
+    somsiadTyper.authToken = new Promise(function fetchCurrentAuthToken(resolve, reject) {
         var cognitoUser = userPool.getCurrentUser();
 
         if (cognitoUser) {
@@ -52,9 +52,9 @@ var WildRydes = window.WildRydes || {};
      * Cognito User Pool functions
      */
 
-    function register(email, password, onSuccess, onFailure) {
+    function register(email, password,name, onSuccess, onFailure) {
         var dataEmail = {
-            Name: 'email',
+            Name: name,
             Value: email
         };
         var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
@@ -105,8 +105,8 @@ var WildRydes = window.WildRydes || {};
      */
 
     $(function onDocReady() {
-        $('#signinForm').submit(handleSignin);
-        $('#registrationForm').submit(handleRegister);
+        $('#loginButton').onclick(handleSignin);
+        $('#registrationButton').onclick(handleRegister);
         $('#verifyForm').submit(handleVerify);
     });
 
@@ -129,6 +129,7 @@ var WildRydes = window.WildRydes || {};
         var email = $('#emailInputRegister').val();
         var password = $('#passwordInputRegister').val();
         var password2 = $('#password2InputRegister').val();
+        var name = $('#nameInput').val();
 
         var onSuccess = function registerSuccess(result) {
             var cognitoUser = result.user;
@@ -144,7 +145,7 @@ var WildRydes = window.WildRydes || {};
         event.preventDefault();
 
         if (password === password2) {
-            register(email, password, onSuccess, onFailure);
+            register(email, password,name, onSuccess, onFailure);
         } else {
             alert('Passwords do not match');
         }
