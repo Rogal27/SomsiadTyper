@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 10
 
 Parameters:
   DynamoDBReadCapacityUnits:
@@ -23,6 +23,12 @@ Parameters:
   DynamoDBWriteCapacityUnitsIndex:
     Type: Number
     Default: 1
+  Version:
+    Type: String
+    Default: 1.0.0
+  Stage:
+    Type: String
+    Default: Dev
 
 Resources:
   TargetBucket:
@@ -38,6 +44,47 @@ Resources:
       Location:
         ApplicationId: arn:aws:serverlessrepo:us-east-1:375983427419:applications/deploy-to-s3
         SemanticVersion: 2.4.2
+
+  # Cognito
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: False
+      UserPoolName: 'SomsiadTyper'
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      #EmailVerificationMessage: 'Your code is {####}'
+      EmailVerificationSubject: 'Welcome to Somsiad Typer'
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: True
+          RequireNumbers: True
+          RequireSymbols: True
+          RequireUppercase: True
+          TemporaryPasswordValidityDays: 7
+
+  UserPoolTokenClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: 'SomsiadTyperApp'
+      GenerateSecret: False
+
+  #api for cognito
+  SomsiadTyperApi:
+    DependsOn: UserPool
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: SomsiadTyperApi
+      StageName: !Ref Stage
+      Auth:
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt "UserPool.Arn"
 
   # this function is used only during deployment, 
   # we use the web site assets as the source of the function
@@ -91,10 +138,13 @@ Resources:
       TargetBucket: !Ref TargetBucket
 
       Substitutions:
-        FilePattern: "*.html"
+        FilePattern: "js/config.js"
         Values:
-          APP_NAME: 'Example Application'
-          STACK_ID: !Ref AWS::StackId
+          USER_POOL_ID: !Ref UserPool
+          USER_POOL_CLIENT_ID: !Ref UserPoolTokenClient
+          AWS_REGION: !Ref AWS::Region
+          INVOKE_URL: !Sub "https://${SomsiadTyperApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}"
+      
       
       # Choose the ACL and caching policies
       # eg, for directly accessible web site
@@ -114,6 +164,7 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /hello
+            RestApiId: !Ref SomsiadTyperApi
             Method: GET
 
   GoodbyeWorldFunction:
@@ -127,6 +178,7 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /goodbye
+            RestApiId: !Ref SomsiadTyperApi
             Method: GET
 
   # InsertUserFunction:
@@ -157,6 +209,7 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /samplehandler
+            RestApiId: !Ref SomsiadTyperApi
             Method: GET  
 
   # dynamoDB setup
@@ -421,15 +474,8 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
-  DestinationBucket:
-    Value: !Ref TargetBucket
-  DestinationUrl:
+    Description: "API Gateway endpoint URL for selected stage"
+    Value: !Sub "https://${SomsiadTyperApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/"
+  DestinationStaticUrl:
+    Description: "Static S3 website URL:"
     Value: !GetAtt TargetBucket.WebsiteURL
