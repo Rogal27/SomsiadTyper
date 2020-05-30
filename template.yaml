@@ -26,6 +26,9 @@ Parameters:
   Version:
     Type: String
     Default: 1.0.0
+  Stage:
+    Type: String
+    Default: Dev
 
 Resources:
   TargetBucket:
@@ -457,7 +460,7 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       Name: ServiceApi
-      StageName: !Ref Version
+      StageName: !Ref Stage
       Auth:
         Authorizers:
           CognitoAuthorizer:
