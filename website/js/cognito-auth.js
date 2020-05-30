@@ -52,9 +52,9 @@ var somsiadTyper = window.somsiadTyper || {};
      * Cognito User Pool functions
      */
 
-    function register(email, password, onSuccess, onFailure) {
+    function register(email, password,name, onSuccess, onFailure) {
         var dataEmail = {
-            Name: 'email',
+            Name: name,
             Value: email
         };
         var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
@@ -106,7 +106,7 @@ var somsiadTyper = window.somsiadTyper || {};
 
     $(function onDocReady() {
         $('#loginButton').onclick(handleSignin);
-        $('#registrationForm').submit(handleRegister);
+        $('#registrationButton').onclick(handleRegister);
         $('#verifyForm').submit(handleVerify);
     });
 
@@ -129,6 +129,7 @@ var somsiadTyper = window.somsiadTyper || {};
         var email = $('#emailInputRegister').val();
         var password = $('#passwordInputRegister').val();
         var password2 = $('#password2InputRegister').val();
+        var name = $('#nameInput').val();
 
         var onSuccess = function registerSuccess(result) {
             var cognitoUser = result.user;
@@ -144,7 +145,7 @@ var somsiadTyper = window.somsiadTyper || {};
         event.preventDefault();
 
         if (password === password2) {
-            register(email, password, onSuccess, onFailure);
+            register(email, password,name, onSuccess, onFailure);
         } else {
             alert('Passwords do not match');
         }
