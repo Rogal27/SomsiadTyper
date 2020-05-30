@@ -1,9 +1,9 @@
 /*global WildRydes _config AmazonCognitoIdentity AWSCognito*/
 
-var WildRydes = window.WildRydes || {};
+var somsiadTyper = window.somsiadTyper || {};
 
 (function scopeWrapper($) {
-    var signinUrl = 'signin.html';
+    var signinUrl = 'login.html';
 
     var poolData = {
         UserPoolId: _config.cognito.userPoolId,
@@ -25,11 +25,11 @@ var WildRydes = window.WildRydes || {};
         AWSCognito.config.region = _config.cognito.region;
     }
 
-    WildRydes.signOut = function signOut() {
+    somsiadTyper.signOut = function signOut() {
         userPool.getCurrentUser().signOut();
     };
 
-    WildRydes.authToken = new Promise(function fetchCurrentAuthToken(resolve, reject) {
+    somsiadTyper.authToken = new Promise(function fetchCurrentAuthToken(resolve, reject) {
         var cognitoUser = userPool.getCurrentUser();
 
         if (cognitoUser) {
@@ -105,7 +105,7 @@ var WildRydes = window.WildRydes || {};
      */
 
     $(function onDocReady() {
-        $('#signinForm').submit(handleSignin);
+        $('#loginButton').onclick(handleSignin);
         $('#registrationForm').submit(handleRegister);
         $('#verifyForm').submit(handleVerify);
     });
