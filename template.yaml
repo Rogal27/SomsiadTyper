@@ -10,6 +10,20 @@ Globals:
   Function:
     Timeout: 3
 
+Parameters:
+  DynamoDBReadCapacityUnits:
+    Type: Number
+    Default: 2
+  DynamoDBWriteCapacityUnits:
+    Type: Number
+    Default: 2
+  DynamoDBReadCapacityUnitsIndex:
+    Type: Number
+    Default: 1
+  DynamoDBWriteCapacityUnitsIndex:
+    Type: Number
+    Default: 1
+
 Resources:
   TargetBucket:
     Type: AWS::S3::Bucket
@@ -100,7 +114,7 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /hello
-            Method: get
+            Method: GET
 
   GoodbyeWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -113,7 +127,294 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /goodbye
-            Method: get
+            Method: GET
+
+  # InsertUserFunction:
+  #   Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  #   Properties:
+  #     CodeUri: add-person/
+  #     Handler: app.lambdaHandler
+  #     Runtime: nodejs12.x
+  #     Policies:
+  #       # Give Create/Read/Update/Delete Permissions to the SampleTable
+  #       - DynamoDBCrudPolicy:
+  #           TableName: !Ref UsersTestDBTable
+  #     Events:
+  #       InsertUser:
+  #         Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+  #         Properties:
+  #           Path: /insertuser
+  #           Method: POST
+
+  SampleHandlerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: handlers/sample-handler/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Events:
+        SampleHandler:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /samplehandler
+            Method: GET  
+
+  # dynamoDB setup
+
+  # users
+  UsersDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "user_id"
+          AttributeType: "N"
+        - 
+          AttributeName: "email"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "user_id"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        - 
+          IndexName: "email_index"
+          KeySchema:
+            - 
+              AttributeName: "email"
+              KeyType: "HASH"
+          Projection:
+            NonKeyAttributes:
+              - "user_id"
+            ProjectionType: "INCLUDE"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
+            WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
+      ProvisionedThroughput: 
+        ReadCapacityUnits: !Ref DynamoDBReadCapacityUnits
+        WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
+      TableName: !Sub 'users-${AWS::StackName}'
+
+  # users_contests
+  UsersContestsDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DependsOn: "UsersDynamoDBTable"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "id"
+          AttributeType: "N"
+        - 
+          AttributeName: "user_id"
+          AttributeType: "N"
+        - 
+          AttributeName: "contest_id" 
+          AttributeType: "N"
+      KeySchema:
+        - 
+          AttributeName: "id"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        - 
+          IndexName: "user_index"
+          KeySchema:
+            - 
+              AttributeName: "user_id"
+              KeyType: "HASH"
+            - 
+              AttributeName: "contest_id"
+              KeyType: "RANGE"
+          Projection:
+            NonKeyAttributes:
+              - "id"
+            ProjectionType: "INCLUDE"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
+            WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
+        - 
+          IndexName: "contest_index"
+          KeySchema:
+            - 
+              AttributeName: "contest_id"
+              KeyType: "HASH"
+            - 
+              AttributeName: "user_id"
+              KeyType: "RANGE"
+          Projection:
+            NonKeyAttributes:
+              - "id"
+            ProjectionType: "INCLUDE"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
+            WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
+      ProvisionedThroughput: 
+        ReadCapacityUnits: !Ref DynamoDBReadCapacityUnits
+        WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
+      TableName: !Sub 'users_contests-${AWS::StackName}'
+
+  # contests
+  ContestsDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DependsOn: "UsersContestsDynamoDBTable"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "contest_id"
+          AttributeType: "N"
+        - 
+          AttributeName: "name"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "contest_id"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        - 
+          IndexName: "name_index"
+          KeySchema:
+            - 
+              AttributeName: "name"
+              KeyType: "HASH"
+          Projection:
+            NonKeyAttributes:
+              - "contest_id"
+            ProjectionType: "INCLUDE"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
+            WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
+      ProvisionedThroughput: 
+        ReadCapacityUnits: !Ref DynamoDBReadCapacityUnits
+        WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
+      TableName: !Sub 'contests-${AWS::StackName}'
+
+  # matches
+  MatchesDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DependsOn: "ContestsDynamoDBTable"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "match_id"
+          AttributeType: "N"
+        - 
+          AttributeName: "match_info"
+          AttributeType: "S"
+        - 
+          AttributeName: "contest_id"
+          AttributeType: "N"
+      KeySchema:
+        - 
+          AttributeName: "match_id"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        - 
+          IndexName: "info_index"
+          KeySchema:
+            - 
+              AttributeName: "match_info"
+              KeyType: "HASH"
+          Projection:
+            NonKeyAttributes:
+              - "match_id"
+            ProjectionType: "INCLUDE"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
+            WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
+        - 
+          IndexName: "contest_index"
+          KeySchema:
+            - 
+              AttributeName: "contest_id"
+              KeyType: "HASH"
+            - 
+              AttributeName: "match_id"
+              KeyType: "RANGE"
+          Projection:
+            NonKeyAttributes:
+              - "match_info"
+            ProjectionType: "INCLUDE"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
+            WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
+      ProvisionedThroughput: 
+        ReadCapacityUnits: !Ref DynamoDBReadCapacityUnits
+        WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
+      TableName: !Sub 'matches-${AWS::StackName}'
+
+  # teams
+  TeamsDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DependsOn: "MatchesDynamoDBTable"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "name"
+          AttributeType: "S"
+      KeySchema:
+        - 
+          AttributeName: "name"
+          KeyType: "HASH"
+      ProvisionedThroughput: 
+        ReadCapacityUnits: !Ref DynamoDBReadCapacityUnits
+        WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
+      TableName: !Sub 'teams-${AWS::StackName}'
+
+  # users_Scores
+  UsersScoresDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    DependsOn: "TeamsDynamoDBTable"
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "id"
+          AttributeType: "N"
+        - 
+          AttributeName: "user_id"
+          AttributeType: "N"
+        - 
+          AttributeName: "match_id"
+          AttributeType: "N"
+      KeySchema:
+        - 
+          AttributeName: "id"
+          KeyType: "HASH"
+      GlobalSecondaryIndexes:
+        - 
+          IndexName: "user_index"
+          KeySchema:
+            - 
+              AttributeName: "user_id"
+              KeyType: "HASH"
+            - 
+              AttributeName: "match_id"
+              KeyType: "RANGE"
+          Projection:
+            NonKeyAttributes:
+              - "id"
+            ProjectionType: "INCLUDE"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
+            WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
+        - 
+          IndexName: "match_index"
+          KeySchema:
+            - 
+              AttributeName: "match_id"
+              KeyType: "HASH"
+            - 
+              AttributeName: "user_id"
+              KeyType: "RANGE"
+          Projection:
+            NonKeyAttributes:
+              - "id"
+            ProjectionType: "INCLUDE"
+          ProvisionedThroughput: 
+            ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
+            WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
+      ProvisionedThroughput: 
+        ReadCapacityUnits: !Ref DynamoDBReadCapacityUnits
+        WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
+      TableName: !Sub 'users_scores-${AWS::StackName}'
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
