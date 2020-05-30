@@ -56,6 +56,14 @@ Resources:
         - email
       AutoVerifiedAttributes:
         - email
+      Schema:
+        - AttributeDataType: String
+          Name: email
+          Required: True
+
+      LambdaConfig:
+        PostAuthentication: !Ref PostAuthenticationFunction
+        PreTokenGeneration: !Ref PreTokenGenerationFunction
       
       EmailVerificationSubject: 
       Policies:
@@ -155,6 +163,20 @@ Resources:
       # use public-read and 10 minutes caching
       Acl: 'public-read'
       CacheControlMaxAge: 600
+  
+  PostAuthenticationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: cognito-lambda/post-authentication/
+      Handler: app.js
+      Runtime: nodejs12.x
+  
+  PreTokenGenerationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: cognito-lambda/pre-token-generation/
+      Handler: app.js
+      Runtime: nodejs12.x
 
 
   HelloWorldFunction:
