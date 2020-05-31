@@ -178,6 +178,8 @@ Resources:
       Runtime: nodejs12.x
       Policies:
         - arn:aws:iam::aws:policy/AmazonCognitoReadOnly
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
   
   PreTokenGenerationFunction:
     Type: AWS::Serverless::Function
