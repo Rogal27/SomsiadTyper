@@ -176,6 +176,8 @@ Resources:
       CodeUri: cognito-lambda/post-authentication/
       Handler: app.js
       Runtime: nodejs12.x
+      Policies:
+        - arn:aws:iam::aws:policy/AmazonCognitoReadOnly
   
   PreTokenGenerationFunction:
     Type: AWS::Serverless::Function
