@@ -31,13 +31,26 @@ Parameters:
     Default: Dev
 
 Resources:
-  TargetBucket:
+  WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub 'somsiadtyperwebsite-${AWS::AccountId}'
       WebsiteConfiguration:
         IndexDocument: index.html
-
+  
+  WebsiteBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal: "*"
+            Action: s3:GetObject
+            Resource: !Sub "arn:aws:s3:::${WebsiteBucket}/*"
+    
   DeploymentLayer:
     Type: AWS::Serverless::Application
     Properties:
@@ -99,6 +112,13 @@ Resources:
     Properties:
       Name: SomsiadTyperApi
       StageName: !Ref Stage
+      Cors:
+        AllowMethods: "POST, GET"
+        AllowHeaders: "Content-Type, X-Amz-Date, Authorization, X-Api-Key"
+        AllowOrigin: "*"
+        #!GetAtt WebsiteBucket.WebsiteURL
+        MaxAge: "600"
+        AllowCredentials: True
       Auth:
         Authorizers:
           CognitoAuthorizer:
@@ -138,7 +158,7 @@ Resources:
       # will upload the assets
       Policies:
         - S3FullAccessPolicy:
-            BucketName: !Ref TargetBucket
+            BucketName: !Ref WebsiteBucket
 
   # This is a custom resource that
   # will trigger the function during deployment
@@ -153,7 +173,7 @@ Resources:
       Version: !Ref "SiteSource.Version"
 
       # tell the deployer where to upload the files
-      TargetBucket: !Ref TargetBucket
+      TargetBucket: !Ref WebsiteBucket
 
       Substitutions:
         FilePattern: "js/config.js"
@@ -212,6 +232,7 @@ Resources:
       ContentUri: layers/db-tables/
       CompatibleRuntimes:
         - nodejs12.x
+      RetentionPolicy: Delete
       Metadata:
         BuildMethod: nodejs12.x
 
@@ -276,6 +297,8 @@ Resources:
   InsertTournamentFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      Layers:
+        - !Ref DBTablesLayer
       CodeUri: handlers/create_tournament/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
@@ -558,4 +581,4 @@ Outputs:
     Value: !Sub "https://${SomsiadTyperApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/"
   DestinationStaticUrl:
     Description: "Static S3 website URL:"
-    Value: !GetAtt TargetBucket.WebsiteURL
+    Value: !GetAtt WebsiteBucket.WebsiteURL
