@@ -46,7 +46,18 @@ function ReadContests(){
 }
 
 function completeReadContestRequest(response){
-    $("#contests_table tbody tr").remove();
+    var table = document.getElementById('contests_table');
+    var rowCount = table.rows.length;
+    for (var i = 1; i < rowCount; i++) {
+        table.deleteRow(1);
+    }
+    $('#matchContestSelect')
+        .find('option')
+        .remove();
+    $('#resultContestSelect')
+        .find('option')
+        .remove();
+
     var i = response.result.Count;
 
     var table = document.getElementById("contests_table");
@@ -63,5 +74,8 @@ function completeReadContestRequest(response){
         cell1.innerHTML = i-j;
         cell2.innerHTML = element.name;
         cell3.innerHTML = "<a style='color:white' onclick='DeleteContest('" + element.contest_id + ") class='btn btn-danger btn-circle'><i class='fas fa-trash'></i></a>";
+
+        $('#matchContestSelect').append('<option value="' + element.contest_id + '">' + element.name + '</option>');
+        $('#resultContestSelect').append('<option value="' + element.contest_id + '">' + element.name + '</option>')
     }
 }
