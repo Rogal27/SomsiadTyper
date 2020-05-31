@@ -34,7 +34,7 @@
               <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
               </div>
-              <form class="user">
+              <form class="user" id="registrationForm">
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                     <input type="text" class="form-control form-control-user" id="nameInput" placeholder="Name">
@@ -51,7 +51,7 @@
                     <input type="password" class="form-control form-control-user" id="password2InputRegister" placeholder="Repeat Password">
                   </div>
                 </div>
-                <button type="button" id="registrationButton" class="btn btn-primary btn-user btn-block">
+                <button type="submit" id="registrationButton" class="btn btn-primary btn-user btn-block">
                   Register
                 </button>
               </form>
@@ -73,6 +73,10 @@
 
   <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- AWS scripts for all pages-->
+  <script src="js/vendor/aws/aws-cognito-sdk.min.js"></script>
+  <script src="js/vendor/aws/amazon-cognito-identity.min.js"></script>
 
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>

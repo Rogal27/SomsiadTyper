@@ -52,14 +52,20 @@ var somsiadTyper = window.somsiadTyper || {};
      * Cognito User Pool functions
      */
 
-    function register(email, password,name, onSuccess, onFailure) {
+    function register(email, password, name, onSuccess, onFailure) {
         var dataEmail = {
-            Name: name,
+            Name: 'email',
             Value: email
         };
         var attributeEmail = new AmazonCognitoIdentity.CognitoUserAttribute(dataEmail);
+        
+        var dataName = {
+            Name: 'name',
+            Value: name
+        };
+        var attributeName = new AmazonCognitoIdentity.CognitoUserAttribute(dataName);
 
-        userPool.signUp(email, password, [attributeEmail], null,
+        userPool.signUp(email, password, [attributeEmail, attributeName], null,
             function signUpCallback(err, result) {
                 if (!err) {
                     onSuccess(result);
@@ -105,8 +111,8 @@ var somsiadTyper = window.somsiadTyper || {};
      */
 
     $(function onDocReady() {
-        $('#loginButton').onclick(handleSignin);
-        $('#registrationButton').onclick(handleRegister);
+        $('#loginForm').submit(handleSignin);
+        $('#registrationForm').submit(handleRegister);
         $('#verifyForm').submit(handleVerify);
     });
 

@@ -58,14 +58,17 @@ Resources:
         - email
       Schema:
         - AttributeDataType: String
-          Name: email
-          Required: True
+          Name: name
+          Mutable: True
+          Required: False
+          StringAttributeConstraints:
+            MaxLength: "128"
+            MinLength: "0"
 
       LambdaConfig:
-        PostAuthentication: !Ref PostAuthenticationFunction
-        PreTokenGeneration: !Ref PreTokenGenerationFunction
+        PostAuthentication: !GetAtt PostAuthenticationFunction.Arn
+        PreTokenGeneration: !GetAtt PreTokenGenerationFunction.Arn
       
-      EmailVerificationSubject: 
       Policies:
         PasswordPolicy:
           MinimumLength: 8

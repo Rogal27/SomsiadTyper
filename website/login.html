@@ -39,14 +39,14 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                   </div>
-                  <form class="user">
+                  <form class="user" id="loginForm">
                     <div class="form-group">
                       <input type="email" class="form-control form-control-user" id="emailInputSignin" aria-describedby="emailHelp" placeholder="Enter Email Address...">
                     </div>
                     <div class="form-group">
                       <input type="password" class="form-control form-control-user" id="passwordInputSignin" placeholder="Password">
                     </div>
-                    <button type="button" id="loginButton" class="btn btn-primary btn-user btn-block">
+                    <button type="submit" id="loginButton" class="btn btn-primary btn-user btn-block">
                       Login
                     </button>
                   </form>
@@ -72,6 +72,11 @@
 
   <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- AWS scripts for all pages-->
+  <script src="js/vendor/aws/aws-cognito-sdk.min.js"></script>
+  <script src="js/vendor/aws/amazon-cognito-identity.min.js"></script>
+  
 
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
