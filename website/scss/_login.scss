@@ -2,13 +2,23 @@
 // Toshi the dog from https://unsplash.com/@charlesdeluvio - what a funny dog...
 
 .bg-login-image {
-  background: url('https://source.unsplash.com/K4mSJ7kc0As/600x800');
+  background: url('https://www.focus.pl/uploads/media/default/0001/37/nosacze-sa-zagrozone-wymarciem-z-powodu-dzialalnosci-czlowieka-fot-getty-images.jpeg');
   background-position: center;
   background-size: cover;
+  width: 800px;
+  height: 600px;
 }
 
 .bg-register-image {
-  background: url('https://source.unsplash.com/Mv9hjnEUHR4/600x800');
+  background: url("https://dinoanimals.pl/wp-content/uploads/2013/09/Nosacz-sundajski-1.jpg");
+  background-position: center;
+  background-size: cover;
+  width: 800px;
+  height: 600px;
+}
+
+.bg-verify-image {
+  background: url("https://dinoanimals.pl/wp-content/uploads/2013/09/Nosacz-sundajski-7.jpg");
   background-position: center;
   background-size: cover;
 }
