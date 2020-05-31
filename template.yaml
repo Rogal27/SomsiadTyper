@@ -77,10 +77,10 @@ Resources:
           RequireSymbols: True
           RequireUppercase: True
           TemporaryPasswordValidityDays: 7
-      VerificationMessageTemplate:
-        DefaultEmailOption: CONFIRM_WITH_LINK
-        EmailSubjectByLink: 'Welcome to Somsiad Typer'
-        #EmailMessageByLink: 'Your link is {####}'
+      # VerificationMessageTemplate:
+      #   DefaultEmailOption: CONFIRM_WITH_LINK
+      #   EmailSubjectByLink: 'Welcome to Somsiad Typer'
+      #   #EmailMessageByLink: 'Your link is {####}'
 
   UserPoolTokenClient:
     Type: AWS::Cognito::UserPoolClient
