@@ -123,7 +123,7 @@ var somsiadTyper = window.somsiadTyper || {};
         signin(email, password,
             function signinSuccess() {
                 console.log('Successfully Logged In');
-                window.location.href = 'ride.html';
+                window.location.href = 'type.html';
             },
             function signinError(err) {
                 alert(err);
