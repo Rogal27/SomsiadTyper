@@ -73,9 +73,31 @@ function completeReadContestRequest(response){
 
         cell1.innerHTML = i-j;
         cell2.innerHTML = element.name;
-        cell3.innerHTML = "<a style='color:white' onclick='DeleteContest('" + element.contest_id + ") class='btn btn-danger btn-circle'><i class='fas fa-trash'></i></a>";
+        cell3.innerHTML = "<a class='btn btn-danger btn-circle' style='color:white' onclick='DeleteContest(" + '"' + element.contest_id + '"' +  ")'><i class='fas fa-trash'></i></a>";
 
         $('#matchContestSelect').append('<option value="' + element.contest_id + '">' + element.name + '</option>');
         $('#resultContestSelect').append('<option value="' + element.contest_id + '">' + element.name + '</option>')
     }
+}
+
+function DeleteContest(id){
+    $.ajax({
+        method: 'POST',
+        url: ApiURL + "deletecontest",
+        headers: {
+        },
+        data: JSON.stringify({
+            id
+        }),
+        success: completeDeleteContestRequest,
+        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            console.error('Response: ', jqXHR.responseText);
+            alert('An error occured when requesting your unicorn:\n' + jqXHR.responseText);
+        }
+    });
+}
+
+function completeDeleteContestRequest(){
+    ReadContests();
 }
