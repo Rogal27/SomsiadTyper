@@ -69,8 +69,8 @@ Resources:
         PostAuthentication: !GetAtt PostAuthenticationFunction.Arn
         PreTokenGeneration: !GetAtt PreTokenGenerationFunction.Arn
       
-      EmailVerificationSubject: 'Welcome to Somsiad Typer'
-      EmailVerificationMessage: 'Your verification link is {username} {####}'
+      EmailVerificationSubject: 'Verify your email - Somsiad Typer'
+      #EmailVerificationMessage: 'Your verification link is {username} {####}'
 
       Policies:
         PasswordPolicy:
