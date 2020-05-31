@@ -56,8 +56,22 @@ Resources:
         - email
       AutoVerifiedAttributes:
         - email
-      #EmailVerificationMessage: 'Your code is {####}'
-      EmailVerificationSubject: 'Welcome to Somsiad Typer'
+      Schema:
+        - AttributeDataType: String
+          Name: name
+          Mutable: True
+          Required: False
+          StringAttributeConstraints:
+            MaxLength: "128"
+            MinLength: "0"
+
+      LambdaConfig:
+        PostAuthentication: !GetAtt PostAuthenticationFunction.Arn
+        PreTokenGeneration: !GetAtt PreTokenGenerationFunction.Arn
+      
+      EmailVerificationSubject: 'Verify your email - Somsiad Typer'
+      #EmailVerificationMessage: 'Your verification link is {username} {####}'
+
       Policies:
         PasswordPolicy:
           MinimumLength: 8
@@ -66,6 +80,10 @@ Resources:
           RequireSymbols: True
           RequireUppercase: True
           TemporaryPasswordValidityDays: 7
+      # VerificationMessageTemplate:
+      #   DefaultEmailOption: CONFIRM_WITH_LINK
+      #   EmailSubjectByLink: 'Welcome to Somsiad Typer'
+      #   #EmailMessageByLink: 'Your link is {####}'
 
   UserPoolTokenClient:
     Type: AWS::Cognito::UserPoolClient
@@ -152,6 +170,50 @@ Resources:
       Acl: 'public-read'
       CacheControlMaxAge: 600
 
+  PostAuthenticationInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt PostAuthenticationFunction.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+  
+  PreTokenGenerationInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt PreTokenGenerationFunction.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+  
+  PostAuthenticationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: cognito-lambda/post-authentication/
+      Handler: app.handler
+      Runtime: nodejs12.x
+      Policies:
+        - arn:aws:iam::aws:policy/AmazonCognitoReadOnly
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+  
+  PreTokenGenerationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: cognito-lambda/pre-token-generation/
+      Handler: app.handler
+      Runtime: nodejs12.x
+
+  DBTablesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: dbtables
+      Description: JSON containing dbtables names.
+      ContentUri: layers/db-tables/
+      CompatibleRuntimes:
+        - nodejs12.x
+      Metadata:
+        BuildMethod: nodejs12.x
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -209,6 +271,24 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /samplehandler
+            Method: GET
+
+  InsertTournamentFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: handlers/create_tournament/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ContestsDynamoDBTable
+      Events:
+        InsertTournament:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /createtournament
+            Method: POST  
             RestApiId: !Ref SomsiadTyperApi
             Method: GET  
 
