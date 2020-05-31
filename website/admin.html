@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>SomsiadTyper - panel główny</title>
+
+    <!-- Custom fonts for this template-->
+    <link
+      href="vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+  <body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <ul
+        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+        id="accordionSidebar"
+      >
+        <!-- Sidebar - Brand -->
+        <a
+          class="sidebar-brand d-flex align-items-center justify-content-center"
+          href="index.html"
+        >
+          <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-hippo"></i>
+          </div>
+          <div class="sidebar-brand-text mx-3">Somsiad Typer</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0" />
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+          <a class="nav-link" href="admin.html">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Panel administratorski</span></a
+          >
+        </li>
+
+        <hr class="sidebar-divider" />
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+          Panel typera
+        </div>
+
+        <li class="nav-item active">
+          <a class="nav-link" href="type.html">
+            <i class="fas fa-futbol"></i>
+            <span>Typuj mecze</span></a
+          >
+        </li>
+
+        <li class="nav-item active">
+          <a class="nav-link" href="results.html">
+            <i class="fas fa-poll"></i>
+            <span>Wyniki</span></a
+          >
+        </li>
+      </ul>
+      <!-- End of Sidebar -->
+
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Begin Page Content -->
+          <div class="container-fluid mt-3">
+            <!-- Page Heading -->
+            <div
+              class="d-sm-flex align-items-center justify-content-between mb-4"
+            >
+              <h1 class="h3 mb-0 text-gray-800">Panel administratorski</h1>
+            </div>
+
+            <div class="row">
+              <a
+                href="#torunamentCard"
+                data-toggle="collapse"
+                role="button"
+                aria-expanded="true"
+                aria-controls="torunamentCard"
+                class="btn btn-primary btn-icon-split m-2"
+              >
+                <span class="icon text-white-50">
+                  <i class="fas fa-trophy"></i>
+                </span>
+                <span class="text">Turnieje</span>
+              </a>
+              <a
+                href="#matchCard"
+                data-toggle="collapse"
+                role="button"
+                aria-expanded="true"
+                aria-controls="matchCard"
+                class="btn btn-success btn-icon-split m-2"
+              >
+                <span class="icon text-white-50">
+                  <i class="fas fa-futbol"></i>
+                </span>
+                <span class="text">Mecze</span>
+              </a>
+              <a
+                href="#resultsCard"
+                data-toggle="collapse"
+                role="button"
+                aria-expanded="true"
+                aria-controls="resultsCard"
+                class="btn btn-info btn-icon-split m-2"
+              >
+                <span class="icon text-white-50">
+                  <i class="fas fa-poll"></i>
+                </span>
+                <span class="text">Wyniki</span>
+              </a>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-lg-12">
+                <!-- Collapsable Card Example -->
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Accordion -->
+                  <a
+                    href="#torunamentCard"
+                    class="d-block card-header py-3"
+                    data-toggle="collapse"
+                    role="button"
+                    aria-expanded="true"
+                    aria-controls="torunamentCard"
+                  >
+                    <h6 class="m-0 font-weight-bold text-primary">
+                      Lista turniejów
+                    </h6>
+                  </a>
+                  <!-- Card Content - Collapse -->
+                  <div class="collapse show" id="torunamentCard">
+                    <div class="card-body">
+                      <form class="form-inline">
+                        <div class="form-group mx-sm-3 mb-2">
+                          <label for="inputPassword2" class="sr-only"
+                            >Password</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Nazwa turnieju"
+                          />
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">
+                          Stwórz nowy turniej
+                        </button>
+                      </form>
+                      <table class="table mt-2">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col">Akcje</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>Liga Mistrzów 2019/20</td>
+                            <td>
+                              <a href="#" class="btn btn-danger btn-circle">
+                                <i class="fas fa-trash"></i>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td>Mistrzostwa Świata 2022</td>
+                            <td>
+                              <a href="#" class="btn btn-danger btn-circle">
+                                <i class="fas fa-trash"></i>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td>B klasa Sezon ogórkowy</td>
+                            <td>
+                              <a href="#" class="btn btn-danger btn-circle">
+                                <i class="fas fa-trash"></i>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-1">
+              <div class="col-lg-12">
+                <!-- Collapsable Card Example -->
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Accordion -->
+                  <a
+                    href="#matchCard"
+                    class="d-block card-header py-3"
+                    data-toggle="collapse"
+                    role="button"
+                    aria-expanded="true"
+                    aria-controls="matchCard"
+                  >
+                    <h6 class="m-0 font-weight-bold text-success">
+                      Lista meczów
+                    </h6>
+                  </a>
+                  <!-- Card Content - Collapse -->
+                  <div class="collapse show" id="matchCard">
+                    <div class="card-body">
+                      <select class="form-control col-6">
+                        <option>Liga Mistrzów 2019/20</option>
+                      </select>
+                      <table class="table mt-2">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">Gospodarz</th>
+                            <th scope="col">Gość</th>
+                            <th scope="col">Dzień</th>
+                            <th scope="col">Godzina</th>
+                            <th scope="col">Wynik gospodarze</th>
+                            <th scope="col">Wynik goście</th>
+                            <th scope="col">Akcje</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input type="text" class="form-control" />
+                            </td>
+                            <td>
+                              <input type="text" class="form-control" />
+                            </td>
+                            <td>
+                              <input type="date" class="form-control" />
+                            </td>
+                            <td>
+                              <input type="time" class="form-control" />
+                            </td>
+                            <td>
+                              <input type="number" class="form-control" />
+                            </td>
+                            <td>
+                              <input type="number" class="form-control" />
+                            </td>
+                            <td>
+                              <a href="#" class="btn btn-success btn-circle">
+                                <i class="fas fa-check"></i>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td hidden>123456</td>
+                            <td>
+                              <input
+                                type="text"
+                                class="form-control"
+                                value="Chelsea"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                class="form-control"
+                                value="Barcelona"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="date"
+                                class="form-control"
+                                value="2020-06-08"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="time"
+                                class="form-control"
+                                value="20:45"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                class="form-control"
+                                value="6"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                class="form-control"
+                                value="0"
+                              />
+                            </td>
+                            <td>
+                              <a href="#" class="btn btn-success btn-circle">
+                                <i class="fas fa-save"></i>
+                              </a>
+                              <a href="#" class="btn btn-danger btn-circle">
+                                <i class="fas fa-trash"></i>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td hidden>123456</td>
+                            <td>
+                              <input
+                                type="text"
+                                class="form-control"
+                                value="Borussia Dortmund"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                class="form-control"
+                                value="Real Madryt"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="date"
+                                class="form-control"
+                                value="2020-06-09"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="time"
+                                class="form-control"
+                                value="18:45"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                class="form-control"
+                                value="3"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                class="form-control"
+                                value="3"
+                              />
+                            </td>
+                            <td>
+                              <a href="#" class="btn btn-success btn-circle">
+                                <i class="fas fa-save"></i>
+                              </a>
+                              <a href="#" class="btn btn-danger btn-circle">
+                                <i class="fas fa-trash"></i>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-1">
+              <div class="col-lg-12">
+                <!-- Collapsable Card Example -->
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Accordion -->
+                  <a
+                    href="#resultsCard"
+                    class="d-block card-header py-3"
+                    data-toggle="collapse"
+                    role="button"
+                    aria-expanded="true"
+                    aria-controls="resultsCard"
+                  >
+                    <h6 class="m-0 font-weight-bold text-info">
+                      Wyniki
+                    </h6>
+                  </a>
+                  <!-- Card Content - Collapse -->
+                  <div class="collapse show" id="resultsCard">
+                    <div class="card-body">
+                      <select class="form-control col-6">
+                        <option>Liga Mistrzów 2019/20</option>
+                      </select>
+                      <table class="table mt-2">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">Adres email</th>
+                            <th scope="col">Wynik</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              BartekTr@test.pl
+                            </td>
+                            <td>
+                              123
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              test@test.pl
+                            </td>
+                            <td>
+                              0
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright &copy; Somsiad Typer 2020</span>
+            </div>
+          </div>
+        </footer>
+        <!-- End of Footer -->
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script>
+
+    <script src="js/vendor/aws/aws-cognito-sdk.min.js"></script>
+    <script src="js/vendor/aws/amazon-cognito-identity.min.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/cognito-auth.js"></script>
+    <script src="js/check-token.js"></script>
+  </body>
+</html>
