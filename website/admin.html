@@ -164,10 +164,11 @@
                           <input
                             type="text"
                             class="form-control"
+                            id="contestInput"
                             placeholder="Nazwa turnieju"
                           />
                         </div>
-                        <button type="submit" class="btn btn-primary mb-2">
+                        <button type="button" onclick="AddContest()" class="btn btn-primary mb-2">
                           Stwórz nowy turniej
                         </button>
                       </form>
@@ -491,5 +492,7 @@
     <script src="js/config.js"></script>
     <script src="js/cognito-auth.js"></script>
     <script src="js/check-token.js"></script>
+
+    <script src="js/admin.js"></script>
   </body>
 </html>

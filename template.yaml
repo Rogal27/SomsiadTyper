@@ -212,8 +212,7 @@ Resources:
       ContentUri: layers/db-tables/
       CompatibleRuntimes:
         - nodejs12.x
-      Metadata:
-        BuildMethod: nodejs12.x
+      RetentionPolicy: Delete
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -290,7 +289,7 @@ Resources:
             Path: /createtournament
             Method: POST  
             RestApiId: !Ref SomsiadTyperApi
-            Method: GET  
+            Method: POST  
 
   # dynamoDB setup
 
