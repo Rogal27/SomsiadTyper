@@ -169,12 +169,28 @@ Resources:
       # use public-read and 10 minutes caching
       Acl: 'public-read'
       CacheControlMaxAge: 600
+
+  PostAuthenticationInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt PostAuthenticationFunction.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+  
+  PreTokenGenerationInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt PreTokenGenerationFunction.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
   
   PostAuthenticationFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: cognito-lambda/post-authentication/
-      Handler: app.js
+      Handler: app.handler
       Runtime: nodejs12.x
       Policies:
         - arn:aws:iam::aws:policy/AmazonCognitoReadOnly
@@ -185,9 +201,19 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: cognito-lambda/pre-token-generation/
-      Handler: app.js
+      Handler: app.handler
       Runtime: nodejs12.x
 
+  DBTablesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: dbtables
+      Description: JSON containing dbtables names.
+      ContentUri: layers/db-tables/
+      CompatibleRuntimes:
+        - nodejs12.x
+      Metadata:
+        BuildMethod: nodejs12.x
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
