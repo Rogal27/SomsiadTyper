@@ -10,13 +10,19 @@ exports.lambdaHandler = async (event, context, callback) => {
 
     console.info('received:', event);
 
-    var requestBody = JSON.parse(event.body)
-    var name = requestBody.name
+    var requestBody = JSON.parse(event.body);
+    var name = requestBody.name;
+    
+    var id='',m='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx',i=0,rb=Math.random()*0xffffffff|0;
+    while(i++<36) {
+        var c=m[i-1],r=rb&0xf,v=c=='x'?r:(r&0x3|0x8);
+        id+=(c=='-'||c=='4')?c:v.toString(16);rb=i%8==0?Math.random()*0xffffffff|0:rb>>4;
+    }
 
     var params = {
         TableName : tableName,
         Item: {
-            contest_id : "123",
+            contest_id : id,
             name: name
         }
     };
