@@ -11,29 +11,24 @@ exports.lambdaHandler = async (event, context, callback) => {
     console.info('received:', event);
 
     var requestBody = JSON.parse(event.body);
-    var name = requestBody.name;
-    
-    var id='',m='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx',i=0,rb=Math.random()*0xffffffff|0;
-    while(i++<36) {
-        var c=m[i-1],r=rb&0xf,v=c=='x'?r:(r&0x3|0x8);
-        id+=(c=='-'||c=='4')?c:v.toString(16);rb=i%8==0?Math.random()*0xffffffff|0:rb>>4;
-    }
+    var id = requestBody.id;
 
     var params = {
         TableName : tableName,
-        Item: {
-            contest_id : id,
-            name: name
+        Key:{
+            "contest_id": id
         }
     };
 
+    //TODO: Delete contest from user too
+
     // Call DynamoDB to add the item to the table
-    const result = await docClient.put(params).promise();
+    const result = await docClient.delete(params).promise();
     
     callback(null, {
         statusCode: 200,
         body: JSON.stringify({
-            name: name
+            id: id
         }),
         headers: {
             'Access-Control-Allow-Origin': '*',
