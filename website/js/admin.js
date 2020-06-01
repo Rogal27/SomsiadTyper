@@ -1,4 +1,4 @@
-const ApiURL = "https://25m8som1ba.execute-api.us-east-1.amazonaws.com/Dev/";
+const ApiURL = _config.api.invokeUrl;
 
 $( document ).ready(function() {
     ReadContests();
@@ -9,7 +9,7 @@ function AddContest(){
 
     $.ajax({
         method: 'POST',
-        url: ApiURL + "createtournament",
+        url: ApiURL + "/createtournament",
         headers: {
         },
         data: JSON.stringify({
@@ -19,7 +19,8 @@ function AddContest(){
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
             console.error('Response: ', jqXHR.responseText);
-            alert('An error occured when requesting your unicorn:\n' + jqXHR.responseText);
+            $("#errorLabel").text("Błąd dodawania turnieju");
+            $("#alertDiv").css("display","block");
         }
     });
 }
@@ -33,14 +34,15 @@ function completeAddContestRequest(result) {
 function ReadContests(){
     $.ajax({
         method: 'GET',
-        url: ApiURL + "readcontest",
+        url: ApiURL + "/readcontest",
         headers: {
         },
         success: completeReadContestRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
             console.error('Response: ', jqXHR.responseText);
-            alert('An error occured when requesting your unicorn:\n' + jqXHR.responseText);
+            $("#errorLabel").text("Błąd podczas odczytu turniejów");
+            $("#alertDiv").css("display","block");
         }
     });
 }
@@ -83,7 +85,7 @@ function completeReadContestRequest(response){
 function DeleteContest(id){
     $.ajax({
         method: 'POST',
-        url: ApiURL + "deletecontest",
+        url: ApiURL + "/deletecontest",
         headers: {
         },
         data: JSON.stringify({
@@ -93,7 +95,8 @@ function DeleteContest(id){
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
             console.error('Response: ', jqXHR.responseText);
-            alert('An error occured when requesting your unicorn:\n' + jqXHR.responseText);
+            $("#errorLabel").text("Błąd usuwania turnieju");
+            $("#alertDiv").css("display","block");
         }
     });
 }

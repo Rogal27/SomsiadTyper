@@ -25,6 +25,31 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+
+    <style> /* The alert message box */
+      .alert {
+        padding: 20px;
+        background-color: #f44336; /* Red */
+        color: white;
+        margin-bottom: 15px;
+      }
+      
+      /* The close button */
+      .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      
+      /* When moving the mouse over the close button */
+      .closebtn:hover {
+        color: black;
+      } </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
@@ -135,6 +160,11 @@
                 <span class="text">Wyniki</span>
               </a>
             </div>
+
+            <div id="alertDiv" class="alert" style="display: none;">
+              <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+              <label id="errorLabel">This is an alert box.</label>
+            </div> 
 
             <div class="row mt-2">
               <div class="col-lg-12">
