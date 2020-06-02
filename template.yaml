@@ -233,8 +233,6 @@ Resources:
       CompatibleRuntimes:
         - nodejs12.x
       RetentionPolicy: Delete
-      Metadata:
-        BuildMethod: nodejs12.x
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -313,7 +311,43 @@ Resources:
             Path: /createtournament
             Method: POST  
             RestApiId: !Ref SomsiadTyperApi
+            Method: POST  
+
+  ReadContestFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: handlers/read_contest/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ContestsDynamoDBTable
+      Events:
+        ReadContest:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /readcontest
             Method: GET  
+            RestApiId: !Ref SomsiadTyperApi
+
+  DeleteContestFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: handlers/delete_contest/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ContestsDynamoDBTable
+      Events:
+        DeleteContest:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /deletecontest
+            Method: POST  
+            RestApiId: !Ref SomsiadTyperApi
 
   # dynamoDB setup
 
