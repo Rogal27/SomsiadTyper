@@ -362,6 +362,8 @@ Resources:
   AddMatchFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      Layers:
+        - !Ref DBTablesLayer
       CodeUri: handlers/add_match/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
@@ -380,6 +382,8 @@ Resources:
   ReadMatchesFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      Layers:
+        - !Ref DBTablesLayer
       CodeUri: handlers/read_matches/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
@@ -398,6 +402,8 @@ Resources:
   UpdateMatchesFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      Layers:
+        - !Ref DBTablesLayer    
       CodeUri: handlers/update_matches/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
@@ -416,6 +422,8 @@ Resources:
   DeleteMatchesFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      Layers:
+        - !Ref DBTablesLayer
       CodeUri: handlers/delete_match/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x

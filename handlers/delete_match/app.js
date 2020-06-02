@@ -1,7 +1,8 @@
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
-const tableName = 'matches-SomsiadTyper';
+const tables = require('/opt/dbtables');
+const tableName = tables.MATCHES;
 
 exports.lambdaHandler = async (event, context, callback) => {
     if (event.httpMethod !== 'POST') {
