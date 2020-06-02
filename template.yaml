@@ -114,7 +114,7 @@ Resources:
       StageName: !Ref Stage
       Cors:
         AllowMethods: "POST, GET"
-        AllowHeaders: "Content-Type, X-Amz-Date, Authorization, X-Api-Key"
+        AllowHeaders: "*" # "Content-Type, X-Amz-Date, Authorization, X-Api-Key"
         AllowOrigin: "*"
         #!GetAtt WebsiteBucket.WebsiteURL
         MaxAge: "600"
