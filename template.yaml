@@ -112,13 +112,13 @@ Resources:
     Properties:
       Name: SomsiadTyperApi
       StageName: !Ref Stage
-      Cors:
-        AllowMethods: "POST, GET"
-        AllowHeaders: "*" # "Content-Type, X-Amz-Date, Authorization, X-Api-Key"
-        AllowOrigin: "*"
-        #!GetAtt WebsiteBucket.WebsiteURL
-        MaxAge: "600"
-        AllowCredentials: True
+      # Cors:
+      #   AllowMethods: "'POST, GET'"
+      #   AllowHeaders: "'*'" # "Content-Type, X-Amz-Date, Authorization, X-Api-Key"
+      #   AllowOrigin: "'*'"
+      #   #!GetAtt WebsiteBucket.WebsiteURL
+      #   MaxAge: "'600'"
+      #   AllowCredentials: True
       Auth:
         Authorizers:
           CognitoAuthorizer:
@@ -181,8 +181,7 @@ Resources:
           USER_POOL_ID: !Ref UserPool
           USER_POOL_CLIENT_ID: !Ref UserPoolTokenClient
           AWS_REGION: !Ref AWS::Region
-          INVOKE_URL: !Sub "https://${SomsiadTyperApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}"
-      
+          INVOKE_URL: !Sub "https://${SomsiadTyperApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}"      
       
       # Choose the ACL and caching policies
       # eg, for directly accessible web site
@@ -209,6 +208,8 @@ Resources:
   PostAuthenticationFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Layers:
+        - !Ref DBTablesLayer
       CodeUri: cognito-lambda/post-authentication/
       Handler: app.handler
       Runtime: nodejs12.x
@@ -233,13 +234,17 @@ Resources:
       CompatibleRuntimes:
         - nodejs12.x
       RetentionPolicy: Delete
+    # Metadata:
+    #   BuildMethod: nodejs12.x
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      Layers:
+        - !Ref DBTablesLayer
       CodeUri: hello-world/
       Handler: app.lambdaHandler
-      Runtime: nodejs12.x
+      Runtime: nodejs12.x      
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
