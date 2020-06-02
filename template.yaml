@@ -31,17 +31,17 @@ Parameters:
     Default: Dev
 
 Resources:
-  WebsiteBucket:
+  TargetBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub 'somsiadtyperwebsite-${AWS::AccountId}'
       WebsiteConfiguration:
         IndexDocument: index.html
   
-  WebsiteBucketPolicy:
+  TargetBucketPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:
-      Bucket: !Ref WebsiteBucket
+      Bucket: !Ref TargetBucket
       PolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -49,7 +49,7 @@ Resources:
             Effect: Allow
             Principal: "*"
             Action: s3:GetObject
-            Resource: !Sub "arn:aws:s3:::${WebsiteBucket}/*"
+            Resource: !Sub "arn:aws:s3:::${TargetBucket}/*"
     
   DeploymentLayer:
     Type: AWS::Serverless::Application
@@ -116,7 +116,7 @@ Resources:
         AllowMethods: "POST, GET"
         AllowHeaders: "*" # "Content-Type, X-Amz-Date, Authorization, X-Api-Key"
         AllowOrigin: "*"
-        #!GetAtt WebsiteBucket.WebsiteURL
+        #!GetAtt TargetBucket.WebsiteURL
         MaxAge: "600"
         AllowCredentials: True
       Auth:
@@ -158,7 +158,7 @@ Resources:
       # will upload the assets
       Policies:
         - S3FullAccessPolicy:
-            BucketName: !Ref WebsiteBucket
+            BucketName: !Ref TargetBucket
 
   # This is a custom resource that
   # will trigger the function during deployment
@@ -173,7 +173,7 @@ Resources:
       Version: !Ref "SiteSource.Version"
 
       # tell the deployer where to upload the files
-      TargetBucket: !Ref WebsiteBucket
+      TargetBucket: !Ref TargetBucket
 
       Substitutions:
         FilePattern: "js/config.js"
@@ -617,4 +617,4 @@ Outputs:
     Value: !Sub "https://${SomsiadTyperApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/"
   DestinationStaticUrl:
     Description: "Static S3 website URL:"
-    Value: !GetAtt WebsiteBucket.WebsiteURL
+    Value: !GetAtt TargetBucket.WebsiteURL

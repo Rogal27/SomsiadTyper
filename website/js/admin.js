@@ -11,6 +11,8 @@ function AddContest(){
         method: 'POST',
         url: ApiURL + "/createtournament",
         headers: {
+            Authorization: somsiadTyper.authToken,
+            "Access-Control-Allow-Origin": "*"
         },
         data: JSON.stringify({
             name
