@@ -1,0 +1,13 @@
+{
+    "name": "update_match",
+    "version": "1.0.0",
+    "description": "Simple match updating code",
+    "main": "app.js",
+    "dependencies": {
+      "aws-sdk": "^2.437.0"
+    },
+    "devDependencies": {
+      "jest": "^24.7.1"
+    }
+  }
+  

@@ -1,0 +1,13 @@
+{
+    "name": "read_matches",
+    "version": "1.0.0",
+    "description": "Simple read matches code",
+    "main": "app.js",
+    "dependencies": {
+      "aws-sdk": "^2.437.0"
+    },
+    "devDependencies": {
+      "jest": "^24.7.1"
+    }
+  }
+  
