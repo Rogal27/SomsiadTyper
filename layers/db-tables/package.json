@@ -1,7 +1,6 @@
 {
-  "name": "create_tournament",
+  "name": "dbtables-layer",
   "version": "1.0.0",
-  "description": "Simple torunament inserting code",
   "main": "app.js",
   "dependencies": {
     "aws-sdk": "^2.437.0"
