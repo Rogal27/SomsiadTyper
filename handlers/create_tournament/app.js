@@ -10,6 +10,7 @@ exports.lambdaHandler = async (event, context, callback) => {
     }
 
     console.info('received:', event);
+    console.info('claims:', event.requestContext.authorizer);
 
     var requestBody = JSON.parse(event.body);
     var name = requestBody.name;
