@@ -315,8 +315,8 @@ Resources:
               Authorizer: CognitoAuthorizer
             RequestParameters:
               - method.request.header.Authorization:
-                Required: true
-                Caching: true
+                  Required: true
+                  Caching: true
 
   ReadContestFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
