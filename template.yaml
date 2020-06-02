@@ -112,13 +112,12 @@ Resources:
     Properties:
       Name: SomsiadTyperApi
       StageName: !Ref Stage
-      Cors:
-        AllowMethods: "POST, GET"
-        AllowHeaders: "*" # "Content-Type, X-Amz-Date, Authorization, X-Api-Key"
-        AllowOrigin: "*"
-        #!GetAtt TargetBucket.WebsiteURL
-        MaxAge: "600"
-        AllowCredentials: True
+      # Cors:
+      #   AllowMethods: "POST, GET"
+      #   AllowHeaders: "*" # "Content-Type, X-Amz-Date, Authorization, X-Api-Key"
+      #   AllowOrigin: "*"
+      #   #!GetAtt TargetBucket.WebsiteURL
+      #   AllowCredentials: True
       Auth:
         Authorizers:
           CognitoAuthorizer:
@@ -314,6 +313,10 @@ Resources:
             Method: POST
             Auth:
               Authorizer: CognitoAuthorizer
+            RequestParameters:
+              - method.request.header.Authorization:
+                Required: true
+                Caching: true
 
   ReadContestFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
