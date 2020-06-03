@@ -2,6 +2,8 @@
 // const url = 'http://checkip.amazonaws.com/';
 let response;
 
+const tables = require('/opt/dbtables');
+
 /**
  *
  * Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
@@ -28,6 +30,8 @@ exports.lambdaHandler = async (event, context) => {
         console.log(err);
         return err;
     }
+
+    console.log(tables.TEAMS);
 
     return response
 };

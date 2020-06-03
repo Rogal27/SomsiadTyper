@@ -2,7 +2,7 @@ const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
 const tables = require('/opt/dbtables');
-const tableName = tables.CONTESTS;
+const tableName = tables.MATCHES;
 
 exports.lambdaHandler = async (event, context, callback) => {
     if (event.httpMethod !== 'POST') {
@@ -10,11 +10,12 @@ exports.lambdaHandler = async (event, context, callback) => {
     }
 
     console.info('received:', event);
-    console.info('claims:', event.requestContext.authorizer);
 
     var requestBody = JSON.parse(event.body);
-    var name = requestBody.name;
-    
+    var home_team = requestBody.home_team;
+    var away_team = requestBody.away_team;
+    var contest_id = requestBody.contest_id;
+    var date =  requestBody.date;
     var id='',m='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx',i=0,rb=Math.random()*0xffffffff|0;
     while(i++<36) {
         var c=m[i-1],r=rb&0xf,v=c=='x'?r:(r&0x3|0x8);
@@ -24,8 +25,11 @@ exports.lambdaHandler = async (event, context, callback) => {
     var params = {
         TableName : tableName,
         Item: {
-            contest_id : id,
-            name: name
+            match_id : id,
+            date: date,
+            contest_id: contest_id,
+            home_team : home_team,
+            away_team : away_team
         }
     };
 
@@ -35,7 +39,10 @@ exports.lambdaHandler = async (event, context, callback) => {
     callback(null, {
         statusCode: 200,
         body: JSON.stringify({
-            name: name
+            contest_id: contest_id,
+            date: date,
+            home_team : home_team,
+            away_team : away_team
         }),
         headers: {
             'Access-Control-Allow-Origin': '*',

@@ -2,7 +2,7 @@ const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
 const tables = require('/opt/dbtables');
-const tableName = tables.CONTESTS;
+const tableName = tables.MATCHES;
 
 exports.lambdaHandler = async (event, context, callback) => {
     if (event.httpMethod !== 'POST') {
@@ -10,32 +10,29 @@ exports.lambdaHandler = async (event, context, callback) => {
     }
 
     console.info('received:', event);
-    console.info('claims:', event.requestContext.authorizer);
 
     var requestBody = JSON.parse(event.body);
-    var name = requestBody.name;
-    
-    var id='',m='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx',i=0,rb=Math.random()*0xffffffff|0;
-    while(i++<36) {
-        var c=m[i-1],r=rb&0xf,v=c=='x'?r:(r&0x3|0x8);
-        id+=(c=='-'||c=='4')?c:v.toString(16);rb=i%8==0?Math.random()*0xffffffff|0:rb>>4;
-    }
+    var id = requestBody.match_id;
+    var home_team_score = requestBody.home_team_score;
+    var away_team_score = requestBody.away_team_score;
 
     var params = {
-        TableName : tableName,
-        Item: {
-            contest_id : id,
-            name: name
+        TableName: tableName,
+        Key: { 'match_id' : id },
+        UpdateExpression: 'set home_score = :home_score, away_score = :away_score',
+        ExpressionAttributeValues: {
+          ':home_score' : home_team_score,
+          ':away_score' : away_team_score
         }
-    };
-
+      };
+      
     // Call DynamoDB to add the item to the table
-    const result = await docClient.put(params).promise();
+    const result = await docClient.update(params).promise();
     
     callback(null, {
         statusCode: 200,
         body: JSON.stringify({
-            name: name
+            result
         }),
         headers: {
             'Access-Control-Allow-Origin': '*',
