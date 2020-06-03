@@ -15,6 +15,7 @@ somsiadTyper.authToken.then(function setAuthToken(token) {
 
 $( document ).ready(function() {
     ReadContests();
+    ReadMatches();
 });
 
 
@@ -95,6 +96,10 @@ function completeReadContestRequest(response){
         $('#matchContestSelect').append('<option value="' + element.contest_id + '">' + element.name + '</option>');
         $('#resultContestSelect').append('<option value="' + element.contest_id + '">' + element.name + '</option>')
     }
+
+    var contest = $('#matchContestSelect').val();
+    if(contest == null)
+        ReadMatches();
 }
 
 function DeleteContest(id){
@@ -124,34 +129,121 @@ function AddMatch(){
     var contest = $('#matchContestSelect').val();
     var firstTeamName = $("#newMatchFirstTeamName").val();
     var secondTeamName = $("#newMatchSecondTeamName").val();
-    var date = $("#newMatchDate").val();
+    var date = new Date($("#newMatchDate").val());
     var hours = $("#newMatchHour").val();
-    var firstTeamScore = $("#newMatchFristTeamScore").val();
-    var secondTeamScore = $("#newMatchSecondTeamScore").val();
 
-    console.log(contest);
-    console.log(firstTeamName);
-    console.log(secondTeamName);
-    console.log(date);
-    console.log(hours);
-    console.log(firstTeamScore);
-    console.log(secondTeamScore);
+    var splitted_hours = hours.split(":");
+    date.setHours(splitted_hours[0]);
+    date.setMinutes(splitted_hours[1]);
 
-    // $.ajax({
-    //     method: 'POST',
-    //     url: ApiURL + "/createtournament",
-    //     headers: {
-    //         "Authorization": authToken
-    //     },
-    //     data: JSON.stringify({
-    //         name
-    //     }),
-    //     success: completeAddContestRequest,
-    //     error: function ajaxError(jqXHR, textStatus, errorThrown) {
-    //         console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-    //         console.error('Response: ', jqXHR.responseText);
-    //         $("#errorLabel").text("Błąd dodawania turnieju");
-    //         $("#alertDiv").css("display","block");
-    //     }
-    // });
+    $.ajax({
+        method: 'POST',
+        url: ApiURL + "/addmatch",
+        headers: {
+        },
+        data: JSON.stringify({
+            home_team: firstTeamName,
+            away_team: secondTeamName,
+            contest_id: contest,
+            date
+        }),
+        success: completeAddMatchRequest,
+        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            console.error('Response: ', jqXHR.responseText);
+            $("#errorLabel").text("Błąd dodawania meczu");
+            $("#alertDiv").css("display","block");
+        }
+    });
+}
+
+function completeAddMatchRequest(){
+    $("#newMatchFirstTeamName").val("");
+    $("#newMatchSecondTeamName").val("");
+    $("#newMatchDate").val(new Date());
+    $("#newMatchHour").val("");
+}
+
+function ReadMatches(){
+    var contest = $('#matchContestSelect').val();
+    if(contest == null)
+        return;
+
+    $.ajax({
+        method: 'POST',
+        url: ApiURL + "/readmatches",
+        headers: {
+        },
+        data:{
+            contest_id: contest
+        },
+        success: completeReadMatchesRequest,
+        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            console.error('Response: ', jqXHR.responseText);
+            $("#errorLabel").text("Błąd podczas odczytu turniejów");
+            $("#alertDiv").css("display","block");
+        }
+    });
+}
+
+function completeReadMatchesRequest(response){
+    console.log(response);
+
+    var table = document.getElementById('matches_table');
+    var rowCount = table.rows.length;
+    for (var i = 1; i < rowCount; i++) {
+        table.deleteRow(1);
+    }
+
+    var size = response.result.Count;
+
+    for(var i=0; i<size; i++){
+        element = response.result.Items[i];
+        var date = element.date;
+        var dd = date.getDate();
+        var mm = date.getMonth()+1; 
+        var yyyy = date.getFullYear();
+        if(dd<10) 
+            dd='0'+dd;
+        if(mm<10) 
+            mm='0'+mm;
+        var resultDate = yyyy+'-'+mm+'-'+dd;
+
+        var minutes = date.getMinutes();
+        var hours = date.getHours();
+        if(minutes<10)
+            minutes='0'+minutes;
+        if(hours<10)
+            hours='0'+hours;
+        var resultTime = hours+":"+minutes;
+
+        var homescore='';
+        var awayscore='';
+        if(element.home_score)
+            homescore = element.home_score;
+        if(awayscore)
+            awayscore = element.away_score;
+
+        var row = table.insertRow(1);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
+        var cell8 = row.insertCell(7);
+
+        cell1.innerHTML = element.match_id;
+        cell1.hidden = true;
+        cell2.innerHTML = "<input type='text' class='form-control' value='" + element.home_team + "' />";
+        cell3.innerHTML = "<input type='text' class='form-control' value='" + element.away_team + "' />";
+        cell4.innerHTML = "<input type='date' class='form-control' value='" + resultDate + "' />";
+        cell4.innerHTML = "<input type='time' class='form-control' value='" + resultTime + "' />";
+        cell5.innerHTML = "<input type='number' class='form-control' value='" + homescore + "' />";
+        cell6.innerHTML = "<input type='number' class='form-control' value='" + awayscore + "' />";
+        cell7.innerHTML = "<a class='btn btn-success btn-circle' style='color:white' onclick='UpdateMatch(" + '"' + element.match_id + '"' +  ")'><i class='fas fa-save'></i> </a><a class='btn btn-danger btn-circle' style='color:white' onclick='DeleteMatch(" + '"' + element.match_id + '"' +  ")'><i class='fas fa-trash'></i></a>";
+    }
 }
