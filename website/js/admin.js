@@ -66,7 +66,7 @@ function ReadContests(){
 function completeReadContestRequest(response){
     var table = document.getElementById('contests_table');
     var rowCount = table.rows.length;
-    for (var i = 2; i < rowCount; i++) {
+    for (var i = 1; i < rowCount; i++) {
         table.deleteRow(1);
     }
     $('#matchContestSelect')
@@ -193,7 +193,7 @@ function completeReadMatchesRequest(response){
 
     var table = document.getElementById('matches_table');
     var rowCount = table.rows.length;
-    for (var i = 1; i < rowCount; i++) {
+    for (var i = 2; i < rowCount; i++) {
         table.deleteRow(1);
     }
 
@@ -223,10 +223,10 @@ function completeReadMatchesRequest(response){
         var awayscore='';
         if(element.home_score)
             homescore = element.home_score;
-        if(awayscore)
+        if(element.away_score)
             awayscore = element.away_score;
 
-        var row = table.insertRow(1);
+        var row = table.insertRow(2);
 
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
@@ -239,12 +239,12 @@ function completeReadMatchesRequest(response){
 
         cell1.innerHTML = element.match_id;
         cell1.hidden = true;
-        cell2.innerHTML = "<input type='text' class='form-control' value='" + element.home_team + "' />";
-        cell3.innerHTML = "<input type='text' class='form-control' value='" + element.away_team + "' />";
-        cell4.innerHTML = "<input type='date' class='form-control' value='" + resultDate + "' />";
-        cell5.innerHTML = "<input type='time' class='form-control' value='" + resultTime + "' />";
-        cell6.innerHTML = "<input type='number' class='form-control' value='" + homescore + "' />";
-        cell7.innerHTML = "<input type='number' class='form-control' value='" + awayscore + "' />";
+        cell2.innerHTML = element.home_team;
+        cell3.innerHTML = element.away_team;
+        cell4.innerHTML = resultDate;
+        cell5.innerHTML = resultTime;
+        cell6.innerHTML = "<input id='" + element.match_id + "-homeScore' type='number' class='form-control' value='" + homescore + "' />";
+        cell7.innerHTML = "<input id='" + element.match_id + "-awayScore' type='number' class='form-control' value='" + awayscore + "' />";
         cell8.innerHTML = "<a class='btn btn-success btn-circle' style='color:white' onclick='UpdateMatch(" + '"' + element.match_id + '"' +  ")'><i class='fas fa-save'></i> </a><a class='btn btn-danger btn-circle' style='color:white' onclick='DeleteMatch(" + '"' + element.match_id + '"' +  ")'><i class='fas fa-trash'></i></a>";
     }
 }
@@ -269,5 +269,34 @@ function DeleteMatch(id){
 }
 
 function completeDeleteMatchRequest(){
+    ReadMatches();
+}
+
+function UpdateMatch(id){
+    var id_prefix = "#"+id;
+    var firstTeamScore = $(id_prefix+"-homeScore").val();
+    var secondTeamScore = $(id_prefix+"-awayScore").val();
+
+    $.ajax({
+        method: 'POST',
+        url: ApiURL + "/updatematches",
+        headers: {
+        },
+        data: JSON.stringify({
+            match_id: id,
+            home_team_score: firstTeamScore,
+            away_team_score: secondTeamScore
+        }),
+        success: completeUpdateMatchRequest,
+        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            console.error('Response: ', jqXHR.responseText);
+            $("#errorLabel").text("Błąd aktualizacji meczu");
+            $("#alertDiv").css("display","block");
+        }
+    });
+}
+
+function completeUpdateMatchRequest(){
     ReadMatches();
 }
