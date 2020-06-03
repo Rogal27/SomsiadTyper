@@ -248,3 +248,26 @@ function completeReadMatchesRequest(response){
         cell8.innerHTML = "<a class='btn btn-success btn-circle' style='color:white' onclick='UpdateMatch(" + '"' + element.match_id + '"' +  ")'><i class='fas fa-save'></i> </a><a class='btn btn-danger btn-circle' style='color:white' onclick='DeleteMatch(" + '"' + element.match_id + '"' +  ")'><i class='fas fa-trash'></i></a>";
     }
 }
+
+function DeleteMatch(id){
+    $.ajax({
+        method: 'POST',
+        url: ApiURL + "/deletematch",
+        headers: {
+        },
+        data: JSON.stringify({
+            id
+        }),
+        success: completeDeleteMatchRequest,
+        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+            console.error('Response: ', jqXHR.responseText);
+            $("#errorLabel").text("Błąd usuwania meczu");
+            $("#alertDiv").css("display","block");
+        }
+    });
+}
+
+function completeDeleteMatchRequest(){
+    ReadMatches();
+}
