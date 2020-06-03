@@ -59,7 +59,7 @@ Resources:
   UserPhotosBucketPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:
-      Bucket: !Ref TargetBucket
+      Bucket: !Ref UserPhotosBucket
       PolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -225,7 +225,6 @@ Resources:
   UserPhotosDeploymentResource:
     Type: AWS::CloudFormation::CustomResource
     Properties:
-
       # the following two lines are required to 
       # ensure that cloudformation will trigger the
       # resource every time you change the bundled files
@@ -238,8 +237,8 @@ Resources:
       # # Choose the ACL and caching policies
       # # eg, for directly accessible web site
       # # use public-read and 10 minutes caching
-      # Acl: 'public-read'
-      # CacheControlMaxAge: 600
+      Acl: 'public-read'
+      CacheControlMaxAge: 600
 
   PostConfirmationInvocationPermission:
     Type: AWS::Lambda::Permission

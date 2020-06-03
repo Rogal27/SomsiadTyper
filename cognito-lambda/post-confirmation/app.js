@@ -14,12 +14,9 @@
 const tables = require('/opt/dbtables');
 const photos_consts = require('/opt/photos');
 const dynamodb = require('aws-sdk/clients/dynamodb');
-const AWS = require('aws-sdk');
 const docClient = new dynamodb.DocumentClient();
 
 const tableName = tables.USERS;
-const photos_bucket_name = photos_consts.PHOTOS_BUCKET;
-const s3 = new AWS.s3();
 
 exports.handler = async (event, context, callback) => {
     // Send post confirmation data to Cloudwatch logs
@@ -31,13 +28,7 @@ exports.handler = async (event, context, callback) => {
     
     var user_contests_won = [];
 
-    var bucket_params = {
-        Bucket: photos_bucket_name
-    };
-
-    const s3_website = await s3.getBucketWebsite(bucket_params).promise();
-
-    var photo_link = `${s3_website}/${photos_consts.DEFAULT_PHOTO}`;
+    var photo_link = photos_consts.BUCKET_URL + photos_consts.DEFAULT_PHOTO;
 
     //Add user to db
     var params = {
