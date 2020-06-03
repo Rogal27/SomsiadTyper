@@ -19,18 +19,16 @@ exports.handler = (event, context, callback) => {
     docClient.get(params, function(err, user_data) {
         if (err) 
             console.info(err);
-        else
-            console.info(user_data);
-      });
-
-    event.response = {
-        "claimsOverrideDetails": {
-            "claimsToAddOrOverride": {
-                "Role": "USER",
-                "Some_Claim": "sample_value"
-            }
+        else {
+            event.response = {
+                "claimsOverrideDetails": {
+                    "claimsToAddOrOverride": {
+                        "Role": user_data.Role,
+                    }
+                }
+            };
         }
-    };
+      });   
 
     // Return to Amazon Cognito
     callback(null, event);
