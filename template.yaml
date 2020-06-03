@@ -81,6 +81,7 @@ Resources:
       LambdaConfig:
         PostConfirmation: !GetAtt PostConfirmationFunction.Arn
         PreTokenGeneration: !GetAtt PreTokenGenerationFunction.Arn
+        PreSignUp: !GetAtt PreSignUpFunction.Arn
       
       EmailVerificationSubject: 'Verify your email - Somsiad Typer'
       #EmailVerificationMessage: 'Your verification link is {username} {####}'
@@ -205,6 +206,14 @@ Resources:
       Principal: cognito-idp.amazonaws.com
       SourceArn: !GetAtt UserPool.Arn
   
+  PreSignUpInvocationPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt PreSignUpFunction.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+
   PostConfirmationFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -213,15 +222,28 @@ Resources:
       CodeUri: cognito-lambda/post-confirmation/
       Handler: app.handler
       Runtime: nodejs12.x
-      # Policies:
-      #   - arn:aws:iam::aws:policy/AmazonCognitoReadOnly
-      #   - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      #   - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersDynamoDBTable
   
   PreTokenGenerationFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Layers:
+        - !Ref DBTablesLayer
       CodeUri: cognito-lambda/pre-token-generation/
+      Handler: app.handler
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersDynamoDBTable
+  
+  PreSignUpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Layers:
+        - !Ref DBTablesLayer
+      CodeUri: cognito-lambda/pre-sign-up/
       Handler: app.handler
       Runtime: nodejs12.x
 
