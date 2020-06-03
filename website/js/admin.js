@@ -66,7 +66,7 @@ function ReadContests(){
 function completeReadContestRequest(response){
     var table = document.getElementById('contests_table');
     var rowCount = table.rows.length;
-    for (var i = 1; i < rowCount; i++) {
+    for (var i = 2; i < rowCount; i++) {
         table.deleteRow(1);
     }
     $('#matchContestSelect')
@@ -97,8 +97,9 @@ function completeReadContestRequest(response){
         $('#resultContestSelect').append('<option value="' + element.contest_id + '">' + element.name + '</option>')
     }
 
-    var contest = $('#matchContestSelect').val();
-    if(contest == null)
+    var table = document.getElementById('matches_table');
+    var rowCount = table.rows.length;
+    if(rowCount <= 2)
         ReadMatches();
 }
 
@@ -174,9 +175,9 @@ function ReadMatches(){
         url: ApiURL + "/readmatches",
         headers: {
         },
-        data:{
-            contest_id: contest
-        },
+        data:JSON.stringify({
+            contest_id: contest,
+        }),
         success: completeReadMatchesRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
             console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
@@ -200,7 +201,7 @@ function completeReadMatchesRequest(response){
 
     for(var i=0; i<size; i++){
         element = response.result.Items[i];
-        var date = element.date;
+        var date = new Date(element.date);
         var dd = date.getDate();
         var mm = date.getMonth()+1; 
         var yyyy = date.getFullYear();
@@ -241,9 +242,9 @@ function completeReadMatchesRequest(response){
         cell2.innerHTML = "<input type='text' class='form-control' value='" + element.home_team + "' />";
         cell3.innerHTML = "<input type='text' class='form-control' value='" + element.away_team + "' />";
         cell4.innerHTML = "<input type='date' class='form-control' value='" + resultDate + "' />";
-        cell4.innerHTML = "<input type='time' class='form-control' value='" + resultTime + "' />";
-        cell5.innerHTML = "<input type='number' class='form-control' value='" + homescore + "' />";
-        cell6.innerHTML = "<input type='number' class='form-control' value='" + awayscore + "' />";
-        cell7.innerHTML = "<a class='btn btn-success btn-circle' style='color:white' onclick='UpdateMatch(" + '"' + element.match_id + '"' +  ")'><i class='fas fa-save'></i> </a><a class='btn btn-danger btn-circle' style='color:white' onclick='DeleteMatch(" + '"' + element.match_id + '"' +  ")'><i class='fas fa-trash'></i></a>";
+        cell5.innerHTML = "<input type='time' class='form-control' value='" + resultTime + "' />";
+        cell6.innerHTML = "<input type='number' class='form-control' value='" + homescore + "' />";
+        cell7.innerHTML = "<input type='number' class='form-control' value='" + awayscore + "' />";
+        cell8.innerHTML = "<a class='btn btn-success btn-circle' style='color:white' onclick='UpdateMatch(" + '"' + element.match_id + '"' +  ")'><i class='fas fa-save'></i> </a><a class='btn btn-danger btn-circle' style='color:white' onclick='DeleteMatch(" + '"' + element.match_id + '"' +  ")'><i class='fas fa-trash'></i></a>";
     }
 }
