@@ -240,6 +240,7 @@
                   <div class="collapse show" id="matchCard">
                     <div class="card-body">
                       <select id="matchContestSelect" class="form-control col-6">
+                        <option value="123455">ASDASDASD</option>
                       </select>
                       <table class="table mt-2">
                         <thead class="thead-light">
@@ -256,25 +257,25 @@
                         <tbody>
                           <tr>
                             <td>
-                              <input type="text" class="form-control" />
+                              <input id="newMatchFirstTeamName" type="text" class="form-control" />
                             </td>
                             <td>
-                              <input type="text" class="form-control" />
+                              <input id="newMatchSecondTeamName" type="text" class="form-control" />
                             </td>
                             <td>
-                              <input type="date" class="form-control" />
+                              <input id="newMatchDate" type="date" class="form-control" />
                             </td>
                             <td>
-                              <input type="time" class="form-control" />
+                              <input id="newMatchHour" type="time" class="form-control" />
                             </td>
                             <td>
-                              <input type="number" class="form-control" />
+                              <input id="newMatchFristTeamScore" type="number" class="form-control" />
                             </td>
                             <td>
-                              <input type="number" class="form-control" />
+                              <input id="newMatchSecondTeamScore" type="number" class="form-control" />
                             </td>
                             <td>
-                              <a href="#" class="btn btn-success btn-circle">
+                              <button onclick="AddMatch()" class="btn btn-success btn-circle">
                                 <i class="fas fa-check"></i>
                               </a>
                             </td>

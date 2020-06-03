@@ -16,7 +16,8 @@ somsiadTyper.authToken.then(function setAuthToken(token) {
 $( document ).ready(function() {
     ReadContests();
 });
-console.log( "ready!" );
+
+
 function AddContest(){
     var name = $('#contestInput').val();
 
@@ -117,4 +118,40 @@ function DeleteContest(id){
 
 function completeDeleteContestRequest(){
     ReadContests();
+}
+
+function AddMatch(){
+    var contest = $('#matchContestSelect').val();
+    var firstTeamName = $("#newMatchFirstTeamName").val();
+    var secondTeamName = $("#newMatchSecondTeamName").val();
+    var date = $("#newMatchDate").val();
+    var hours = $("#newMatchHour").val();
+    var firstTeamScore = $("#newMatchFristTeamScore").val();
+    var secondTeamScore = $("#newMatchSecondTeamScore").val();
+
+    console.log(contest);
+    console.log(firstTeamName);
+    console.log(secondTeamName);
+    console.log(date);
+    console.log(hours);
+    console.log(firstTeamScore);
+    console.log(secondTeamScore);
+
+    // $.ajax({
+    //     method: 'POST',
+    //     url: ApiURL + "/createtournament",
+    //     headers: {
+    //         "Authorization": authToken
+    //     },
+    //     data: JSON.stringify({
+    //         name
+    //     }),
+    //     success: completeAddContestRequest,
+    //     error: function ajaxError(jqXHR, textStatus, errorThrown) {
+    //         console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
+    //         console.error('Response: ', jqXHR.responseText);
+    //         $("#errorLabel").text("Błąd dodawania turnieju");
+    //         $("#alertDiv").css("display","block");
+    //     }
+    // });
 }
