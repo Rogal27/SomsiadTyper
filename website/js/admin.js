@@ -33,8 +33,6 @@ function AddContest(){
         }),
         success: completeAddContestRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            console.error('Response: ', jqXHR.responseText);
             $("#errorLabel").text("Błąd dodawania turnieju");
             $("#alertDiv").css("display","block");
         }
@@ -55,8 +53,6 @@ function ReadContests(){
         },
         success: completeReadContestRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            console.error('Response: ', jqXHR.responseText);
             $("#errorLabel").text("Błąd podczas odczytu turniejów");
             $("#alertDiv").css("display","block");
         }
@@ -99,7 +95,7 @@ function completeReadContestRequest(response){
 
     var table = document.getElementById('matches_table');
     var rowCount = table.rows.length;
-    if(rowCount <= 2)
+    if(rowCount <= 2) //first row - headers, second row - new match input
         ReadMatches();
 }
 
@@ -114,8 +110,6 @@ function DeleteContest(id){
         }),
         success: completeDeleteContestRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            console.error('Response: ', jqXHR.responseText);
             $("#errorLabel").text("Błąd usuwania turnieju");
             $("#alertDiv").css("display","block");
         }
@@ -150,8 +144,6 @@ function AddMatch(){
         }),
         success: completeAddMatchRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            console.error('Response: ', jqXHR.responseText);
             $("#errorLabel").text("Błąd dodawania meczu");
             $("#alertDiv").css("display","block");
         }
@@ -180,8 +172,6 @@ function ReadMatches(){
         }),
         success: completeReadMatchesRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            console.error('Response: ', jqXHR.responseText);
             $("#errorLabel").text("Błąd podczas odczytu turniejów");
             $("#alertDiv").css("display","block");
         }
@@ -260,8 +250,6 @@ function DeleteMatch(id){
         }),
         success: completeDeleteMatchRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            console.error('Response: ', jqXHR.responseText);
             $("#errorLabel").text("Błąd usuwania meczu");
             $("#alertDiv").css("display","block");
         }
@@ -289,8 +277,6 @@ function UpdateMatch(id){
         }),
         success: completeUpdateMatchRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            console.error('Error requesting ride: ', textStatus, ', Details: ', errorThrown);
-            console.error('Response: ', jqXHR.responseText);
             $("#errorLabel").text("Błąd aktualizacji meczu");
             $("#alertDiv").css("display","block");
         }
