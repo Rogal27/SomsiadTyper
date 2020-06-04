@@ -12,6 +12,7 @@
  */
 
 const tables = require('/opt/dbtables');
+const photos_consts = require('/opt/photos');
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
@@ -24,8 +25,10 @@ exports.handler = async (event, context, callback) => {
     var user_email = event.request.userAttributes.email;
     var user_name = event.request.userAttributes.name;
     var user_role = 'USER';
-    var photo_link = '';
+    
     var user_contests_won = [];
+
+    var photo_link = photos_consts.BUCKET_URL + photos_consts.DEFAULT_PHOTO;
 
     //Add user to db
     var params = {
