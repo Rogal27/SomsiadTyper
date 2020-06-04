@@ -5,8 +5,8 @@ const tables = require('/opt/dbtables');
 const tableName = tables.MATCHES;
 
 exports.lambdaHandler = async (event, context, callback) => {
-    if (event.httpMethod !== 'GET') {
-        throw new Error(`getMethod only accepts GET method, you tried: ${event.httpMethod} method.`);
+    if (event.httpMethod !== 'POST') {
+        throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
     }
 
     console.info('received:', event);

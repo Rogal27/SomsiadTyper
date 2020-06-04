@@ -239,9 +239,9 @@
                   <!-- Card Content - Collapse -->
                   <div class="collapse show" id="matchCard">
                     <div class="card-body">
-                      <select id="matchContestSelect" class="form-control col-6">
+                      <select id="matchContestSelect" onchange="ReadMatches()" class="form-control col-6">
                       </select>
-                      <table class="table mt-2">
+                      <table id="matches_table" class="table mt-2">
                         <thead class="thead-light">
                           <tr>
                             <th scope="col">Gospodarz</th>
@@ -256,132 +256,24 @@
                         <tbody>
                           <tr>
                             <td>
-                              <input type="text" class="form-control" />
+                              <input id="newMatchFirstTeamName" type="text" class="form-control" />
                             </td>
                             <td>
-                              <input type="text" class="form-control" />
+                              <input id="newMatchSecondTeamName" type="text" class="form-control" />
                             </td>
                             <td>
-                              <input type="date" class="form-control" />
+                              <input id="newMatchDate" type="date" class="form-control" />
                             </td>
                             <td>
-                              <input type="time" class="form-control" />
+                              <input id="newMatchHour" type="time" class="form-control" />
                             </td>
                             <td>
-                              <input type="number" class="form-control" />
                             </td>
                             <td>
-                              <input type="number" class="form-control" />
                             </td>
                             <td>
-                              <a href="#" class="btn btn-success btn-circle">
+                              <button onclick="AddMatch()" class="btn btn-success btn-circle">
                                 <i class="fas fa-check"></i>
-                              </a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td hidden>123456</td>
-                            <td>
-                              <input
-                                type="text"
-                                class="form-control"
-                                value="Chelsea"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                class="form-control"
-                                value="Barcelona"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="date"
-                                class="form-control"
-                                value="2020-06-08"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="time"
-                                class="form-control"
-                                value="20:45"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="number"
-                                class="form-control"
-                                value="6"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="number"
-                                class="form-control"
-                                value="0"
-                              />
-                            </td>
-                            <td>
-                              <a href="#" class="btn btn-success btn-circle">
-                                <i class="fas fa-save"></i>
-                              </a>
-                              <a href="#" class="btn btn-danger btn-circle">
-                                <i class="fas fa-trash"></i>
-                              </a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td hidden>123456</td>
-                            <td>
-                              <input
-                                type="text"
-                                class="form-control"
-                                value="Borussia Dortmund"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                class="form-control"
-                                value="Real Madryt"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="date"
-                                class="form-control"
-                                value="2020-06-09"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="time"
-                                class="form-control"
-                                value="18:45"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="number"
-                                class="form-control"
-                                value="3"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="number"
-                                class="form-control"
-                                value="3"
-                              />
-                            </td>
-                            <td>
-                              <a href="#" class="btn btn-success btn-circle">
-                                <i class="fas fa-save"></i>
-                              </a>
-                              <a href="#" class="btn btn-danger btn-circle">
-                                <i class="fas fa-trash"></i>
                               </a>
                             </td>
                           </tr>
