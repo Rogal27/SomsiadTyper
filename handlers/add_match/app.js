@@ -15,7 +15,7 @@ exports.lambdaHandler = async (event, context, callback) => {
     var home_team = requestBody.home_team;
     var away_team = requestBody.away_team;
     var contest_id = requestBody.contest_id;
-    var date =  requestBody.date;
+    var date =  new Date(requestBody.date).getTime()/1000;
     var id='',m='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx',i=0,rb=Math.random()*0xffffffff|0;
     while(i++<36) {
         var c=m[i-1],r=rb&0xf,v=c=='x'?r:(r&0x3|0x8);
