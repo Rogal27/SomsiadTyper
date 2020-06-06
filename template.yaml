@@ -531,7 +531,28 @@ Resources:
             Method: POST  
             RestApiId: !Ref SomsiadTyperApi
   
-            
+  AddTypeFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Layers:
+        - !Ref DBTablesLayer
+      CodeUri: handlers/type/add_type
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersScoresDynamoDBTable
+      Events:
+        ReadContest:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /addtype
+            Method: POST  
+            Auth:
+              Authorizer: CognitoAuthorizer
+            RestApiId: !Ref SomsiadTyperApi
+
   # dynamoDB setup
 
   # users
