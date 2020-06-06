@@ -74,5 +74,47 @@ function ReadMatches(){
 }
 
 function completeReadMatchesRequest(response){
-    console.log(response);
+    var table = document.getElementById('matches_table');
+    var rowCount = table.rows.length;
+    for (var i = 1; i < rowCount; i++) {
+        table.deleteRow(1);
+    }
+
+    var size = response.result.Count;
+
+    for(var i=0; i<size; i++){
+        element = response.result.Items[i];
+        var date = new Date(element.date);
+        var dd = date.getDate();
+        var mm = date.getMonth()+1; 
+        var yyyy = date.getFullYear();
+        if(dd<10) 
+            dd='0'+dd;
+        if(mm<10) 
+            mm='0'+mm;
+        var resultDate = yyyy+'-'+mm+'-'+dd;
+
+        var minutes = date.getMinutes();
+        var hours = date.getHours();
+        if(minutes<10)
+            minutes='0'+minutes;
+        if(hours<10)
+            hours='0'+hours;
+        var resultTime = hours+":"+minutes+" "+resultDate;
+
+        var row = table.insertRow(1);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+
+        cell1.innerHTML = element.match_id;
+        cell1.hidden = true;
+        cell2.innerHTML = element.home_team + "-" + element.away_team;
+        cell3.innerHTML = resultTime;
+        cell4.innerHTML = "<input id='" + element.match_id + "-homeScore' type='number' class='form-control' value='" + "-1" + "' />";
+        cell5.innerHTML = "<input id='" + element.match_id + "-awayScore' type='number' class='form-control' value='" + "-1" + "' />";
+    }
 }

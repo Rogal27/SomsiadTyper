@@ -186,8 +186,6 @@ function ReadMatches(){
 }
 
 function completeReadMatchesRequest(response){
-    console.log(response);
-
     var table = document.getElementById('matches_table');
     var rowCount = table.rows.length;
     for (var i = 2; i < rowCount; i++) {
