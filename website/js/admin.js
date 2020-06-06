@@ -160,6 +160,8 @@ function completeAddMatchRequest(){
     $("#newMatchSecondTeamName").val("");
     $("#newMatchDate").val(new Date());
     $("#newMatchHour").val("");
+
+    ReadMatches();
 }
 
 function ReadMatches(){
@@ -189,7 +191,7 @@ function completeReadMatchesRequest(response){
     var table = document.getElementById('matches_table');
     var rowCount = table.rows.length;
     for (var i = 2; i < rowCount; i++) {
-        table.deleteRow(1);
+        table.deleteRow(2);
     }
 
     var size = response.result.Count;
