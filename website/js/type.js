@@ -92,7 +92,7 @@ function completeReadMatchesRequest(response){
             dd='0'+dd;
         if(mm<10) 
             mm='0'+mm;
-        var resultDate = yyyy+'-'+mm+'-'+dd;
+        var resultDate = dd+'-'+mm+'-'+yyyy;
 
         var minutes = date.getMinutes();
         var hours = date.getHours();
