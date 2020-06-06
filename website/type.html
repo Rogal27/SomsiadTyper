@@ -112,8 +112,12 @@
               <h1 class="h3 mb-0 text-gray-800">Panel typera</h1>
             </div>
 
-            <select class="form-control col-6">
-                <option>Liga Mistrzów 2019/20</option>
+            <div id="alertDiv" class="alert" style="display: none;">
+              <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+              <label id="errorLabel">This is an alert box.</label>
+            </div> 
+
+            <select id="matchContestSelect" class="form-control col-6">
             </select>
 
             <table class="table mt-2">

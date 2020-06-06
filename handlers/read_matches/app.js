@@ -23,11 +23,19 @@ exports.lambdaHandler = async (event, context, callback) => {
         ExpressionAttributeValues: { ":contest_id": contest_id }
     
     };
+    
 
     // Call DynamoDB to read the item to the table
     const result = await docClient.scan(params).promise();
     
-      callback(null, {
+    for(var i=0; i<result.Count; i++){
+        var utcSeconds = result.Items[i].date;
+        var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        d.setUTCSeconds(utcSeconds);
+        result.Items[i].date = d;
+    }
+    
+    callback(null, {
         statusCode: 200,
         body: JSON.stringify({
             result
