@@ -511,6 +511,49 @@ Resources:
             Method: POST
             RestApiId: !Ref SomsiadTyperApi
   
+  GetUserInfoFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Layers:
+        - !Ref DBTablesLayer
+      CodeUri: handlers/user_profile/user_info/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersDynamoDBTable
+      Events:
+        ReadContest:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /user_info
+            Method: POST
+            RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer
+  
+  SetUserProfilePictureFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Layers:
+        - !Ref DBTablesLayer
+      CodeUri: handlers/user_profile/set_profile_picture/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the SampleTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersDynamoDBTable
+      Events:
+        ReadContest:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /set_profile_picture
+            Method: POST
+            RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer
             
   # dynamoDB setup
 
