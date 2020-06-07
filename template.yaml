@@ -498,12 +498,16 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersScoresDynamoDBTable 
       Events:
         ReadContest:
           Type: Api 
           Properties:
             Path: /readmatchestotype
-            Method: POST  
+            Method: POST
+            Auth:
+              Authorizer: CognitoAuthorizer  
             RestApiId: !Ref SomsiadTyperApi
 
   AddTypeFunction:
