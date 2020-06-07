@@ -43,7 +43,6 @@ exports.lambdaHandler = async (event, context, callback) => {
 
     var points;
     for(var i=0; i<resultSearch.Count; i++){
-        console.info("LOG");
         if(resultSearch.Items[i].home_team_score == home_team_score && resultSearch.Items[i].away_team_score == away_team_score)
             points = 3;
         else if(home_team_score == away_team_score && resultSearch.Items[i].home_team_score == resultSearch.Items[i].away_team_score)
