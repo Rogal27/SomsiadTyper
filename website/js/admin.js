@@ -179,15 +179,13 @@ function ReadMatches(){
         }),
         success: completeReadMatchesRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            $("#errorLabel").text("Błąd podczas odczytu turniejów");
+            $("#errorLabel").text("Błąd podczas odczytu meczów");
             $("#alertDiv").css("display","block");
         }
     });
 }
 
 function completeReadMatchesRequest(response){
-    console.log(response);
-
     var table = document.getElementById('matches_table');
     var rowCount = table.rows.length;
     for (var i = 2; i < rowCount; i++) {

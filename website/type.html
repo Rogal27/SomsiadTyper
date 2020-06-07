@@ -112,11 +112,15 @@
               <h1 class="h3 mb-0 text-gray-800">Panel typera</h1>
             </div>
 
-            <select class="form-control col-6">
-                <option>Liga Mistrzów 2019/20</option>
+            <div id="alertDiv" class="alert" style="display: none;">
+              <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+              <label id="errorLabel">This is an alert box.</label>
+            </div> 
+
+            <select id="matchContestSelect" onchange="ReadMatches()" class="form-control col-6">
             </select>
 
-            <table class="table mt-2">
+            <table id="matches_table" class="table mt-2">
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">Mecz</th>
@@ -126,52 +130,6 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td hidden>123456</td>
-                    <td>
-                      Chelsea - Barcelona
-                    </td>
-                    <td>
-                      20:45 08-06-2020
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="form-control"
-                        value="6"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="form-control"
-                        value="0"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td hidden>123456</td>
-                    <td>
-                      Borussia Dortmund - Real Madryt
-                    </td>
-                    <td>
-                        18:45 09-06-2020
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="form-control"
-                        value="2"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        class="form-control"
-                        value="1"
-                      />
-                    </td>
-                  </tr>
                 </tbody>
               </table>
 
