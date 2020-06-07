@@ -1,3 +1,17 @@
+const ApiURL = _config.api.invokeUrl;
+
+var authToken;
+somsiadTyper.authToken.then(function setAuthToken(token) {
+    if (token) {
+        authToken = token;
+    } else {
+        window.location.href = '/login.html';
+    }
+}).catch(function handleTokenError(error) {
+    alert(error);
+    window.location.href = '/login.html';
+});
+
 $(document).ready(function () {
   setUser();
 });
@@ -21,6 +35,6 @@ function setUser() {
 function completeSetUserRequest(response) {
   console.log(response);
 
-  $("#name").val() = "";
-  $("#profile_photo").attr("src", "");
+  $("#name").text(response.name);
+  $("#profile_photo").attr("src", response.photo);
 }
