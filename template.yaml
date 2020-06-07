@@ -523,12 +523,16 @@ Resources:
         # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersScoresDynamoDBTable 
       Events:
         ReadContest:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /readmatchestotype
-            Method: POST  
+            Method: POST
+            Auth:
+              Authorizer: CognitoAuthorizer  
             RestApiId: !Ref SomsiadTyperApi
   
   AddTypeFunction:

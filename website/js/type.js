@@ -61,6 +61,7 @@ function ReadMatches(){
         method: 'POST',
         url: ApiURL + "/readmatchestotype",
         headers: {
+            Authorization: authToken
         },
         data:JSON.stringify({
             contest_id: contest,
@@ -80,10 +81,10 @@ function completeReadMatchesRequest(response){
         table.deleteRow(1);
     }
 
-    var size = response.result.Count;
+    var size = response.result.length;
 
     for(var i=0; i<size; i++){
-        element = response.result.Items[i];
+        element = response.result[i];
         var date = new Date(element.date);
         var dd = date.getDate();
         var mm = date.getMonth()+1; 
@@ -114,8 +115,8 @@ function completeReadMatchesRequest(response){
         cell1.hidden = true;
         cell2.innerHTML = element.home_team + "-" + element.away_team;
         cell3.innerHTML = resultTime;
-        cell4.innerHTML = "<input id='" + element.match_id + "-homeScore' type='number' class='form-control' value='" + "-1" + "' />";
-        cell5.innerHTML = "<input id='" + element.match_id + "-awayScore' type='number' class='form-control' value='" + "-1" + "' />";
+        cell4.innerHTML = "<input id='" + element.match_id + "-homeScore' type='number' class='form-control' value='" + element.home_team_type + "' />";
+        cell5.innerHTML = "<input id='" + element.match_id + "-awayScore' type='number' class='form-control' value='" + element.away_team_type + "' />";
     }
 }
 
