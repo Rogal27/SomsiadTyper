@@ -91,10 +91,10 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   var photo_length = requestBody.photo_length;
 
-  if (parseInt(photo_length) > 3 * 1024) {
+  if (parseInt(photo_length) > 3 * 1024 * 1024) {
     const response = {
       statusCode: 400,
-      body: "File size too large",
+      body: "File size too large. Max size is 3MiB.",
       headers: {
         "Access-Control-Allow-Origin": "*",
       },
@@ -135,6 +135,8 @@ exports.lambdaHandler = async (event, context, callback) => {
     return response;
   }
 
+  user_data = user_data.Item;
+
   var default_photo_path = photo_consts.BUCKET_URL + photo_consts.DEFAULT_PHOTO;
   var user_photo_path = user_data.photo;
 
@@ -154,12 +156,20 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   user_photo_key = user_id + "/profile." + photo_type;
 
+  if (photo_type == "jpg" || photo_type == "jpeg") {
+    var content_type = "image/jpeg";
+  } else {
+    var content_type = "image/png";
+  }
+
   try {
+    var buffer = Buffer.from(photo,'base64');
     var s3_params = {
       Bucket: photo_consts.PHOTOS_BUCKET,
       Key: user_photo_key,
-      ContentType: "image",
-      Body: photo,
+      ContentType: content_type,
+      Body: buffer,
+      //ContentEncoding: "base64",
     };
     var putResult = await s3Client.putObject(s3_params).promise();
   } catch (error) {
