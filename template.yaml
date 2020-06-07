@@ -410,7 +410,9 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /readcontest
-            Method: GET  
+            Method: GET
+            Auth:
+              Authorizer: CognitoAuthorizer    
             RestApiId: !Ref SomsiadTyperApi
 
   DeleteContestFunction:
@@ -429,6 +431,8 @@ Resources:
           Properties:
             Path: /deletecontest
             Method: POST  
+            Auth:
+              Authorizer: CognitoAuthorizer  
             RestApiId: !Ref SomsiadTyperApi
 
   AddMatchFunction:
@@ -449,6 +453,8 @@ Resources:
           Properties:
             Path: /addmatch
             Method: POST  
+            Auth:
+              Authorizer: CognitoAuthorizer  
             RestApiId: !Ref SomsiadTyperApi
 
   ReadMatchesFunction:
@@ -469,6 +475,8 @@ Resources:
           Properties:
             Path: /readmatches
             Method: POST  
+            Auth:
+              Authorizer: CognitoAuthorizer  
             RestApiId: !Ref SomsiadTyperApi
 
   UpdateMatchesFunction:
@@ -489,6 +497,8 @@ Resources:
           Properties:
             Path: /updatematches
             Method: POST
+            Auth:
+              Authorizer: CognitoAuthorizer  
             RestApiId: !Ref SomsiadTyperApi
 
   DeleteMatchesFunction:
@@ -509,6 +519,8 @@ Resources:
           Properties:
             Path: /deletematch
             Method: POST
+            Auth:
+              Authorizer: CognitoAuthorizer  
             RestApiId: !Ref SomsiadTyperApi
 
   ReadMatchesToTypeFunction:

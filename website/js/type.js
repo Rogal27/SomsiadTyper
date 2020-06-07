@@ -27,6 +27,7 @@ function ReadContests(){
         method: 'GET',
         url: ApiURL + "/readcontest",
         headers: {
+            Authorization: authToken
         },
         success: completeReadContestRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {

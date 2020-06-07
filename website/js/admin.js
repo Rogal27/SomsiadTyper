@@ -31,7 +31,7 @@ function AddContest(){
         method: 'POST',
         url: ApiURL + "/createtournament",
         headers: {
-            "Authorization": authToken
+            Authorization: authToken
         },
         data: JSON.stringify({
             name
@@ -55,6 +55,7 @@ function ReadContests(){
         method: 'GET',
         url: ApiURL + "/readcontest",
         headers: {
+            Authorization: authToken
         },
         success: completeReadContestRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
@@ -109,6 +110,7 @@ function DeleteContest(id){
         method: 'POST',
         url: ApiURL + "/deletecontest",
         headers: {
+            Authorization: authToken
         },
         data: JSON.stringify({
             id
@@ -140,6 +142,7 @@ function AddMatch(){
         method: 'POST',
         url: ApiURL + "/addmatch",
         headers: {
+            Authorization: authToken
         },
         data: JSON.stringify({
             home_team: firstTeamName,
@@ -173,6 +176,7 @@ function ReadMatches(){
         method: 'POST',
         url: ApiURL + "/readmatches",
         headers: {
+            Authorization: authToken
         },
         data:JSON.stringify({
             contest_id: contest,
@@ -249,6 +253,7 @@ function DeleteMatch(id){
         method: 'POST',
         url: ApiURL + "/deletematch",
         headers: {
+            Authorization: authToken
         },
         data: JSON.stringify({
             id
@@ -274,6 +279,7 @@ function UpdateMatch(id){
         method: 'POST',
         url: ApiURL + "/updatematches",
         headers: {
+            Authorization: authToken
         },
         data: JSON.stringify({
             match_id: id,
