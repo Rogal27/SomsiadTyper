@@ -118,3 +118,43 @@ function completeReadMatchesRequest(response){
         cell5.innerHTML = "<input id='" + element.match_id + "-awayScore' type='number' class='form-control' value='" + "-1" + "' />";
     }
 }
+
+function SendTypes(){
+    var table = document.getElementById('matches_table');
+
+    var rowLength = table.rows.length;
+
+    var matches = [];
+
+    for(var i=1; i<rowLength; i+=1) //skip thead row
+    {
+        var row = table.rows[i];
+
+        matches.push({
+            match_id: row.cells[0].innerText,
+            home_team_score: row.cells[3].firstChild.value,
+            away_team_score: row.cells[4].firstChild.value
+        })
+    }
+    console.log(matches);
+
+    $.ajax({
+        method: 'POST',
+        url: ApiURL + "/addtype",
+        headers: {
+            Authorization: authToken
+        },
+        data:JSON.stringify({
+            matches
+        }),
+        success: completeAddTypeRequest,
+        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            $("#errorLabel").text("Błąd podczas dodawanie typów");
+            $("#alertDiv").css("display","block");
+        }
+    });
+}
+
+function completeAddTypeRequest(){
+    ReadMatches();
+}
