@@ -12,7 +12,7 @@ exports.lambdaHandler = async (event, context, callback) => {
     );
   }
 
-  console.info("Received event:", event);
+  console.info("Received:", event);
 
   if (!event.requestContext.hasOwnProperty("authorizer")) {
     callback(null, {
@@ -26,7 +26,7 @@ exports.lambdaHandler = async (event, context, callback) => {
   if (!event.requestContext.authorizer.claims.sub) {
     callback(null, {
       statusCode: 400,
-      body: "User account ID not found",
+      body: "User account ID not found in claims",
       headers: {
         "Access-Control-Allow-Origin": "*",
       },
@@ -50,7 +50,7 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   var user_data = await docClient.getItem(params).promise();
 
-  if (user_data == null) {
+  if (!user_data) {
     callback(null, {
       statusCode: 400,
       body: "User with requested ID not found",

@@ -9,13 +9,11 @@ function setUser() {
     headers: {
       Authorization: authToken,
     },
-    data: JSON.stringify({
-      name,
-    }),
     success: completeSetUserRequest,
     error: function ajaxError(jqXHR, textStatus, errorThrown) {
-      $("#errorLabel").text("Błąd dodawania turnieju");
-      $("#alertDiv").css("display", "block");
+      console.log("error");
+      //   $("#errorLabel").text("Błąd dodawania turnieju");
+      //   $("#alertDiv").css("display", "block");
     },
   });
 }
