@@ -14,6 +14,11 @@ somsiadTyper.authToken.then(function setAuthToken(token) {
 });
 
 $( document ).ready(function() {
+    $('#logOut').click(function() {
+        somsiadTyper.signOut();
+        window.location = "index.html";
+    });
+
     ReadContests();
     ReadMatches();
 });
@@ -155,6 +160,8 @@ function completeAddMatchRequest(){
     $("#newMatchSecondTeamName").val("");
     $("#newMatchDate").val(new Date());
     $("#newMatchHour").val("");
+
+    ReadMatches();
 }
 
 function ReadMatches(){
@@ -172,19 +179,17 @@ function ReadMatches(){
         }),
         success: completeReadMatchesRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            $("#errorLabel").text("Błąd podczas odczytu turniejów");
+            $("#errorLabel").text("Błąd podczas odczytu meczów");
             $("#alertDiv").css("display","block");
         }
     });
 }
 
 function completeReadMatchesRequest(response){
-    console.log(response);
-
     var table = document.getElementById('matches_table');
     var rowCount = table.rows.length;
     for (var i = 2; i < rowCount; i++) {
-        table.deleteRow(1);
+        table.deleteRow(2);
     }
 
     var size = response.result.Count;
