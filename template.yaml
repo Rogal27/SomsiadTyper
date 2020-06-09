@@ -309,49 +309,6 @@ Resources:
     Metadata:
       BuildMethod: nodejs12.x
 
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      Layers:
-        - !Ref DBTablesLayer
-      CodeUri: hello-world/
-      Handler: app.lambdaHandler
-      Runtime: nodejs12.x
-      Events:
-        HelloWorld:
-          Type: Api 
-          Properties:
-            Path: /hello
-            RestApiId: !Ref SomsiadTyperApi
-            Method: GET
-
-  GoodbyeWorldFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: goodbye_world/
-      Handler: app.lambda_handler
-      Runtime: python3.8
-      Events:
-        GoodbyeWorld:
-          Type: Api 
-          Properties:
-            Path: /goodbye
-            RestApiId: !Ref SomsiadTyperApi
-            Method: GET
-
-  SampleHandlerFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: handlers/sample-handler/
-      Handler: app.lambdaHandler
-      Runtime: nodejs12.x
-      Events:
-        SampleHandler:
-          Type: Api 
-          Properties:
-            Path: /samplehandler
-            Method: GET
-
   InsertTournamentFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -492,7 +449,7 @@ Resources:
     Properties:
       Layers:
         - !Ref DBTablesLayer
-      CodeUri: handlers/type/read_matches
+      CodeUri: handlers/type/read_future_matches
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
@@ -505,6 +462,29 @@ Resources:
           Type: Api 
           Properties:
             Path: /readmatchestotype
+            Method: POST
+            RestApiId: !Ref SomsiadTyperApi
+            # Auth:
+            #   Authorizer: CognitoAuthorizer             
+
+  ReadScoresFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      Layers:
+        - !Ref DBTablesLayer
+      CodeUri: handlers/read_scores
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MatchesDynamoDBTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersScoresDynamoDBTable 
+      Events:
+        ReadContest:
+          Type: Api 
+          Properties:
+            Path: /readscores
             Method: POST
             Auth:
               Authorizer: CognitoAuthorizer  

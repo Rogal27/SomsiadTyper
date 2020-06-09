@@ -22,10 +22,13 @@ exports.lambdaHandler = async (event, context, callback) => {
         id+=(c=='-'||c=='4')?c:v.toString(16);rb=i%8==0?Math.random()*0xffffffff|0:rb>>4;
     }
 
+    var match_info = `${home_team}#${away_team}#${date}`;
+
     var params = {
         TableName : tableName,
         Item: {
             match_id : id,
+            match_info: match_info,
             match_day: date,
             contest_id: contest_id,
             home_team : home_team,

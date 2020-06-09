@@ -7,9 +7,7 @@ const tableName = tables.USERS;
 exports.lambdaHandler = async (event, context) => {
   // Send post confirmation data to Cloudwatch logs
   if (event.httpMethod !== "POST") {
-    throw new Error(
-      `postMethod only accepts POST method, you tried: ${event.httpMethod} method.`
-    );
+    throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
   }
 
   console.info("Received:", event);
@@ -41,8 +39,7 @@ exports.lambdaHandler = async (event, context) => {
   var requestBody = JSON.parse(event.body);
 
   var requested_user_id;
-  if (requestBody && requestBody.user_id)
-    requested_user_id = requestBody.user_id;
+  if (requestBody && requestBody.user_id) requested_user_id = requestBody.user_id;
   else requested_user_id = current_user_id;
 
   var params = {
