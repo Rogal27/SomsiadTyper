@@ -67,6 +67,7 @@ exports.lambdaHandler = async (event, context) => {
     var match_data = match_info.split("#");
 
     result.push({
+      match_id: current_match.match_id,
       home_team: match_data[0],
       away_team: match_data[1],
       date: utc_date,

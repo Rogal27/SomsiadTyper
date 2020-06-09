@@ -99,7 +99,7 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   const response = {
     statusCode: 200,
-    body: "sSuccess",
+    body: "Success",
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
