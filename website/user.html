@@ -1,72 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-        <title>SomsiadTyper - panel typera</title>
+    <title>SomsiadTyper - panel główny</title>
 
-        <!-- Custom fonts for this template-->
-        <link
-        href="vendor/fontawesome-free/css/all.min.css"
-        rel="stylesheet"
-        type="text/css"
-        />
-        <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet"
-        />
+    <!-- Custom fonts for this template-->
+    <link
+      href="vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
 
-        <!-- Custom styles for this template-->
-        <link href="css/sb-admin-2.min.css" rel="stylesheet" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    </head>
-    <body>
-        <div><span id="name" ></span></div>
-        
-        <div><img id="profile_photo"/></div>
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
 
-        <div id="dialog-form" title="Zmień se fote">
-            <form>
-                <span class="label label-success">My zajmiemy się resztą</span>
-                <fieldset>
-                    <input id="fileInput" type="file" accept="image/jpeg, image/png" />
-    
-                    <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-                </fieldset>
-            </form>
+  <body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <ul
+        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+        id="accordionSidebar"
+      >
+        <!-- Sidebar - Brand -->
+        <a
+          class="sidebar-brand d-flex align-items-center justify-content-center"
+          href="index.html"
+        >
+          <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-hippo"></i>
+          </div>
+          <div class="sidebar-brand-text mx-3">Somsiad Typer</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0" />
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+          <a class="nav-link" href="admin.html">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Panel administratorski</span></a
+          >
+        </li>
+
+        <hr class="sidebar-divider" />
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+          Panel typera
         </div>
-        
-        <!-- Bootstrap core JavaScript-->
-        <script src="vendor/jquery/jquery.min.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-        <!-- Core plugin JavaScript-->
-        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+        <li class="nav-item active">
+          <a class="nav-link" href="type.html">
+            <i class="fas fa-futbol"></i>
+            <span>Typuj mecze</span></a
+          >
+        </li>
 
-        <!-- Custom scripts for all pages-->
-        <script src="js/sb-admin-2.min.js"></script>
+        <li class="nav-item active">
+          <a class="nav-link" href="results.html">
+            <i class="fas fa-poll"></i>
+            <span>Wyniki</span></a
+          >
+        </li>
+      </ul>
+      <!-- End of Sidebar -->
 
-        <!-- Page level plugins -->
-        <script src="vendor/chart.js/Chart.min.js"></script>
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
 
-        <!-- Page level custom scripts -->
-        <script src="js/demo/chart-area-demo.js"></script>
-        <script src="js/demo/chart-pie-demo.js"></script>
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
 
-        <script src="js/vendor/aws/aws-cognito-sdk.min.js"></script>
-        <script src="js/vendor/aws/amazon-cognito-identity.min.js"></script>
+            <div class="topbar-divider d-none d-sm-block"></div>
 
-        <script src="js/config.js"></script>
-        <script src="js/cognito-auth.js"></script>
-        <script src="js/check-token.js"></script>
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a style="cursor: pointer" id="logOut" class="nav-link" >
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Wyloguj</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- End of Topbar -->
 
-        <script src="js/user.js"></script>
-    </body>
+          <!-- Begin Page Content -->
+          <div class="container-fluid mt-3">
+            <!-- Page Heading -->
+            <div
+              class="d-sm-flex align-items-center justify-content-between mb-4"
+            >
+              <h1 class="h3 mb-0 text-gray-800">Szczegóły użytkownika</h1>
+            </div>
+
+
+            <div class="row">
+              <div class="col-3">
+                 <h3 id="name" class="m-2"></h3>
+                 <image id="profile_photo" class="col-12"></image>
+                </div>
+              <div class="col-8">
+                <select onchange="ReadMyMatchesResults()" id="matchContestSelect" class="form-control col-8">
+                </select>
+                <table id="matches_table" class="table mt-2">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Mecz</th>
+                      <th scope="col">Data</th>
+                      <th scope="col">Typ</th>
+                      <th scope="col">Wynik</th>
+                      <th scope="col">Zdobyte punkty</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+                <div id="spinner" style="display: none;" class="spinner-border text-primary center" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright &copy; Somsiad Typer 2020</span>
+            </div>
+          </div>
+        </footer>
+        <!-- End of Footer -->
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script>
+
+    <script src="js/vendor/aws/aws-cognito-sdk.min.js"></script>
+    <script src="js/vendor/aws/amazon-cognito-identity.min.js"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/cognito-auth.js"></script>
+    <script src="js/check-token.js"></script>
+
+    <script src="js/user.js"></script>
+  </body>
 </html>
