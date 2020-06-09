@@ -10,9 +10,8 @@ exports.lambdaHandler = async (event, context, callback) => {
   }
 
   console.info("received:", event);
-//   var user_id = event.requestContext.authorizer.claims['sub'];
+  var user_id = event.requestContext.authorizer.claims['sub'];
   var requestBody = JSON.parse(event.body);
-  var user_id = requestBody.user_id;
   var contest_id = requestBody.contest_id;
   const time = Date.now() / 1000;
 
