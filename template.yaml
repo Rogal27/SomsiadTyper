@@ -333,6 +333,8 @@ Resources:
   ReadContestFunction:
     Type: AWS::Serverless::Function 
     Properties:
+      Layers:
+        - !Ref DBTablesLayer
       CodeUri: handlers/read_contest/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
@@ -350,6 +352,8 @@ Resources:
   DeleteContestFunction:
     Type: AWS::Serverless::Function 
     Properties:
+      Layers:
+        - !Ref DBTablesLayer
       CodeUri: handlers/delete_contest/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
@@ -376,7 +380,7 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
       Events:
-        InsertTournament:
+        AddMatch:
           Type: Api 
           Properties:
             Path: /addmatch
@@ -395,7 +399,7 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
       Events:
-        ReadContest:
+        ReadAllMatchesInContest:
           Type: Api 
           Properties:
             Path: /readmatches
@@ -404,7 +408,7 @@ Resources:
             Auth:
               Authorizer: CognitoAuthorizer
 
-  UpdateMatchesFunction:
+  UpdateScoreInMatchFunction:
     Type: AWS::Serverless::Function 
     Properties:
       Layers:
@@ -416,7 +420,7 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
       Events:
-        ReadContest:
+        UpdateScoreInMatch:
           Type: Api 
           Properties:
             Path: /updatematches
@@ -435,7 +439,7 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
       Events:
-        ReadContest:
+        DeleteMatches:
           Type: Api 
           Properties:
             Path: /deletematch
@@ -456,7 +460,7 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref UsersScoresDynamoDBTable 
       Events:
-        ReadContest:
+        ReadFutureMatchesUserContest:
           Type: Api 
           Properties:
             Path: /readmatchestotype
@@ -479,7 +483,7 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref UsersScoresDynamoDBTable 
       Events:
-        ReadContest:
+        ReadPastMatchesUserContest:
           Type: Api 
           Properties:
             Path: /readscores
@@ -500,7 +504,7 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref UsersScoresDynamoDBTable
       Events:
-        ReadContest:
+        AddType:
           Type: Api 
           Properties:
             Path: /addtype
