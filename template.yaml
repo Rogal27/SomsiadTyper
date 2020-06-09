@@ -309,19 +309,19 @@ Resources:
     Metadata:
       BuildMethod: nodejs12.x
 
-  InsertTournamentFunction:
+  CreateContestFunction:
     Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
-      CodeUri: handlers/create_tournament/
+      CodeUri: handlers/create_contest/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ContestsDynamoDBTable
       Events:
-        InsertTournament:
+        CreateContest:
           Type: Api 
           Properties:
             Path: /createtournament
