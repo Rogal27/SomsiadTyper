@@ -348,10 +348,10 @@ Resources:
           Type: Api 
           Properties:
             Path: /readcontest
-            Method: GET
-            Auth:
-              Authorizer: CognitoAuthorizer    
+            Method: GET  
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   DeleteContestFunction:
     Type: AWS::Serverless::Function 
@@ -368,9 +368,9 @@ Resources:
           Properties:
             Path: /deletecontest
             Method: POST  
+            RestApiId: !Ref SomsiadTyperApi
             Auth:
               Authorizer: CognitoAuthorizer  
-            RestApiId: !Ref SomsiadTyperApi
 
   AddMatchFunction:
     Type: AWS::Serverless::Function 
@@ -389,9 +389,9 @@ Resources:
           Properties:
             Path: /addmatch
             Method: POST  
+            RestApiId: !Ref SomsiadTyperApi
             Auth:
               Authorizer: CognitoAuthorizer  
-            RestApiId: !Ref SomsiadTyperApi
 
   ReadMatchesFunction:
     Type: AWS::Serverless::Function 
@@ -410,9 +410,9 @@ Resources:
           Properties:
             Path: /readmatches
             Method: POST  
+            RestApiId: !Ref SomsiadTyperApi
             Auth:
               Authorizer: CognitoAuthorizer  
-            RestApiId: !Ref SomsiadTyperApi
 
   UpdateMatchesFunction:
     Type: AWS::Serverless::Function 
@@ -433,9 +433,9 @@ Resources:
           Properties:
             Path: /updatematches
             Method: POST
+            RestApiId: !Ref SomsiadTyperApi
             Auth:
               Authorizer: CognitoAuthorizer  
-            RestApiId: !Ref SomsiadTyperApi
 
   DeleteMatchesFunction:
     Type: AWS::Serverless::Function 
@@ -454,9 +454,9 @@ Resources:
           Properties:
             Path: /deletematch
             Method: POST
+            RestApiId: !Ref SomsiadTyperApi
             Auth:
               Authorizer: CognitoAuthorizer  
-            RestApiId: !Ref SomsiadTyperApi
 
   ReadMatchesToTypeFunction:
     Type: AWS::Serverless::Function 
@@ -500,9 +500,9 @@ Resources:
           Properties:
             Path: /readscores
             Method: POST
+            RestApiId: !Ref SomsiadTyperApi
             Auth:
               Authorizer: CognitoAuthorizer  
-            RestApiId: !Ref SomsiadTyperApi
 
   AddTypeFunction:
     Type: AWS::Serverless::Function 
