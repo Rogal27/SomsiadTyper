@@ -54,6 +54,9 @@ exports.lambdaHandler = async (event, context, callback) => {
     
     const response = {
         statusCode: 200,
+        body:JSON.stringify({
+            match_id
+        }),
         headers: {
             'Access-Control-Allow-Origin': '*',
         }

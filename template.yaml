@@ -350,6 +350,8 @@ Resources:
             Path: /readcontest
             Method: GET  
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   DeleteContestFunction:
     Type: AWS::Serverless::Function 
@@ -367,6 +369,8 @@ Resources:
             Path: /deletecontest
             Method: POST  
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   AddMatchFunction:
     Type: AWS::Serverless::Function 
@@ -386,6 +390,8 @@ Resources:
             Path: /addmatch
             Method: POST  
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   ReadMatchesFunction:
     Type: AWS::Serverless::Function 
@@ -405,6 +411,8 @@ Resources:
             Path: /readmatches
             Method: POST  
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   UpdateMatchesFunction:
     Type: AWS::Serverless::Function 
@@ -417,6 +425,8 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersScoresDynamoDBTable
       Events:
         ReadContest:
           Type: Api 
@@ -424,6 +434,8 @@ Resources:
             Path: /updatematches
             Method: POST
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   DeleteMatchesFunction:
     Type: AWS::Serverless::Function 
@@ -443,6 +455,8 @@ Resources:
             Path: /deletematch
             Method: POST
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   ReadMatchesToTypeFunction:
     Type: AWS::Serverless::Function 
@@ -464,8 +478,8 @@ Resources:
             Path: /readmatchestotype
             Method: POST
             RestApiId: !Ref SomsiadTyperApi
-            # Auth:
-            #   Authorizer: CognitoAuthorizer             
+            Auth:
+              Authorizer: CognitoAuthorizer             
 
   ReadScoresFunction:
     Type: AWS::Serverless::Function 
@@ -486,9 +500,9 @@ Resources:
           Properties:
             Path: /readscores
             Method: POST
+            RestApiId: !Ref SomsiadTyperApi
             Auth:
               Authorizer: CognitoAuthorizer  
-            RestApiId: !Ref SomsiadTyperApi
 
   AddTypeFunction:
     Type: AWS::Serverless::Function 
