@@ -2,7 +2,7 @@ const dynamodb = require("aws-sdk/clients/dynamodb");
 const docClient = new dynamodb.DocumentClient();
 
 const tables = require("/opt/dbtables");
-const tableName = tables.MATCHES;
+const tableMatches = tables.MATCHES;
 const tableScores = tables.USERS_SCORES;
 
 exports.lambdaHandler = async (event, context, callback) => {
@@ -13,12 +13,52 @@ exports.lambdaHandler = async (event, context, callback) => {
   console.info("received:", event);
 
   var requestBody = JSON.parse(event.body);
+  if (!requestBody) {
+    const response = {
+      statusCode: 400,
+      body: "Request has no body.",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    return response;
+  }
+  if (!requestBody.match_id) {
+    const response = {
+      statusCode: 400,
+      body: "Match ID is required.",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    return response;
+  }
+  if (!requestBody.home_team_score) {
+    const response = {
+      statusCode: 400,
+      body: "Home Team Score is required.",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    return response;
+  }
+  if (!requestBody.away_team_score) {
+    const response = {
+      statusCode: 400,
+      body: "Away Team Score ID is required.",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    return response;
+  }
   var id = requestBody.match_id;
   var home_team_score = requestBody.home_team_score;
   var away_team_score = requestBody.away_team_score;
 
   var params = {
-    TableName: tableName,
+    TableName: tableMatches,
     Key: { match_id: id },
     UpdateExpression: "set home_team_score = :home_score, away_team_score = :away_score",
     ExpressionAttributeValues: {
@@ -59,9 +99,7 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   const response = {
     statusCode: 200,
-    // body: JSON.stringify({
-    //   resultSearch,
-    // }),
+    body: "sSuccess",
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
