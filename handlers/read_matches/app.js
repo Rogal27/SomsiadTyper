@@ -35,13 +35,14 @@ exports.lambdaHandler = async (event, context, callback) => {
         result.Items[i].date = d;
     }
     
-    callback(null, {
+    const response = {
         statusCode: 200,
         body: JSON.stringify({
             result
         }),
         headers: {
             'Access-Control-Allow-Origin': '*',
-        },
-    });
+        }
+    }
+    return response;
 };

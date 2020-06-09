@@ -36,7 +36,7 @@ exports.lambdaHandler = async (event, context, callback) => {
     // Call DynamoDB to add the item to the table
     const result = await docClient.put(params).promise();
     
-    callback(null, {
+    const response = {
         statusCode: 200,
         body: JSON.stringify({
             contest_id: contest_id,
@@ -46,7 +46,8 @@ exports.lambdaHandler = async (event, context, callback) => {
         }),
         headers: {
             'Access-Control-Allow-Origin': '*',
-        },
-    });
+        }
+    }
+    return response;
 };
 
