@@ -26,7 +26,7 @@ exports.lambdaHandler = async (event, context, callback) => {
         TableName : tableName,
         Item: {
             match_id : id,
-            date: date,
+            match_day: date,
             contest_id: contest_id,
             home_team : home_team,
             away_team : away_team

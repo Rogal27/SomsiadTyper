@@ -61,6 +61,7 @@ function ReadMatches(){
         method: 'POST',
         url: ApiURL + "/readmatchestotype",
         headers: {
+            Authorization: authToken
         },
         data:JSON.stringify({
             contest_id: contest,
@@ -80,10 +81,10 @@ function completeReadMatchesRequest(response){
         table.deleteRow(1);
     }
 
-    var size = response.result.Count;
+    var size = response.result.length;
 
     for(var i=0; i<size; i++){
-        element = response.result.Items[i];
+        element = response.result[i];
         var date = new Date(element.date);
         var dd = date.getDate();
         var mm = date.getMonth()+1; 
@@ -114,7 +115,47 @@ function completeReadMatchesRequest(response){
         cell1.hidden = true;
         cell2.innerHTML = element.home_team + "-" + element.away_team;
         cell3.innerHTML = resultTime;
-        cell4.innerHTML = "<input id='" + element.match_id + "-homeScore' type='number' class='form-control' value='" + "-1" + "' />";
-        cell5.innerHTML = "<input id='" + element.match_id + "-awayScore' type='number' class='form-control' value='" + "-1" + "' />";
+        cell4.innerHTML = "<input id='" + element.match_id + "-homeScore' type='number' class='form-control' value='" + element.home_team_type + "' />";
+        cell5.innerHTML = "<input id='" + element.match_id + "-awayScore' type='number' class='form-control' value='" + element.away_team_type + "' />";
     }
+}
+
+function SendTypes(){
+    var table = document.getElementById('matches_table');
+
+    var rowLength = table.rows.length;
+
+    var matches = [];
+
+    for(var i=1; i<rowLength; i+=1) //skip thead row
+    {
+        var row = table.rows[i];
+
+        matches.push({
+            match_id: row.cells[0].innerText,
+            home_team_score: row.cells[3].firstChild.value,
+            away_team_score: row.cells[4].firstChild.value
+        })
+    }
+    console.log(matches);
+
+    $.ajax({
+        method: 'POST',
+        url: ApiURL + "/addtype",
+        headers: {
+            Authorization: authToken
+        },
+        data:JSON.stringify({
+            matches
+        }),
+        success: completeAddTypeRequest,
+        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            $("#errorLabel").text("Błąd podczas dodawanie typów");
+            $("#alertDiv").css("display","block");
+        }
+    });
+}
+
+function completeAddTypeRequest(){
+    ReadMatches();
 }
