@@ -2,9 +2,9 @@ const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
 const tables = require('/opt/dbtables');
-const tableName = tables.MATCHES;
+const tableMatches = tables.MATCHES;
 
-exports.lambdaHandler = async (event, context, callback) => {
+exports.lambdaHandler = async (event, context) => {
     if (event.httpMethod !== 'POST') {
         throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
     }
@@ -12,28 +12,46 @@ exports.lambdaHandler = async (event, context, callback) => {
     console.info('received:', event);
 
     var requestBody = JSON.parse(event.body);
+    if (!requestBody) {
+        const response = {
+          statusCode: 400,
+          body: "Request has no body.",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        };
+        return response;
+      }
+      if (!requestBody.id) {
+        const response = {
+          statusCode: 400,
+          body: "Match ID is required required.",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        };
+        return response;
+      }
     var id = requestBody.id;
 
     var params = {
-        TableName : tableName,
+        TableName : tableMatches,
         Key:{
             "match_id": id
         }
     };
 
-    //TODO: Delete contest from user too
+    //TODO: Delete match from scores too and maybe recalculate points
 
-    // Call DynamoDB to add the item to the table
     const result = await docClient.delete(params).promise();
     
-    callback(null, {
+    const response = {
         statusCode: 200,
-        body: JSON.stringify({
-            id: id
-        }),
+        body: "Success",
         headers: {
             'Access-Control-Allow-Origin': '*',
         },
-    });
+    };
+    return response;
 };
 

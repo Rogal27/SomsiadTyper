@@ -4,7 +4,7 @@ const docClient = new dynamodb.DocumentClient();
 const tables = require("/opt/dbtables");
 const tableContests = tables.CONTESTS;
 
-exports.lambdaHandler = async (event, context, callback) => {
+exports.lambdaHandler = async (event, context) => {
   if (event.httpMethod !== "POST") {
     throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
   }
