@@ -12,7 +12,7 @@ exports.lambdaHandler = async (event, context) => {
   console.info("received:", event);
 
   var user_role = event.requestContext.authorizer.claims.role;
-  if(role !== "ADMIN"){
+  if(user_role !== "ADMIN"){
     const response = {
       statusCode: 401,
       body: "Unauthorized",
