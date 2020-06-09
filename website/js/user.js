@@ -1,18 +1,15 @@
 const ApiURL = _config.api.invokeUrl;
 
 var authToken;
-somsiadTyper.authToken
-  .then(function setAuthToken(token) {
+somsiadTyper.authToken.then(function setAuthToken(token) {
     if (token) {
-      authToken = token;
+        authToken = token;
     } else {
-      window.location.href = "/login.html";
+        window.location.href = '/login.html';
     }
-  })
-  .catch(function handleTokenError(error) {
-    alert(error);
-    window.location.href = "/login.html";
-  });
+}).catch(function handleTokenError(error) {
+    window.location.href = '/login.html';
+});
 
 $(document).ready(function () {
   console.log(getUserIdFromURL())
