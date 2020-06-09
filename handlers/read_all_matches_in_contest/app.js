@@ -24,6 +24,16 @@ exports.lambdaHandler = async (event, context) => {
   // }
 
   var requestBody = JSON.parse(event.body);
+  if (!requestBody) {
+    const response = {
+      statusCode: 400,
+      body: "Request has no body.",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    return response;
+  }
   if (!requestBody.contest_id) {
     const response = {
       statusCode: 400,
