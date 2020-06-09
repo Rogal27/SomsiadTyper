@@ -309,19 +309,6 @@ Resources:
     Metadata:
       BuildMethod: nodejs12.x
 
-  SampleHandlerFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: handlers/sample-handler/
-      Handler: app.lambdaHandler
-      Runtime: nodejs12.x
-      Events:
-        SampleHandler:
-          Type: Api 
-          Properties:
-            Path: /samplehandler
-            Method: GET
-
   InsertTournamentFunction:
     Type: AWS::Serverless::Function 
     Properties:
