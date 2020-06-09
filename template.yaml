@@ -330,19 +330,19 @@ Resources:
             Auth:
               Authorizer: CognitoAuthorizer
 
-  ReadContestFunction:
+  ReadContestsFunction:
     Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
-      CodeUri: handlers/read_contest/
+      CodeUri: handlers/read_contests/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ContestsDynamoDBTable
       Events:
-        ReadContest:
+        ReadContests:
           Type: Api 
           Properties:
             Path: /readcontest
