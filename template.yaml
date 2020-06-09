@@ -449,7 +449,7 @@ Resources:
     Properties:
       Layers:
         - !Ref DBTablesLayer
-      CodeUri: handlers/type/read_matches
+      CodeUri: handlers/type/read_future_matches
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
@@ -463,9 +463,9 @@ Resources:
           Properties:
             Path: /readmatchestotype
             Method: POST
-            Auth:
-              Authorizer: CognitoAuthorizer  
             RestApiId: !Ref SomsiadTyperApi
+            # Auth:
+            #   Authorizer: CognitoAuthorizer             
 
   AddTypeFunction:
     Type: AWS::Serverless::Function 
