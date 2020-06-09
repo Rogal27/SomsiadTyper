@@ -57,11 +57,12 @@ exports.lambdaHandler = async (event, context) => {
 
   //TODO: make it asynchronous
   for (var i = 0; i < matchesToType.Count; i++) {
-    var utcSeconds = matchesToType.Items[i].match_day;
+    const current_match = matchesToType.Items[i];
+    var utcSeconds = current_match.match_day;
     var utc_date = new Date(0); // The 0 there is the key, which sets the date to the epoch
     utc_date.setUTCSeconds(utcSeconds);
 
-    var match_id = matchesToType.Items[i].match_id;
+    var match_id = current_match.match_id;
     var searchParams = {
       TableName: scoreTableName,
       IndexName: "match_index",
@@ -82,11 +83,12 @@ exports.lambdaHandler = async (event, context) => {
       away_team_type = resultSearch.Items[0].away_team_score;
     }
 
-    var match_info = matchesToType.Items[i].match_info;
+    var match_info = current_match.match_info;
 
     var match_data = match_info.split("#");
 
     result.push({
+      match_id: current_match.match_id,
       home_team: match_data[0],
       away_team: match_data[1],
       date: utc_date,
