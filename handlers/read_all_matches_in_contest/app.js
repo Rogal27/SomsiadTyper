@@ -11,17 +11,17 @@ exports.lambdaHandler = async (event, context) => {
 
   console.info("received:", event);
 
-  var user_role = event.requestContext.authorizer.claims.role;
-  if(user_role !== "ADMIN"){
-    const response = {
-      statusCode: 401,
-      body: "Unauthorized",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
-  }
+  // var user_role = event.requestContext.authorizer.claims.role;
+  // if(user_role !== "ADMIN"){
+  //   const response = {
+  //     statusCode: 401,
+  //     body: "Unauthorized",
+  //     headers: {
+  //       "Access-Control-Allow-Origin": "*",
+  //     },
+  //   };
+  //   return response;
+  // }
 
   var requestBody = JSON.parse(event.body);
   if (!requestBody.contest_id) {
