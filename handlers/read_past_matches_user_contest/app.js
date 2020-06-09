@@ -11,7 +11,7 @@ exports.lambdaHandler = async (event, context) => {
   }
 
   console.info("received:", event);
-  var user_id = event.requestContext.authorizer.claims.sub;
+  var current_user_id = event.requestContext.authorizer.claims.sub;
   var requestBody = JSON.parse(event.body);
   if (!requestBody) {
     const response = {
