@@ -11,9 +11,7 @@ const s3Client = new AWS.S3();
 exports.lambdaHandler = async (event, context, callback) => {
   // Send post confirmation data to Cloudwatch logs
   if (event.httpMethod !== "POST") {
-    throw new Error(
-      `postMethod only accepts POST method, you tried: ${event.httpMethod} method.`
-    );
+    throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
   }
 
   console.info("Received:", event);
@@ -140,9 +138,7 @@ exports.lambdaHandler = async (event, context, callback) => {
   var default_photo_path = photo_consts.BUCKET_URL + photo_consts.DEFAULT_PHOTO;
   var user_photo_path = user_data.photo;
 
-  var user_photo_key = user_photo_path.substring(
-    photo_consts.BUCKET_URL.length
-  );
+  var user_photo_key = user_photo_path.substring(photo_consts.BUCKET_URL.length);
 
   if (user_photo_path != default_photo_path) {
     let s3_params = {
@@ -163,7 +159,7 @@ exports.lambdaHandler = async (event, context, callback) => {
   }
 
   try {
-    var buffer = Buffer.from(photo,'base64');
+    var buffer = Buffer.from(photo, "base64");
     var s3_params = {
       Bucket: photo_consts.PHOTOS_BUCKET,
       Key: user_photo_key,
