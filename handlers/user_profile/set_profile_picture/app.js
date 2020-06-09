@@ -8,7 +8,7 @@ const tableName = tables.USERS;
 
 const s3Client = new AWS.S3();
 
-exports.lambdaHandler = async (event, context, callback) => {
+exports.lambdaHandler = async (event, context) => {
   // Send post confirmation data to Cloudwatch logs
   if (event.httpMethod !== "POST") {
     throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);

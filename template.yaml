@@ -387,12 +387,12 @@ Resources:
             Method: POST  
             RestApiId: !Ref SomsiadTyperApi
 
-  ReadMatchesFunction:
+  ReadAllMatchesUserContestFunction:
     Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
-      CodeUri: handlers/read_matches/
+      CodeUri: handlers/read_all_matches_user_contest/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
@@ -411,7 +411,7 @@ Resources:
     Properties:
       Layers:
         - !Ref DBTablesLayer    
-      CodeUri: handlers/update_matches/
+      CodeUri: handlers/update_score_in_match/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
@@ -444,12 +444,12 @@ Resources:
             Method: POST
             RestApiId: !Ref SomsiadTyperApi
 
-  ReadMatchesToTypeFunction:
+  ReadFutureMatchesUserContestFunction:
     Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
-      CodeUri: handlers/type/read_future_matches
+      CodeUri: handlers/type/read_future_matches_user_contest/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
@@ -464,15 +464,15 @@ Resources:
             Path: /readmatchestotype
             Method: POST
             RestApiId: !Ref SomsiadTyperApi
-            # Auth:
-            #   Authorizer: CognitoAuthorizer             
+            Auth:
+              Authorizer: CognitoAuthorizer             
 
-  ReadScoresFunction:
+  ReadPastMatchesUserContestFunction:
     Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
-      CodeUri: handlers/read_scores
+      CodeUri: handlers/read_past_matches_user_contest/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
@@ -486,16 +486,16 @@ Resources:
           Properties:
             Path: /readscores
             Method: POST
-            Auth:
-              Authorizer: CognitoAuthorizer  
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer
 
   AddTypeFunction:
     Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
-      CodeUri: handlers/type/add_type
+      CodeUri: handlers/type/add_type/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:

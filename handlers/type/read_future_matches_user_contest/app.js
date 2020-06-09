@@ -5,7 +5,7 @@ const tables = require("/opt/dbtables");
 const matchTableName = tables.MATCHES;
 const scoreTableName = tables.USERS_SCORES;
 
-exports.lambdaHandler = async (event, context, callback) => {
+exports.lambdaHandler = async (event, context) => {
   if (event.httpMethod !== "POST") {
     throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
   }
@@ -47,6 +47,7 @@ exports.lambdaHandler = async (event, context, callback) => {
   console.info("Matches result:", matchesToType);
   var result = [];
 
+  //TODO: make it asynchronous
   for (var i = 0; i < matchesToType.Count; i++) {
     var utcSeconds = matchesToType.Items[i].match_day;
     var utc_date = new Date(0); // The 0 there is the key, which sets the date to the epoch
@@ -86,6 +87,11 @@ exports.lambdaHandler = async (event, context, callback) => {
       away_team_type: away_team_type,
     });
   }
+
+  result.sort(function (a, b) {
+    return a.date.getTime() - b.date.getTime();
+  });
+
   console.info("Returned matches:", result);
 
   const response = {
