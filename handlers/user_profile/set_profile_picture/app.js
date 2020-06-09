@@ -202,6 +202,9 @@ exports.lambdaHandler = async (event, context) => {
 
   const response = {
     statusCode: 200,
+    body: JSON.stringify({
+      photo: user_photo_path,
+    }),
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
