@@ -309,36 +309,6 @@ Resources:
     Metadata:
       BuildMethod: nodejs12.x
 
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      Layers:
-        - !Ref DBTablesLayer
-      CodeUri: hello-world/
-      Handler: app.lambdaHandler
-      Runtime: nodejs12.x
-      Events:
-        HelloWorld:
-          Type: Api 
-          Properties:
-            Path: /hello
-            RestApiId: !Ref SomsiadTyperApi
-            Method: GET
-
-  GoodbyeWorldFunction:
-    Type: AWS::Serverless::Function 
-    Properties:
-      CodeUri: goodbye_world/
-      Handler: app.lambda_handler
-      Runtime: python3.8
-      Events:
-        GoodbyeWorld:
-          Type: Api 
-          Properties:
-            Path: /goodbye
-            RestApiId: !Ref SomsiadTyperApi
-            Method: GET
-
   SampleHandlerFunction:
     Type: AWS::Serverless::Function
     Properties:
