@@ -61,19 +61,18 @@
         class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
         id="accordionSidebar"
       >
-        <!-- Sidebar - Brand -->
+      <!-- Sidebar - Brand -->
         <a
-          class="sidebar-brand d-flex align-items-center justify-content-center"
+          class="sidebar-brand d-flex align-items-center justify-content-center mt-3"
           href="index.html"
         >
-          <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-hippo"></i>
+          <div class="sidebar-brand-icon">
+              <img width="80%" height="80%" src="logo.png">
           </div>
-          <div class="sidebar-brand-text mx-3">Somsiad Typer</div>
         </a>
 
         <!-- Divider -->
-        <hr class="sidebar-divider my-0" />
+        <hr class="sidebar-divider my-0 mt-3" />
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
@@ -116,6 +115,12 @@
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
+            <li class="nav-item dropdown no-arrow">
+              <a href="./user.html" style="cursor: pointer" class="nav-link" >
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Profil</span>
+              </a>
+            </li>
+            
             <div class="topbar-divider d-none d-sm-block"></div>
 
             <!-- Nav Item - User Information -->
@@ -232,6 +237,10 @@
                         <tbody>
                         </tbody>
                       </table>
+
+                      <div id="contestsSpinner" style="display: none;" class="spinner-border text-primary center" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -298,6 +307,10 @@
                           </tr>
                         </tbody>
                       </table>
+
+                      <div id="matchesSpinner" style="display: none;" class="spinner-border text-primary center" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
                     </div>
                   </div>
                 </div>

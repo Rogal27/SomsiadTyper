@@ -19,25 +19,30 @@ $( document ).ready(function() {
         window.location = "index.html";
     });
 
+    var input = document.getElementById("newMatchDate");
+    input.setAttribute("min", formatDate(new Date()));
+
     ReadContests();
     ReadMatches();
 });
 
 
 function AddContest(){
+    startLoadingContests();
     var name = $('#contestInput').val();
 
     $.ajax({
         method: 'POST',
         url: ApiURL + "/createtournament",
         headers: {
-            "Authorization": authToken
+            Authorization: authToken
         },
         data: JSON.stringify({
             name
         }),
         success: completeAddContestRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoadingContests();
             $("#errorLabel").text("Błąd dodawania turnieju");
             $("#alertDiv").css("display","block");
         }
@@ -47,17 +52,23 @@ function AddContest(){
 function completeAddContestRequest(result) {
     $('#contestInput').val(" ");
 
+    stopLoadingContests();
+
     ReadContests();
 }
 
 function ReadContests(){
+    startLoadingContests();
+
     $.ajax({
         method: 'GET',
         url: ApiURL + "/readcontest",
         headers: {
+            Authorization: authToken
         },
         success: completeReadContestRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoadingContests();
             $("#errorLabel").text("Błąd podczas odczytu turniejów");
             $("#alertDiv").css("display","block");
         }
@@ -65,6 +76,8 @@ function ReadContests(){
 }
 
 function completeReadContestRequest(response){
+    stopLoadingContests();
+
     var table = document.getElementById('contests_table');
     var rowCount = table.rows.length;
     for (var i = 1; i < rowCount; i++) {
@@ -105,16 +118,20 @@ function completeReadContestRequest(response){
 }
 
 function DeleteContest(id){
+    startLoadingContests();
+
     $.ajax({
         method: 'POST',
         url: ApiURL + "/deletecontest",
         headers: {
+            Authorization: authToken
         },
         data: JSON.stringify({
             id
         }),
         success: completeDeleteContestRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoadingContests();
             $("#errorLabel").text("Błąd usuwania turnieju");
             $("#alertDiv").css("display","block");
         }
@@ -122,6 +139,8 @@ function DeleteContest(id){
 }
 
 function completeDeleteContestRequest(){
+    stopLoadingContests();
+
     ReadContests();
 }
 
@@ -136,10 +155,13 @@ function AddMatch(){
     date.setHours(splitted_hours[0]);
     date.setMinutes(splitted_hours[1]);
 
+    startLoadingMatches();
+
     $.ajax({
         method: 'POST',
         url: ApiURL + "/addmatch",
         headers: {
+            Authorization: authToken
         },
         data: JSON.stringify({
             home_team: firstTeamName,
@@ -149,6 +171,7 @@ function AddMatch(){
         }),
         success: completeAddMatchRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoadingMatches();
             $("#errorLabel").text("Błąd dodawania meczu");
             $("#alertDiv").css("display","block");
         }
@@ -156,6 +179,8 @@ function AddMatch(){
 }
 
 function completeAddMatchRequest(){
+    stopLoadingMatches();
+
     $("#newMatchFirstTeamName").val("");
     $("#newMatchSecondTeamName").val("");
     $("#newMatchDate").val(new Date());
@@ -169,16 +194,20 @@ function ReadMatches(){
     if(contest == null)
         return;
 
+    startLoadingMatches();
+
     $.ajax({
         method: 'POST',
         url: ApiURL + "/readmatches",
         headers: {
+            Authorization: authToken
         },
         data:JSON.stringify({
             contest_id: contest,
         }),
         success: completeReadMatchesRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoadingMatches();
             $("#errorLabel").text("Błąd podczas odczytu meczów");
             $("#alertDiv").css("display","block");
         }
@@ -186,6 +215,8 @@ function ReadMatches(){
 }
 
 function completeReadMatchesRequest(response){
+    stopLoadingMatches();
+
     var table = document.getElementById('matches_table');
     var rowCount = table.rows.length;
     for (var i = 2; i < rowCount; i++) {
@@ -197,14 +228,7 @@ function completeReadMatchesRequest(response){
     for(var i=0; i<size; i++){
         element = response.result.Items[i];
         var date = new Date(element.date);
-        var dd = date.getDate();
-        var mm = date.getMonth()+1; 
-        var yyyy = date.getFullYear();
-        if(dd<10) 
-            dd='0'+dd;
-        if(mm<10) 
-            mm='0'+mm;
-        var resultDate = yyyy+'-'+mm+'-'+dd;
+        var resultDate = formatDate(date);
 
         var minutes = date.getMinutes();
         var hours = date.getHours();
@@ -245,16 +269,21 @@ function completeReadMatchesRequest(response){
 }
 
 function DeleteMatch(id){
+    startLoadingMatches();
+
     $.ajax({
         method: 'POST',
         url: ApiURL + "/deletematch",
         headers: {
+            Authorization: authToken
         },
         data: JSON.stringify({
             id
         }),
         success: completeDeleteMatchRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoadingMatches();
+
             $("#errorLabel").text("Błąd usuwania meczu");
             $("#alertDiv").css("display","block");
         }
@@ -262,10 +291,13 @@ function DeleteMatch(id){
 }
 
 function completeDeleteMatchRequest(){
+    stopLoadingMatches();
+
     ReadMatches();
 }
 
 function UpdateMatch(id){
+
     var id_prefix = "#"+id;
     var firstTeamScore = $(id_prefix+"-homeScore").val();
     var secondTeamScore = $(id_prefix+"-awayScore").val();
@@ -274,6 +306,7 @@ function UpdateMatch(id){
         method: 'POST',
         url: ApiURL + "/updatematches",
         headers: {
+            Authorization: authToken
         },
         data: JSON.stringify({
             match_id: id,
@@ -290,4 +323,51 @@ function UpdateMatch(id){
 
 function completeUpdateMatchRequest(){
     ReadMatches();
+}
+
+function startLoadingMatches(){
+    var table = document.getElementById('matches_table');
+    var rowCount = table.rows.length;
+    for (var i = 2; i < rowCount; i++) {
+        table.deleteRow(2);
+    }
+
+    $("#matchesSpinner").css("display","block");
+}
+
+function stopLoadingMatches(){
+    $("#matchesSpinner").css("display","none");
+}
+
+function startLoadingContests(){
+    var table = document.getElementById('contests_table');
+    var rowCount = table.rows.length;
+    for (var i = 1; i < rowCount; i++) {
+        table.deleteRow(1);
+    }
+    $('#matchContestSelect')
+        .find('option')
+        .remove();
+    $('#resultContestSelect')
+        .find('option')
+        .remove();
+
+    $("#contestsSpinner").css("display","block");
+}
+
+function stopLoadingContests(){
+    $("#contestsSpinner").css("display","none");
+}
+
+function formatDate(date){
+    var dd = date.getDate();
+    var mm = date.getMonth()+1; 
+    var yyyy = date.getFullYear();
+    if(dd<10) 
+        dd='0'+dd;
+    if(mm<10) 
+        mm='0'+mm;
+    var resultDate = yyyy+'-'+mm+'-'+dd;
+
+    return resultDate;
 }

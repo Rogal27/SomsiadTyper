@@ -348,6 +348,8 @@ Resources:
             Path: /readcontest
             Method: GET  
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   DeleteContestFunction:
     Type: AWS::Serverless::Function 
@@ -367,6 +369,8 @@ Resources:
             Path: /deletecontest
             Method: POST  
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   AddMatchFunction:
     Type: AWS::Serverless::Function 
@@ -386,6 +390,8 @@ Resources:
             Path: /addmatch
             Method: POST  
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   ReadAllMatchesInContestFunction:
     Type: AWS::Serverless::Function 
@@ -419,6 +425,8 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersScoresDynamoDBTable
       Events:
         UpdateScoreInMatch:
           Type: Api 
@@ -426,6 +434,8 @@ Resources:
             Path: /updatematches
             Method: POST
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   DeleteMatchesFunction:
     Type: AWS::Serverless::Function 
@@ -445,6 +455,8 @@ Resources:
             Path: /deletematch
             Method: POST
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer  
 
   ReadFutureMatchesUserContestFunction:
     Type: AWS::Serverless::Function 
