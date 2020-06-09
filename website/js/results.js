@@ -23,6 +23,8 @@ $( document ).ready(function() {
 
 //TODO: Change it to read contests, which user is assigned for
 function ReadContests(){
+    startLoading();
+
     $.ajax({
         method: 'GET',
         url: ApiURL + "/readcontest",
@@ -31,6 +33,7 @@ function ReadContests(){
         },
         success: completeReadContestRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoading();
             $("#errorLabel").text("Błąd podczas odczytu turniejów");
             $("#alertDiv").css("display","block");
         }
@@ -38,6 +41,8 @@ function ReadContests(){
 }
 
 function completeReadContestRequest(response){
+    stopLoading();
+
     $('#matchContestSelect')
         .find('option')
         .remove();
@@ -46,7 +51,7 @@ function completeReadContestRequest(response){
     
     for(var j=0; j<i; j++){
         element = response.result.Items[j];
-        $('#matchContestSelect').append('<option value="' + element.contest_id + '">' + element.name + '</option>');
+        $('#matchContestSelect').append(`<option value="${element.contest_id}">${element.name}</option>`);
     }
 
     ReadMyMatchesResults();
@@ -56,6 +61,8 @@ function ReadMyMatchesResults(){
     var contest = $('#matchContestSelect').val();
     if(contest == null)
         return;
+
+    startLoading();
 
     $.ajax({
         method: 'POST',
@@ -68,6 +75,7 @@ function ReadMyMatchesResults(){
         }),
         success: completeReadMyMatchesResultsRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoading();
             $("#errorLabel").text("Błąd podczas odczytu wyników");
             $("#alertDiv").css("display","block");
         }
@@ -75,6 +83,8 @@ function ReadMyMatchesResults(){
 }
 
 function completeReadMyMatchesResultsRequest(response){
+    stopLoading();
+
     var table = document.getElementById('matches_table');
     var rowCount = table.rows.length;
     for (var i = 1; i < rowCount; i++) {
@@ -112,7 +122,7 @@ function completeReadMyMatchesResultsRequest(response){
         if(element.typed_away_team_score && element.typed_home_team_score)
             myType = element.typed_home_team_score + " - " + element.typed_away_team_score;
         var points = "<center>-</center>";
-        if(element.points)
+        if(element.points == 0 || element.points)
             points = element.points;
 
         var cell1 = row.insertCell(0);
@@ -127,4 +137,12 @@ function completeReadMyMatchesResultsRequest(response){
         cell4.innerHTML = result;
         cell5.innerHTML = points;
     }
+}
+
+function startLoading(){
+    $("#spinner").css("display","block");
+}
+
+function stopLoading(){
+    $("#spinner").css("display","none");
 }
