@@ -425,6 +425,8 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersScoresDynamoDBTable
       Events:
         ReadContest:
           Type: Api 
@@ -476,8 +478,8 @@ Resources:
             Path: /readmatchestotype
             Method: POST
             RestApiId: !Ref SomsiadTyperApi
-            # Auth:
-            #   Authorizer: CognitoAuthorizer             
+            Auth:
+              Authorizer: CognitoAuthorizer             
 
   ReadScoresFunction:
     Type: AWS::Serverless::Function 
