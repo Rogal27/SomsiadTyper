@@ -109,6 +109,7 @@ exports.lambdaHandler = async (event, context) => {
   const response = {
     statusCode: 200,
     body: JSON.stringify({
+      contest_id: contest_id,
       date: date,
       home_team: home_team,
       away_team: away_team,
