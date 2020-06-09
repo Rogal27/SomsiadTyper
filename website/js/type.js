@@ -175,6 +175,12 @@ function completeAddTypeRequest(){
 }
 
 function startLoading(){
+    var table = document.getElementById('matches_table');
+    var rowCount = table.rows.length;
+    for (var i = 1; i < rowCount; i++) {
+        table.deleteRow(1);
+    }
+    
     $("#spinner").css("display","block");
 }
 

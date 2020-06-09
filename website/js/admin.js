@@ -330,6 +330,12 @@ function completeUpdateMatchRequest(){
 }
 
 function startLoadingMatches(){
+    var table = document.getElementById('matches_table');
+    var rowCount = table.rows.length;
+    for (var i = 2; i < rowCount; i++) {
+        table.deleteRow(2);
+    }
+
     $("#matchesSpinner").css("display","block");
 }
 
@@ -338,6 +344,18 @@ function stopLoadingMatches(){
 }
 
 function startLoadingContests(){
+    var table = document.getElementById('contests_table');
+    var rowCount = table.rows.length;
+    for (var i = 1; i < rowCount; i++) {
+        table.deleteRow(1);
+    }
+    $('#matchContestSelect')
+        .find('option')
+        .remove();
+    $('#resultContestSelect')
+        .find('option')
+        .remove();
+        
     $("#contestsSpinner").css("display","block");
 }
 
