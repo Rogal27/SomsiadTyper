@@ -19,6 +19,9 @@ $( document ).ready(function() {
         window.location = "index.html";
     });
 
+    var input = document.getElementById("newMatchDate");
+    input.setAttribute("min", formatDate(new Date()));
+
     ReadContests();
     ReadMatches();
 });
@@ -225,14 +228,7 @@ function completeReadMatchesRequest(response){
     for(var i=0; i<size; i++){
         element = response.result.Items[i];
         var date = new Date(element.date);
-        var dd = date.getDate();
-        var mm = date.getMonth()+1; 
-        var yyyy = date.getFullYear();
-        if(dd<10) 
-            dd='0'+dd;
-        if(mm<10) 
-            mm='0'+mm;
-        var resultDate = yyyy+'-'+mm+'-'+dd;
+        var resultDate = formatDate(date);
 
         var minutes = date.getMinutes();
         var hours = date.getHours();
@@ -355,10 +351,23 @@ function startLoadingContests(){
     $('#resultContestSelect')
         .find('option')
         .remove();
-        
+
     $("#contestsSpinner").css("display","block");
 }
 
 function stopLoadingContests(){
     $("#contestsSpinner").css("display","none");
+}
+
+function formatDate(date){
+    var dd = date.getDate();
+    var mm = date.getMonth()+1; 
+    var yyyy = date.getFullYear();
+    if(dd<10) 
+        dd='0'+dd;
+    if(mm<10) 
+        mm='0'+mm;
+    var resultDate = yyyy+'-'+mm+'-'+dd;
+
+    return resultDate;
 }
