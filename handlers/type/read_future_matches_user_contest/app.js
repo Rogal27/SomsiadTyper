@@ -12,7 +12,16 @@ exports.lambdaHandler = async (event, context) => {
 
   console.info("received:", event);
   var requestBody = JSON.parse(event.body);
-
+  if (!requestBody) {
+    const response = {
+      statusCode: 400,
+      body: "Request has no body.",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    return response;
+  }
   if (!requestBody.contest_id) {
     const response = {
       statusCode: 400,
@@ -22,11 +31,10 @@ exports.lambdaHandler = async (event, context) => {
     };
     return response;
   }
-
   var contest_id = requestBody.contest_id;
 
   var user_id = event.requestContext.authorizer.claims.sub;
-  var date = new Date().getTime() / 1000;
+  const date = new Date().getTime() / 1000;
 
   var params = {
     TableName: matchTableName,

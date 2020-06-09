@@ -20,14 +20,13 @@ exports.lambdaHandler = async (event, context, callback) => {
   var params = {
     TableName: tableName,
     Key: { match_id: id },
-    UpdateExpression: "set home_score = :home_score, away_score = :away_score",
+    UpdateExpression: "set home_team_score = :home_score, away_team_score = :away_score",
     ExpressionAttributeValues: {
       ":home_score": home_team_score,
       ":away_score": away_team_score,
     },
   };
 
-  // Call DynamoDB to add the item to the table
   const result = await docClient.update(params).promise();
 
   params = {
@@ -60,9 +59,9 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   const response = {
     statusCode: 200,
-    body: JSON.stringify({
-      resultSearch,
-    }),
+    // body: JSON.stringify({
+    //   resultSearch,
+    // }),
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
