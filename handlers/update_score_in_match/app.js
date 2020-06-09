@@ -81,13 +81,19 @@ exports.lambdaHandler = async (event, context, callback) => {
   var promises = [];
   var points;
   for (var i = 0; i < resultSearch.Count; i++) {
-    if (resultSearch.Items[i].home_team_score == home_team_score && resultSearch.Items[i].away_team_score == away_team_score) points = 3;
-    else if (home_team_score == away_team_score && resultSearch.Items[i].home_team_score == resultSearch.Items[i].away_team_score) points = 1;
-    else if ((resultSearch.Items[i].home_team_score - resultSearch.Items[i].away_team_score) * (home_team_score - away_team_score) > 0) points = 1;
-    else points = 0;
+    const user_bet = resultSearch.Items[i];
+    if (user_bet.home_team_score == home_team_score && user_bet.away_team_score == away_team_score) {
+      points = 3;
+    } else if (home_team_score == away_team_score && user_bet.home_team_score == user_bet.away_team_score) {
+      points = 1;
+    } else if ((user_bet.home_team_score - user_bet.away_team_score) * (home_team_score - away_team_score) > 0) {
+      points = 1;
+    } else {
+      points = 0;
+    }
     var params = {
       TableName: tableScores,
-      Key: { id: resultSearch.Items[i].id },
+      Key: { id: user_bet.id },
       UpdateExpression: "set points = :points",
       ExpressionAttributeValues: {
         ":points": points,
