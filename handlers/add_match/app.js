@@ -22,11 +22,14 @@ exports.lambdaHandler = async (event, context, callback) => {
         id+=(c=='-'||c=='4')?c:v.toString(16);rb=i%8==0?Math.random()*0xffffffff|0:rb>>4;
     }
 
+    var match_info = `${home_team}#${away_team}#${date}`;
+
     var params = {
         TableName : tableName,
         Item: {
             match_id : id,
-            date: date,
+            match_info: match_info,
+            match_day: date,
             contest_id: contest_id,
             home_team : home_team,
             away_team : away_team
@@ -36,7 +39,7 @@ exports.lambdaHandler = async (event, context, callback) => {
     // Call DynamoDB to add the item to the table
     const result = await docClient.put(params).promise();
     
-    callback(null, {
+    const response = {
         statusCode: 200,
         body: JSON.stringify({
             contest_id: contest_id,
@@ -46,7 +49,8 @@ exports.lambdaHandler = async (event, context, callback) => {
         }),
         headers: {
             'Access-Control-Allow-Origin': '*',
-        },
-    });
+        }
+    }
+    return response;
 };
 

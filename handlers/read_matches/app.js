@@ -29,19 +29,20 @@ exports.lambdaHandler = async (event, context, callback) => {
     const result = await docClient.scan(params).promise();
     
     for(var i=0; i<result.Count; i++){
-        var utcSeconds = result.Items[i].date;
+        var utcSeconds = result.Items[i].match_day;
         var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
         d.setUTCSeconds(utcSeconds);
         result.Items[i].date = d;
     }
     
-    callback(null, {
+    const response = {
         statusCode: 200,
         body: JSON.stringify({
             result
         }),
         headers: {
             'Access-Control-Allow-Origin': '*',
-        },
-    });
+        }
+    }
+    return response;
 };

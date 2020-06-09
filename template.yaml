@@ -309,68 +309,8 @@ Resources:
     Metadata:
       BuildMethod: nodejs12.x
 
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      Layers:
-        - !Ref DBTablesLayer
-      CodeUri: hello-world/
-      Handler: app.lambdaHandler
-      Runtime: nodejs12.x
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /hello
-            RestApiId: !Ref SomsiadTyperApi
-            Method: GET
-
-  GoodbyeWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: goodbye_world/
-      Handler: app.lambda_handler
-      Runtime: python3.8
-      Events:
-        GoodbyeWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /goodbye
-            RestApiId: !Ref SomsiadTyperApi
-            Method: GET
-
-  # InsertUserFunction:
-  #   Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-  #   Properties:
-  #     CodeUri: add-person/
-  #     Handler: app.lambdaHandler
-  #     Runtime: nodejs12.x
-  #     Policies:
-  #       # Give Create/Read/Update/Delete Permissions to the SampleTable
-  #       - DynamoDBCrudPolicy:
-  #           TableName: !Ref UsersTestDBTable
-  #     Events:
-  #       InsertUser:
-  #         Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-  #         Properties:
-  #           Path: /insertuser
-  #           Method: POST
-
-  SampleHandlerFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: handlers/sample-handler/
-      Handler: app.lambdaHandler
-      Runtime: nodejs12.x
-      Events:
-        SampleHandler:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /samplehandler
-            Method: GET
-
   InsertTournamentFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
@@ -378,12 +318,11 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref ContestsDynamoDBTable
       Events:
         InsertTournament:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /createtournament
             RestApiId: !Ref SomsiadTyperApi
@@ -396,18 +335,17 @@ Resources:
                   Caching: true
 
   ReadContestFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       CodeUri: handlers/read_contest/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref ContestsDynamoDBTable
       Events:
         ReadContest:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /readcontest
             Method: GET
@@ -416,18 +354,17 @@ Resources:
             RestApiId: !Ref SomsiadTyperApi
 
   DeleteContestFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       CodeUri: handlers/delete_contest/
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref ContestsDynamoDBTable
       Events:
         DeleteContest:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /deletecontest
             Method: POST  
@@ -436,7 +373,7 @@ Resources:
             RestApiId: !Ref SomsiadTyperApi
 
   AddMatchFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
@@ -444,12 +381,11 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
       Events:
         InsertTournament:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /addmatch
             Method: POST  
@@ -458,7 +394,7 @@ Resources:
             RestApiId: !Ref SomsiadTyperApi
 
   ReadMatchesFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
@@ -466,12 +402,11 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
       Events:
         ReadContest:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /readmatches
             Method: POST  
@@ -480,7 +415,7 @@ Resources:
             RestApiId: !Ref SomsiadTyperApi
 
   UpdateMatchesFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer    
@@ -488,12 +423,11 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
       Events:
         ReadContest:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /updatematches
             Method: POST
@@ -502,7 +436,7 @@ Resources:
             RestApiId: !Ref SomsiadTyperApi
 
   DeleteMatchesFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
@@ -510,12 +444,11 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
       Events:
         ReadContest:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /deletematch
             Method: POST
@@ -524,31 +457,53 @@ Resources:
             RestApiId: !Ref SomsiadTyperApi
 
   ReadMatchesToTypeFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
-      CodeUri: handlers/type/read_matches
+      CodeUri: handlers/type/read_future_matches
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref MatchesDynamoDBTable
         - DynamoDBCrudPolicy:
             TableName: !Ref UsersScoresDynamoDBTable 
       Events:
         ReadContest:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /readmatchestotype
+            Method: POST
+            RestApiId: !Ref SomsiadTyperApi
+            # Auth:
+            #   Authorizer: CognitoAuthorizer             
+
+  ReadScoresFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      Layers:
+        - !Ref DBTablesLayer
+      CodeUri: handlers/read_scores
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MatchesDynamoDBTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersScoresDynamoDBTable 
+      Events:
+        ReadContest:
+          Type: Api 
+          Properties:
+            Path: /readscores
             Method: POST
             Auth:
               Authorizer: CognitoAuthorizer  
             RestApiId: !Ref SomsiadTyperApi
-  
+
   AddTypeFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
       Layers:
         - !Ref DBTablesLayer
@@ -556,18 +511,61 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
         - DynamoDBCrudPolicy:
             TableName: !Ref UsersScoresDynamoDBTable
       Events:
         ReadContest:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /addtype
-            Method: POST  
+            Method: POST
+            RestApiId: !Ref SomsiadTyperApi
             Auth:
               Authorizer: CognitoAuthorizer
+
+  GetUserInfoFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      Layers:
+        - !Ref DBTablesLayer
+      CodeUri: handlers/user_profile/user_info/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersDynamoDBTable
+      Events:
+        GetUserInfo:
+          Type: Api 
+          Properties:
+            Path: /user_info
+            Method: POST
             RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer
+
+  SetUserProfilePictureFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Layers:
+        - !Ref DBTablesLayer
+      CodeUri: handlers/user_profile/set_profile_picture/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersDynamoDBTable
+        - S3FullAccessPolicy:
+            BucketName: !Ref UserPhotosBucket
+      Events:
+        SetProfilePicture:
+          Type: Api 
+          Properties:
+            Path: /set_profile_picture
+            Method: POST
+            RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer
 
   # dynamoDB setup
 
@@ -594,9 +592,9 @@ Resources:
               AttributeName: "email"
               KeyType: "HASH"
           Projection:
-            NonKeyAttributes:
-              - "user_id"
-            ProjectionType: "INCLUDE"
+            # NonKeyAttributes:
+            #   - "user_id"
+            ProjectionType: "KEYS_ONLY"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
             WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
@@ -637,6 +635,7 @@ Resources:
           Projection:
             NonKeyAttributes:
               - "id"
+              - "user_points"
             ProjectionType: "INCLUDE"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
@@ -653,6 +652,7 @@ Resources:
           Projection:
             NonKeyAttributes:
               - "id"
+              - "user_points"
             ProjectionType: "INCLUDE"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
@@ -688,6 +688,8 @@ Resources:
           Projection:
             NonKeyAttributes:
               - "contest_id"
+              - "startdate"
+              - "isActive"
             ProjectionType: "INCLUDE"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
@@ -726,6 +728,10 @@ Resources:
           Projection:
             NonKeyAttributes:
               - "match_id"
+              - "match_day"
+              - "home_team_score"
+              - "away_team_score"
+              - "contest_id"
             ProjectionType: "INCLUDE"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
@@ -742,6 +748,9 @@ Resources:
           Projection:
             NonKeyAttributes:
               - "match_info"
+              - "match_day"
+              - "home_team_score"
+              - "away_team_score"
             ProjectionType: "INCLUDE"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
@@ -799,9 +808,7 @@ Resources:
               AttributeName: "match_id"
               KeyType: "RANGE"
           Projection:
-            NonKeyAttributes:
-              - "id"
-            ProjectionType: "INCLUDE"
+            ProjectionType: "ALL"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
             WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
@@ -815,9 +822,7 @@ Resources:
               AttributeName: "user_id"
               KeyType: "RANGE"
           Projection:
-            NonKeyAttributes:
-              - "id"
-            ProjectionType: "INCLUDE"
+            ProjectionType: "ALL"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
             WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex

@@ -22,14 +22,6 @@ exports.lambdaHandler = async (event, context, callback) => {
             IndexName: 'user_index',
             KeyConditionExpression: "user_id = :user_id AND match_id = :match_id",
             ExpressionAttributeValues: { ":user_id": user_id, ":match_id": match_id }
-            /*
-            FilterExpression: "#match_id = :match_id and #user_id = :user_id",
-            ExpressionAttributeNames: {
-                "#match_id": "match_id",
-                "#user_id": "user_id"
-            },
-            ExpressionAttributeValues: { ":user_id": user_id, ":match_id": match_id }
-            */
         };
         console.info("Search params",searchParams);
         const resultSearch = await docClient.query(searchParams).promise();
@@ -60,12 +52,13 @@ exports.lambdaHandler = async (event, context, callback) => {
         await docClient.put(addParams).promise();
     }
     
-    callback(null, {
+    const response = {
         statusCode: 200,
         headers: {
             'Access-Control-Allow-Origin': '*',
-        },
-    });
+        }
+    }
+    return response;
 };
 function generate_guid()
 {
