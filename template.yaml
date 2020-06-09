@@ -511,6 +511,8 @@ Resources:
             Auth:
               Authorizer: CognitoAuthorizer
 
+  # user_profile ----------------------------------------------------------------------------------
+
   GetUserInfoFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -555,9 +557,9 @@ Resources:
             Auth:
               Authorizer: CognitoAuthorizer
 
-  # dynamoDB setup
+  # dynamoDB setup --------------------------------------------------------------------------------
 
-  # users
+  # users -----------------------------------------------------------------------------------------
   UsersDynamoDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -591,7 +593,7 @@ Resources:
         WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
       TableName: !Sub 'users-${AWS::StackName}'
 
-  # users_contests
+  # users_contests --------------------------------------------------------------------------------
   UsersContestsDynamoDBTable:
     Type: AWS::DynamoDB::Table
     DependsOn: "UsersDynamoDBTable"
@@ -650,7 +652,7 @@ Resources:
         WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
       TableName: !Sub 'users_contests-${AWS::StackName}'
 
-  # contests
+  # contests --------------------------------------------------------------------------------------
   ContestsDynamoDBTable:
     Type: AWS::DynamoDB::Table
     DependsOn: "UsersContestsDynamoDBTable"
@@ -687,7 +689,7 @@ Resources:
         WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
       TableName: !Sub 'contests-${AWS::StackName}'
 
-  # matches
+  # matches ---------------------------------------------------------------------------------------
   MatchesDynamoDBTable:
     Type: AWS::DynamoDB::Table
     DependsOn: "ContestsDynamoDBTable"
@@ -748,7 +750,7 @@ Resources:
         WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
       TableName: !Sub 'matches-${AWS::StackName}'
 
-  # teams
+  # teams -----------------------------------------------------------------------------------------
   TeamsDynamoDBTable:
     Type: AWS::DynamoDB::Table
     DependsOn: "MatchesDynamoDBTable"
@@ -766,7 +768,7 @@ Resources:
         WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
       TableName: !Sub 'teams-${AWS::StackName}'
 
-  # users_Scores
+  # users_Scores ----------------------------------------------------------------------------------
   UsersScoresDynamoDBTable:
     Type: AWS::DynamoDB::Table
     DependsOn: "TeamsDynamoDBTable"
@@ -818,6 +820,8 @@ Resources:
         ReadCapacityUnits: !Ref DynamoDBReadCapacityUnits
         WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnits
       TableName: !Sub 'users_scores-${AWS::StackName}'
+
+# output ------------------------------------------------------------------------------------------
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
