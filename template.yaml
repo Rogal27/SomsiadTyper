@@ -467,6 +467,29 @@ Resources:
             # Auth:
             #   Authorizer: CognitoAuthorizer             
 
+  ReadScoresFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      Layers:
+        - !Ref DBTablesLayer
+      CodeUri: handlers/read_scores
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MatchesDynamoDBTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersScoresDynamoDBTable 
+      Events:
+        ReadContest:
+          Type: Api 
+          Properties:
+            Path: /readscores
+            Method: POST
+            Auth:
+              Authorizer: CognitoAuthorizer  
+            RestApiId: !Ref SomsiadTyperApi
+
   AddTypeFunction:
     Type: AWS::Serverless::Function 
     Properties:
