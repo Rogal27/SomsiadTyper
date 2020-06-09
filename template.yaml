@@ -600,9 +600,9 @@ Resources:
               AttributeName: "email"
               KeyType: "HASH"
           Projection:
-            NonKeyAttributes:
-              - "user_id"
-            ProjectionType: "INCLUDE"
+            # NonKeyAttributes:
+            #   - "user_id"
+            ProjectionType: "KEYS_ONLY"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
             WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
@@ -643,6 +643,7 @@ Resources:
           Projection:
             NonKeyAttributes:
               - "id"
+              - "user_points"
             ProjectionType: "INCLUDE"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
@@ -659,6 +660,7 @@ Resources:
           Projection:
             NonKeyAttributes:
               - "id"
+              - "user_points"
             ProjectionType: "INCLUDE"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
@@ -694,6 +696,8 @@ Resources:
           Projection:
             NonKeyAttributes:
               - "contest_id"
+              - "startdate"
+              - "isActive"
             ProjectionType: "INCLUDE"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
@@ -732,6 +736,10 @@ Resources:
           Projection:
             NonKeyAttributes:
               - "match_id"
+              - "match_day"
+              - "home_team_score"
+              - "away_team_score"
+              - "contest_id"
             ProjectionType: "INCLUDE"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
@@ -748,6 +756,9 @@ Resources:
           Projection:
             NonKeyAttributes:
               - "match_info"
+              - "match_day"
+              - "home_team_score"
+              - "away_team_score"
             ProjectionType: "INCLUDE"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
@@ -805,9 +816,7 @@ Resources:
               AttributeName: "match_id"
               KeyType: "RANGE"
           Projection:
-            NonKeyAttributes:
-              - "id"
-            ProjectionType: "INCLUDE"
+            ProjectionType: "ALL"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
             WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
@@ -821,9 +830,7 @@ Resources:
               AttributeName: "user_id"
               KeyType: "RANGE"
           Projection:
-            NonKeyAttributes:
-              - "id"
-            ProjectionType: "INCLUDE"
+            ProjectionType: "ALL"
           ProvisionedThroughput: 
             ReadCapacityUnits: !Ref DynamoDBReadCapacityUnitsIndex
             WriteCapacityUnits: !Ref DynamoDBWriteCapacityUnitsIndex
