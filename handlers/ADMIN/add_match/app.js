@@ -1,10 +1,9 @@
-const dynamodb = require("aws-sdk/clients/dynamodb");
-const docClient = new dynamodb.DocumentClient();
+import { DocumentClient } from "aws-sdk/clients/dynamodb";
+const docClient = new DocumentClient();
 
-const tables = require("/opt/dbtables");
-const tableName = tables.MATCHES;
+import { MATCHES } from "/opt/dbtables";
 
-exports.lambdaHandler = async (event, context) => {
+export async function lambdaHandler(event, context) {
   if (event.httpMethod !== "POST") {
     throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
   }
@@ -21,58 +20,24 @@ exports.lambdaHandler = async (event, context) => {
   //     },
   //   };
   //   return response;
+  //   return response.GetResponse(400, { message: "Request has no body." });
   // }
 
   var requestBody = JSON.parse(event.body);
   if (!requestBody) {
-    const response = {
-      statusCode: 400,
-      body: "Request has no body.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Request has no body." });
   }
   if (!requestBody.contest_id) {
-    const response = {
-      statusCode: 400,
-      body: "Contest ID is required.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Contest ID is required." });
   }
   if (!requestBody.home_team) {
-    const response = {
-      statusCode: 400,
-      body: "Home team is required.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Home team is required." });
   }
   if (!requestBody.away_team) {
-    const response = {
-      statusCode: 400,
-      body: "Away Team is required.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Away Team is required." });
   }
   if (!requestBody.date) {
-    const response = {
-      statusCode: 400,
-      body: "Date is required.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Date is required." });
   }
   var home_team = requestBody.home_team;
   var away_team = requestBody.away_team;
@@ -80,14 +45,7 @@ exports.lambdaHandler = async (event, context) => {
   var date = new Date(requestBody.date).getTime() / 1000;
   const now_date = new Date().getTime() / 1000;
   if (date < now_date) {
-    const response = {
-      statusCode: 400,
-      body: "Date must be greater than today.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Date must be greater than today." });
   }
 
   var id = "",
@@ -105,7 +63,7 @@ exports.lambdaHandler = async (event, context) => {
   var match_info = `${home_team}#${away_team}#${date}`;
 
   var params = {
-    TableName: tableName,
+    TableName: MATCHES,
     Item: {
       match_id: id,
       match_info: match_info,
@@ -118,17 +76,10 @@ exports.lambdaHandler = async (event, context) => {
 
   const result = await docClient.put(params).promise();
 
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      match_id: match_id,
-      date: date,
-      home_team: home_team,
-      away_team: away_team,
-    }),
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
-  return response;
-};
+  return response.GetResponse(200, {
+    match_id: match_id,
+    date: date,
+    home_team: home_team,
+    away_team: away_team,
+  });
+}

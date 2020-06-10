@@ -2,6 +2,7 @@ const dynamodb = require("aws-sdk/clients/dynamodb");
 const docClient = new dynamodb.DocumentClient();
 
 const tables = require("/opt/dbtables");
+const response = require("/opt/response");
 const tableMatches = tables.MATCHES;
 
 exports.lambdaHandler = async (event, context) => {
@@ -21,28 +22,15 @@ exports.lambdaHandler = async (event, context) => {
   //     },
   //   };
   //   return response;
+  //   return response.GetResponse(400, { message: "Request has no body." });
   // }
 
   var requestBody = JSON.parse(event.body);
   if (!requestBody) {
-    const response = {
-      statusCode: 400,
-      body: "Request has no body.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Request has no body." });
   }
   if (!requestBody.contest_id) {
-    const response = {
-      statusCode: 400,
-      body: "Contest ID not found in body!",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Contest ID not found in body!" });
   }
   var contest_id = requestBody.contest_id;
   console.info("Contest ID in body:", contest_id);
@@ -90,14 +78,5 @@ exports.lambdaHandler = async (event, context) => {
     return a.date.getTime() - b.date.getTime();
   });
 
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      result,
-    }),
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
-  return response;
+  return response.GetResponse(200, { result });
 };
