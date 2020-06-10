@@ -13,7 +13,6 @@ somsiadTyper.authToken.then(function setAuthToken(token) {
 });
 
 $(document).ready(function () {
-  console.log(getUserIdFromURL())
   ReadContests();
   setUser();
 
@@ -42,6 +41,10 @@ function setUser() {
     dataToSend = {
       user_id
     }
+  }
+  else{
+    $("#fileInput").css("display","block");
+    $("#uploadPhotoButton").css("display","block");
   }
 
   $.ajax({
