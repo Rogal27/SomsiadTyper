@@ -18,12 +18,21 @@ $(document).ready(function () {
 });
 
 function setUser() {
+  var user_id = getUserIdFromURL();
+  var dataToSend = {}
+  if(user_id){
+    dataToSend = {
+      user_id
+    }
+  }
+
   $.ajax({
     method: "POST",
     url: ApiURL + "/user_info",
     headers: {
       Authorization: authToken,
     },
+    data: JSON.stringify(dataToSend),
     success: completeSetUserRequest,
     error: function ajaxError(jqXHR, textStatus, errorThrown) {
       console.log("error");
