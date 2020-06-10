@@ -1,4 +1,5 @@
 const ApiURL = _config.api.invokeUrl;
+var binaryString = [];
 
 var authToken;
 somsiadTyper.authToken.then(function setAuthToken(token) {
@@ -15,6 +16,23 @@ $(document).ready(function () {
   console.log(getUserIdFromURL())
   ReadContests();
   setUser();
+
+  document.getElementById('fileInput').addEventListener('change', function() {
+
+    var reader = new FileReader();
+    reader.onload = function() {
+  
+      var arrayBuffer = this.result;
+      var array = new Uint8Array(arrayBuffer);  
+      for(var i=0; i<array.length; i++)
+        binaryString.push(array[i]);
+  
+      console.log(binaryString);
+  
+    }
+    reader.readAsArrayBuffer(this.files[0]);
+  
+  }, false);
 });
 
 function setUser() {
@@ -187,6 +205,50 @@ function completeReadMyMatchesResultsRequest(response){
       cell4.innerHTML = result;
       cell5.innerHTML = points;
   }
+}
+
+function SendPhoto(){
+  if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+      alert('W przeglądarce, której używasz nie jest możliwa operacja załączania plików - prosimy skorzystaj z nowszej wersji przeglądarki');
+      return;
+  }
+  input = document.getElementById('fileInput');
+  if (!input.files) {
+      alert("W przeglądarce, której używasz nie jest możliwa operacja załączania plików - prosimy skorzystaj z nowszej wersji przeglądarki");
+  }
+  else if (!input.files[0]) {
+      alert("Załącz swoje zdjęcie przed naciśnięciem aplikuj");
+  }
+  else {
+      console.log(input.files[0])
+      var reader = new FileReader();
+      var array = reader.readAsArrayBuffer(input.files[0]);
+      var extension = input.files[0].type.split("/");
+      extension = extension[1];
+
+      $.ajax({
+        method: 'POST',
+        url: ApiURL + "/set_profile_picture",
+        headers: {
+            Authorization: authToken
+        },
+        data:JSON.stringify({
+          photo: binaryString,
+          photo_type: extension,
+          photo_length: input.files[0].size
+        }),
+        success: completeUploadPictureRequest,
+        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoading();
+            $("#errorLabel").text("Błąd podczas odczytu wyników");
+            $("#alertDiv").css("display","block");
+        }
+    });
+  }
+}
+
+function completeUploadPictureRequest(response){
+  console.log(response);
 }
 
 function startLoading(){

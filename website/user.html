@@ -116,6 +116,18 @@
               <div class="col-3">
                  <h3 id="name" class="m-2"></h3>
                  <image id="profile_photo" class="col-12"></image>
+                 <input id="fileInput" accept=".jpg,.jpeg,.png" class="mt-1" type="file" />
+                 <button
+                    id="uploadPhotoButton"
+                    onclick="SendPhoto()"
+                    type="button"
+                    class="btn btn-success btn-icon-split m-2 float-right"
+                  >
+                    <span class="icon text-white-50">
+                      <i class="fas fa-portrait"></i>
+                    </span>
+                    <span class="text">Załaduj obraz</span>
+                </button>
                 </div>
               <div class="col-8">
                 <select onchange="ReadMatchesResults()" id="matchContestSelect" class="form-control col-8">
