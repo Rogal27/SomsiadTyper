@@ -12,28 +12,6 @@ exports.lambdaHandler = async (event, context) => {
 
   console.info("Received:", event);
 
-  if (!event.requestContext.hasOwnProperty("authorizer")) {
-    console.info("Not authorized");
-    const response = {
-      statusCode: 401,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
-  }
-
-  if (!event.requestContext.authorizer.claims.sub) {
-    console.info("User account ID not found in claims");
-    const response = {
-      statusCode: 400,
-      body: "User account ID not found in claims",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
-  }
   var current_user_id = event.requestContext.authorizer.claims.sub;
 
   var requestBody = JSON.parse(event.body);

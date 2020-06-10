@@ -8,7 +8,7 @@ const tableName = tables.USERS;
 
 const s3Client = new AWS.S3();
 
-exports.lambdaHandler = async (event, context, callback) => {
+exports.lambdaHandler = async (event, context) => {
   // Send post confirmation data to Cloudwatch logs
   if (event.httpMethod !== "POST") {
     throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
@@ -16,32 +16,20 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   console.info("Received:", event);
 
-  if (!event.requestContext.hasOwnProperty("authorizer")) {
-    const response = {
-      statusCode: 401,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
-  }
-
-  if (!event.requestContext.authorizer.claims.sub) {
-    const response = {
-      statusCode: 400,
-      body: "User account ID not found in claims",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
-  }
-
   var user_id = event.requestContext.authorizer.claims.sub;
 
   var requestBody = JSON.parse(event.body);
-
-  if (!requestBody || !requestBody.photo_length) {
+  if (!requestBody) {
+    const response = {
+      statusCode: 400,
+      body: "Request has no body.",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    return response;
+  }
+  if (!requestBody.photo_length) {
     const response = {
       statusCode: 400,
       body: "Photo length is required",
@@ -52,7 +40,7 @@ exports.lambdaHandler = async (event, context, callback) => {
     return response;
   }
 
-  if (!requestBody || !requestBody.photo_type) {
+  if (!requestBody.photo_type) {
     const response = {
       statusCode: 400,
       body: "Photo type is required",
@@ -63,7 +51,7 @@ exports.lambdaHandler = async (event, context, callback) => {
     return response;
   }
 
-  if (!requestBody || !requestBody.photo) {
+  if (!requestBody.photo) {
     const response = {
       statusCode: 400,
       body: "Photo is required",
@@ -202,6 +190,9 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   const response = {
     statusCode: 200,
+    body: JSON.stringify({
+      photo: user_photo_path,
+    }),
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
