@@ -23,7 +23,7 @@ exports.handler = (event, context, callback) => {
             event.response = {
                 "claimsOverrideDetails": {
                     "claimsToAddOrOverride": {
-                        "Role": user_data.role,
+                        "Role": user_data.Item.role,
                     }
                 }
             };
