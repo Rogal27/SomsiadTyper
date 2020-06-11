@@ -12,7 +12,6 @@ exports.lambdaHandler = async (event, context) => {
   }
 
   console.info("Received:", event);
-  console.info(event.requestContext.authorizer.claims);
 
   var current_user_id = event.requestContext.authorizer.claims.sub;
 
@@ -40,7 +39,7 @@ exports.lambdaHandler = async (event, context) => {
     console.info("Returning data for user", user_data);
     return response.GetResponse(200, {
       name: user_data.Item.name,
-      role: user_data.Item.role
+      role: user_data.Item.role,
     });
   }
 
@@ -48,6 +47,6 @@ exports.lambdaHandler = async (event, context) => {
 
   return response.GetResponse(200, {
     name: user_data.Item.name,
-    role: user_data.Item.role
+    role: user_data.Item.role,
   });
 };

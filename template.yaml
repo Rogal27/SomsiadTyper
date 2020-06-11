@@ -556,7 +556,7 @@ Resources:
         GetUserInfo:
           Type: Api 
           Properties:
-            Path: /user_info
+            Path: /user_parameters
             Method: POST
             RestApiId: !Ref SomsiadTyperApi
             Auth:
