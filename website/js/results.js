@@ -91,11 +91,11 @@ function completeReadMyMatchesResultsRequest(response){
         table.deleteRow(1);
     }
 
-    var size = response.matches.length;
+    var size = response.result.length;
 
     for(var i=0; i<size; i++){
-        element = response.matches[i];
-        var date = new Date(element.match_day);
+        element = response.result[i];
+        var date = new Date(element.date);
         var dd = date.getDate();
         var mm = date.getMonth()+1; 
         var yyyy = date.getFullYear();
@@ -119,8 +119,8 @@ function completeReadMyMatchesResultsRequest(response){
         if(element.away_team_score && element.home_team_score)
             result = element.home_team_score + " - " + element.away_team_score;
         var myType = "<center>-</center>";
-        if(element.typed_away_team_score && element.typed_home_team_score)
-            myType = element.typed_home_team_score + " - " + element.typed_away_team_score;
+        if(element.away_team_type && element.home_team_type)
+            myType = element.home_team_type + " - " + element.away_team_type;
         var points = "<center>-</center>";
         if(element.points == 0 || element.points)
             points = element.points;

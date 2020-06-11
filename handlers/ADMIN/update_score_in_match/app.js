@@ -1,8 +1,9 @@
 const dynamodb = require("aws-sdk/clients/dynamodb");
 const docClient = new dynamodb.DocumentClient();
 
+const response = require("/opt/response");
 const tables = require("/opt/dbtables");
-const tableName = tables.MATCHES;
+const tableMatches = tables.MATCHES;
 const tableScores = tables.USERS_SCORES;
 
 exports.lambdaHandler = async (event, context, callback) => {
@@ -12,22 +13,38 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   console.info("received:", event);
 
+  // var user_role = event.requestContext.authorizer.claims.role;
+  // if(user_role !== "ADMIN"){
+  //   return response.GetResponse(401, { message: "Unauthorized" });
+  // }
+
   var requestBody = JSON.parse(event.body);
+  if (!requestBody) {
+    return response.GetResponse(400, { message: "Request has no body." });
+  }
+  if (!requestBody.match_id) {
+    return response.GetResponse(400, { message: "Match ID is required." });
+  }
+  if (!requestBody.home_team_score) {
+    return response.GetResponse(400, { message: "Home Team Score is required." });
+  }
+  if (!requestBody.away_team_score) {
+    return response.GetResponse(400, { message: "Away Team Score ID is required." });
+  }
   var id = requestBody.match_id;
   var home_team_score = requestBody.home_team_score;
   var away_team_score = requestBody.away_team_score;
 
   var params = {
-    TableName: tableName,
+    TableName: tableMatches,
     Key: { match_id: id },
-    UpdateExpression: "set home_score = :home_score, away_score = :away_score",
+    UpdateExpression: "set home_team_score = :home_score, away_team_score = :away_score",
     ExpressionAttributeValues: {
       ":home_score": home_team_score,
       ":away_score": away_team_score,
     },
   };
 
-  // Call DynamoDB to add the item to the table
   const result = await docClient.update(params).promise();
 
   params = {
@@ -42,13 +59,19 @@ exports.lambdaHandler = async (event, context, callback) => {
   var promises = [];
   var points;
   for (var i = 0; i < resultSearch.Count; i++) {
-    if (resultSearch.Items[i].home_team_score == home_team_score && resultSearch.Items[i].away_team_score == away_team_score) points = 3;
-    else if (home_team_score == away_team_score && resultSearch.Items[i].home_team_score == resultSearch.Items[i].away_team_score) points = 1;
-    else if ((resultSearch.Items[i].home_team_score - resultSearch.Items[i].away_team_score) * (home_team_score - away_team_score) > 0) points = 1;
-    else points = 0;
+    const user_bet = resultSearch.Items[i];
+    if (user_bet.home_team_score == home_team_score && user_bet.away_team_score == away_team_score) {
+      points = 3;
+    } else if (home_team_score == away_team_score && user_bet.home_team_score == user_bet.away_team_score) {
+      points = 1;
+    } else if ((user_bet.home_team_score - user_bet.away_team_score) * (home_team_score - away_team_score) > 0) {
+      points = 1;
+    } else {
+      points = 0;
+    }
     var params = {
       TableName: tableScores,
-      Key: { id: resultSearch.Items[i].id },
+      Key: { id: user_bet.id },
       UpdateExpression: "set points = :points",
       ExpressionAttributeValues: {
         ":points": points,
@@ -58,14 +81,5 @@ exports.lambdaHandler = async (event, context, callback) => {
   }
   await Promise.all(promises);
 
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      resultSearch,
-    }),
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
-  return response;
+  return response.GetResponse(200, { message: "Success" });
 };

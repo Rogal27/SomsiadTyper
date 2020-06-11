@@ -1,14 +1,15 @@
-const tables = require("/opt/dbtables");
-const photo_consts = require("/opt/photos");
 const dynamodb = require("aws-sdk/clients/dynamodb");
-const AWS = require("aws-sdk");
 const docClient = new dynamodb.DocumentClient();
 
+const response = require("/opt/response");
+const photo_consts = require("/opt/photos");
+const tables = require("/opt/dbtables");
 const tableName = tables.USERS;
 
+const AWS = require("aws-sdk");
 const s3Client = new AWS.S3();
 
-exports.lambdaHandler = async (event, context, callback) => {
+exports.lambdaHandler = async (event, context) => {
   // Send post confirmation data to Cloudwatch logs
   if (event.httpMethod !== "POST") {
     throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
@@ -16,101 +17,41 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   console.info("Received:", event);
 
-  if (!event.requestContext.hasOwnProperty("authorizer")) {
-    const response = {
-      statusCode: 401,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
-  }
-
-  if (!event.requestContext.authorizer.claims.sub) {
-    const response = {
-      statusCode: 400,
-      body: "User account ID not found in claims",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
-  }
-
   var user_id = event.requestContext.authorizer.claims.sub;
 
   var requestBody = JSON.parse(event.body);
-
-  if (!requestBody || !requestBody.photo_length) {
-    const response = {
-      statusCode: 400,
-      body: "Photo length is required",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+  if (!requestBody) {
+    return response.GetResponse(400, { message: "Request has no body." });
+  }
+  if (!requestBody.photo_length) {
+    return response.GetResponse(400, { message: "Photo length is required" });
   }
 
-  if (!requestBody || !requestBody.photo_type) {
-    const response = {
-      statusCode: 400,
-      body: "Photo type is required",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+  if (!requestBody.photo_type) {
+    return response.GetResponse(400, { message: "Photo type is required" });
   }
 
-  if (!requestBody || !requestBody.photo) {
-    const response = {
-      statusCode: 400,
-      body: "Photo is required",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+  if (!requestBody.photo) {
+    return response.GetResponse(400, { message: "Photo is required" });
   }
 
   var photo_type = requestBody.photo_type;
 
   if (photo_type != "jpg" && photo_type != "png" && photo_type != "jpeg") {
-    const response = {
-      statusCode: 400,
-      body: "Photo type not supported",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Photo type not supported" });
   }
 
   var photo_length = requestBody.photo_length;
 
-  if (parseInt(photo_length) > 3 * 1024 * 1024) {
-    const response = {
-      statusCode: 400,
-      body: "File size too large. Max size is 3MiB.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+  if (parseInt(photo_length) > 3145728) {
+    //3145728 is 3MiB
+    return response.GetResponse(400, { message: "File size too large. Max size is 3MiB." });
   }
 
   var photo = requestBody.photo;
 
   if (photo_length != photo.length) {
-    const response = {
-      statusCode: 400,
-      body: "Photo length did not match",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Photo length did not match" });
   }
 
   var db_params = {
@@ -123,14 +64,7 @@ exports.lambdaHandler = async (event, context, callback) => {
   var user_data = await docClient.get(db_params).promise();
 
   if (!user_data) {
-    const response = {
-      statusCode: 400,
-      body: "User with requested ID not found",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "User with requested ID not found" });
   }
 
   user_data = user_data.Item;
@@ -170,14 +104,7 @@ exports.lambdaHandler = async (event, context, callback) => {
     var putResult = await s3Client.putObject(s3_params).promise();
   } catch (error) {
     console.info("S3 upload error:", error);
-    const response = {
-      statusCode: 418,
-      body: "Error while uploading to s3",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(418, { message: "Error while uploading to S3." });
   }
 
   user_photo_path = photo_consts.BUCKET_URL + user_photo_key;
@@ -200,11 +127,5 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   console.info("DB Update Result: ", db_result);
 
-  const response = {
-    statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
-  return response;
+  return response.GetResponse(200, { photo: user_photo_path });
 };
