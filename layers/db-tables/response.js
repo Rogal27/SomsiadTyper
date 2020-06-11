@@ -1,4 +1,4 @@
-export function GetResponse(code, body) {
+module.exports.GetResponse = (code, body) => {
   const response = {
     statusCode: code,
     body: JSON.stringify(body),
@@ -7,4 +7,4 @@ export function GetResponse(code, body) {
     },
   };
   return response;
-}
+};

@@ -1,9 +1,11 @@
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
-const docClient = new DocumentClient();
+const dynamodb = require("aws-sdk/clients/dynamodb");
+const docClient = new dynamodb.DocumentClient();
 
-import { MATCHES } from "/opt/dbtables";
+const tables = require("/opt/dbtables");
+const response = require("/opt/response");
+const tableMatches = tables.MATCHES;
 
-export async function lambdaHandler(event, context) {
+exports.lambdaHandler = async (event, context) => {
   if (event.httpMethod !== "POST") {
     throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
   }
@@ -63,7 +65,7 @@ export async function lambdaHandler(event, context) {
   var match_info = `${home_team}#${away_team}#${date}`;
 
   var params = {
-    TableName: MATCHES,
+    TableName: tableMatches,
     Item: {
       match_id: id,
       match_info: match_info,
