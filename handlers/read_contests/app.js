@@ -18,15 +18,6 @@ exports.lambdaHandler = async (event, context) => {
 
     const result = await docClient.scan(params).promise();
     
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify({
-            result
-        }),
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-        },
-    };
-    return response;
+    return response.GetResponse(200, { result });
 };
 

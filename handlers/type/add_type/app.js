@@ -15,24 +15,10 @@ exports.lambdaHandler = async (event, context) => {
 
   var requestBody = JSON.parse(event.body);
   if (!requestBody) {
-    const response = {
-      statusCode: 400,
-      body: "Request has no body.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Request has no body." });
   }
   if (!requestBody.matches) {
-    const response = {
-      statusCode: 400,
-      body: "Matches are required.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Matches are required." });
   }
   for (var i = 0; i < requestBody.matches.length; i++) {
     var match = requestBody.matches[i];
@@ -71,14 +57,7 @@ exports.lambdaHandler = async (event, context) => {
     await docClient.put(addParams).promise();
   }
 
-  const response = {
-    statusCode: 200,
-    body: "Success",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
-  return response;
+  return response.GetResponse(200, { message: "Success" });
 };
 
 function generate_guid() {

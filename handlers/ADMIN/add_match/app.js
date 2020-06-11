@@ -71,7 +71,7 @@ exports.lambdaHandler = async (event, context) => {
   const result = await docClient.put(params).promise();
 
   return response.GetResponse(200, {
-    match_id: match_id,
+    match_id: id,
     date: date,
     home_team: home_team,
     away_team: away_team,
