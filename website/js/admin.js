@@ -11,6 +11,14 @@ somsiadTyper.authToken.then(function setAuthToken(token) {
 });
 
 $( document ).ready(function() {
+    var name = localStorage.getItem("name");
+    var role = localStorage.getItem("role");
+
+    if(role != "ADMIN"){
+        window.location = "./type.html";
+        return;
+    }
+
     var input = document.getElementById("newMatchDate");
     input.setAttribute("min", formatDate(new Date()));
 
