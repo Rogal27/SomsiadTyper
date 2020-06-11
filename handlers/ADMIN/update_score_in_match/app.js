@@ -1,6 +1,7 @@
 const dynamodb = require("aws-sdk/clients/dynamodb");
 const docClient = new dynamodb.DocumentClient();
 
+const response = require("/opt/response");
 const tables = require("/opt/dbtables");
 const tableMatches = tables.MATCHES;
 const tableScores = tables.USERS_SCORES;
@@ -14,56 +15,21 @@ exports.lambdaHandler = async (event, context, callback) => {
 
   // var user_role = event.requestContext.authorizer.claims.role;
   // if(user_role !== "ADMIN"){
-  //   const response = {
-  //     statusCode: 401,
-  //     body: "Unauthorized",
-  //     headers: {
-  //       "Access-Control-Allow-Origin": "*",
-  //     },
-  //   };
-  //   return response;
+  //   return response.GetResponse(401, { message: "Unauthorized" });
   // }
 
   var requestBody = JSON.parse(event.body);
   if (!requestBody) {
-    const response = {
-      statusCode: 400,
-      body: "Request has no body.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Request has no body." });
   }
   if (!requestBody.match_id) {
-    const response = {
-      statusCode: 400,
-      body: "Match ID is required.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Match ID is required." });
   }
   if (!requestBody.home_team_score) {
-    const response = {
-      statusCode: 400,
-      body: "Home Team Score is required.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Home Team Score is required." });
   }
   if (!requestBody.away_team_score) {
-    const response = {
-      statusCode: 400,
-      body: "Away Team Score ID is required.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Away Team Score ID is required." });
   }
   var id = requestBody.match_id;
   var home_team_score = requestBody.home_team_score;
@@ -94,7 +60,9 @@ exports.lambdaHandler = async (event, context, callback) => {
   var points;
   for (var i = 0; i < resultSearch.Count; i++) {
     const user_bet = resultSearch.Items[i];
-    if (user_bet.home_team_score == home_team_score && user_bet.away_team_score == away_team_score) {
+    if (!user_bet.home_team_score || !user_bet.away_team_score || isNaN(user_bet.home_team_score) || isNaN(user_bet.away_team_score)) {
+      points = 0;
+    } else if (user_bet.home_team_score == home_team_score && user_bet.away_team_score == away_team_score) {
       points = 3;
     } else if (home_team_score == away_team_score && user_bet.home_team_score == user_bet.away_team_score) {
       points = 1;
@@ -115,12 +83,5 @@ exports.lambdaHandler = async (event, context, callback) => {
   }
   await Promise.all(promises);
 
-  const response = {
-    statusCode: 200,
-    body: "Success",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
-  return response;
+  return response.GetResponse(200, { message: "Success" });
 };

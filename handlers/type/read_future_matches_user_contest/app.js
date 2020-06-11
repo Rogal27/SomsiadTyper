@@ -1,6 +1,7 @@
 const dynamodb = require("aws-sdk/clients/dynamodb");
 const docClient = new dynamodb.DocumentClient();
 
+const response = require("/opt/response");
 const tables = require("/opt/dbtables");
 const matchTableName = tables.MATCHES;
 const scoreTableName = tables.USERS_SCORES;
@@ -13,23 +14,10 @@ exports.lambdaHandler = async (event, context) => {
   console.info("received:", event);
   var requestBody = JSON.parse(event.body);
   if (!requestBody) {
-    const response = {
-      statusCode: 400,
-      body: "Request has no body.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Request has no body." });
   }
   if (!requestBody.contest_id) {
-    const response = {
-      statusCode: 400,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Contest ID is required." });
   }
   var contest_id = requestBody.contest_id;
 
@@ -103,14 +91,5 @@ exports.lambdaHandler = async (event, context) => {
 
   console.info("Returned matches:", result);
 
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      result,
-    }),
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
-  return response;
+  return response.GetResponse(200, { result });
 };

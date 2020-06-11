@@ -319,7 +319,7 @@ Resources:
             Method: POST  
             RestApiId: !Ref SomsiadTyperApi
             Auth:
-              Authorizer: CognitoAuthorizer  
+              Authorizer: CognitoAuthorizer
 
   CreateContestFunction:
     Type: AWS::Serverless::Function 

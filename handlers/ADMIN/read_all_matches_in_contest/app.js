@@ -1,8 +1,8 @@
 const dynamodb = require("aws-sdk/clients/dynamodb");
 const docClient = new dynamodb.DocumentClient();
 
-const tables = require("/opt/dbtables");
 const response = require("/opt/response");
+const tables = require("/opt/dbtables");
 const tableMatches = tables.MATCHES;
 
 exports.lambdaHandler = async (event, context) => {
@@ -14,15 +14,7 @@ exports.lambdaHandler = async (event, context) => {
 
   // var user_role = event.requestContext.authorizer.claims.role;
   // if(user_role !== "ADMIN"){
-  //   const response = {
-  //     statusCode: 401,
-  //     body: "Unauthorized",
-  //     headers: {
-  //       "Access-Control-Allow-Origin": "*",
-  //     },
-  //   };
-  //   return response;
-  //   return response.GetResponse(400, { message: "Request has no body." });
+  //   return response.GetResponse(401, { message: "Unauthorized" });
   // }
 
   var requestBody = JSON.parse(event.body);

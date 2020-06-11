@@ -1,6 +1,7 @@
 const dynamodb = require("aws-sdk/clients/dynamodb");
 const docClient = new dynamodb.DocumentClient();
 
+const response = require("/opt/response");
 const tables = require("/opt/dbtables");
 const tableContests = tables.CONTESTS;
 
@@ -13,36 +14,15 @@ exports.lambdaHandler = async (event, context) => {
 
   // var user_role = event.requestContext.authorizer.claims.role;
   // if(user_role !== "ADMIN"){
-  //   const response = {
-  //     statusCode: 401,
-  //     body: "Unauthorized",
-  //     headers: {
-  //       "Access-Control-Allow-Origin": "*",
-  //     },
-  //   };
-  //   return response;
+  //   return response.GetResponse(401, { message: "Unauthorized" });
   // }
 
   var requestBody = JSON.parse(event.body);
   if (!requestBody) {
-    const response = {
-      statusCode: 400,
-      body: "Request has no body.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Request has no body." });
   }
   if (!requestBody.id) {
-    const response = {
-      statusCode: 400,
-      body: "Contest ID is required required.",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-    return response;
+    return response.GetResponse(400, { message: "Contest ID is required required." });
   }
   var id = requestBody.id;
 
@@ -58,14 +38,5 @@ exports.lambdaHandler = async (event, context) => {
 
   const result = await docClient.delete(params).promise();
 
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      id: id,
-    }),
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
-  return response;
+  return response.GetResponse(200, { id: id });
 };

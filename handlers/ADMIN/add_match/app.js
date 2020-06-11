@@ -1,9 +1,11 @@
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
-const docClient = new DocumentClient();
+const dynamodb = require("aws-sdk/clients/dynamodb");
+const docClient = new dynamodb.DocumentClient();
 
-import { MATCHES } from "/opt/dbtables";
+const response = require("/opt/response");
+const tables = require("/opt/dbtables");
+const tableMatches = tables.MATCHES;
 
-export async function lambdaHandler(event, context) {
+exports.lambdaHandler = async (event, context) => {
   if (event.httpMethod !== "POST") {
     throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
   }
@@ -12,15 +14,7 @@ export async function lambdaHandler(event, context) {
 
   // var user_role = event.requestContext.authorizer.claims.role;
   // if(user_role !== "ADMIN"){
-  //   const response = {
-  //     statusCode: 401,
-  //     body: "Unauthorized",
-  //     headers: {
-  //       "Access-Control-Allow-Origin": "*",
-  //     },
-  //   };
-  //   return response;
-  //   return response.GetResponse(400, { message: "Request has no body." });
+  //   return response.GetResponse(401, { message: "Unauthorized" });
   // }
 
   var requestBody = JSON.parse(event.body);
@@ -63,7 +57,7 @@ export async function lambdaHandler(event, context) {
   var match_info = `${home_team}#${away_team}#${date}`;
 
   var params = {
-    TableName: MATCHES,
+    TableName: tableMatches,
     Item: {
       match_id: id,
       match_info: match_info,
@@ -77,7 +71,7 @@ export async function lambdaHandler(event, context) {
   const result = await docClient.put(params).promise();
 
   return response.GetResponse(200, {
-    match_id: match_id,
+    match_id: id,
     date: date,
     home_team: home_team,
     away_team: away_team,
