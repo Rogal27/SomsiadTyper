@@ -1,6 +1,3 @@
-const ApiURL = _config.api.invokeUrl;
-
-
 var authToken;
 somsiadTyper.authToken.then(function setAuthToken(token) {
     if (token) {

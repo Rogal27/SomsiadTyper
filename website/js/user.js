@@ -1,4 +1,3 @@
-const ApiURL = _config.api.invokeUrl;
 var binaryString = [];
 
 var authToken;
@@ -64,8 +63,6 @@ function setUser() {
 }
 
 function completeSetUserRequest(response) {
-  console.log(response);
-
   $("#name").text(response.name);
   $("#profile_photo").attr("src", response.photo);
 }
@@ -251,7 +248,7 @@ function SendPhoto(){
 }
 
 function completeUploadPictureRequest(response){
-  console.log(response);
+  $("#profile_photo").attr("src", response.photo);
 }
 
 function startLoading(){

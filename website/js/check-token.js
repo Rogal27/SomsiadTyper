@@ -21,13 +21,21 @@ somsiadTyper.map = somsiadTyper.map || {};
                         Authorization: authToken
                     },
                     success: function completeGetRoleRequest(response){
-                        console.log(response);
+                        localStorage.setItem("name",response.name);
+                        localStorage.setItem("role",response.role)
+                        var name = localStorage.getItem("name");
+                        var role = localStorage.getItem("role");
+
+                        restrict(role,name);
                     },
                     error: function ajaxError(jqXHR, textStatus, errorThrown) {
                         stopLoading();
                         window.location = "login.html";
                     }
                 });
+            }
+            else{
+                restrict(role,name);
             }
         } else {
             window.location.href = '/login.html';
@@ -44,3 +52,9 @@ somsiadTyper.map = somsiadTyper.map || {};
 
 
 }(jQuery));
+
+function restrict(role,name){
+    $("#navbarName").text("Witaj " + name);
+    if(role == "ADMIN")
+        $("#adminLinker").css("display","block");
+}
