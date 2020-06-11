@@ -223,10 +223,10 @@ function completeReadMatchesRequest(response){
         table.deleteRow(2);
     }
 
-    var size = response.result.Count;
+    var size = response.result.length;
 
     for(var i=0; i<size; i++){
-        element = response.result.Items[i];
+        element = response.result[i];
         var date = new Date(element.date);
         var resultDate = formatDate(date);
 
@@ -240,10 +240,10 @@ function completeReadMatchesRequest(response){
 
         var homescore='';
         var awayscore='';
-        if(element.home_score)
-            homescore = element.home_score;
-        if(element.away_score)
-            awayscore = element.away_score;
+        if(element.home_team_score)
+            homescore = element.home_team_score;
+        if(element.away_team_score)
+            awayscore = element.away_team_score;
 
         var row = table.insertRow(2);
 
