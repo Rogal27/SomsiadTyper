@@ -1,6 +1,7 @@
 const dynamodb = require("aws-sdk/clients/dynamodb");
 const docClient = new dynamodb.DocumentClient();
 
+const response = require("/opt/response");
 const tables = require("/opt/dbtables");
 const tableMatches = tables.MATCHES;
 const tableScores = tables.USERS_SCORES;

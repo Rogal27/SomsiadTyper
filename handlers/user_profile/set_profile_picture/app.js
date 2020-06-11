@@ -1,11 +1,12 @@
-const tables = require("/opt/dbtables");
-const photo_consts = require("/opt/photos");
 const dynamodb = require("aws-sdk/clients/dynamodb");
-const AWS = require("aws-sdk");
 const docClient = new dynamodb.DocumentClient();
 
+const response = require("/opt/response");
+const photo_consts = require("/opt/photos");
+const tables = require("/opt/dbtables");
 const tableName = tables.USERS;
 
+const AWS = require("aws-sdk");
 const s3Client = new AWS.S3();
 
 exports.lambdaHandler = async (event, context) => {

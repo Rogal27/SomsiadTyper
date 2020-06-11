@@ -1,8 +1,9 @@
-const tables = require("/opt/dbtables");
 const dynamodb = require("aws-sdk/clients/dynamodb");
 const docClient = new dynamodb.DocumentClient();
 
-const tableName = tables.USERS;
+const response = require("/opt/response");
+const tables = require("/opt/dbtables");
+const tableUsers = tables.USERS;
 
 exports.lambdaHandler = async (event, context) => {
   // Send post confirmation data to Cloudwatch logs
@@ -21,7 +22,7 @@ exports.lambdaHandler = async (event, context) => {
   else requested_user_id = current_user_id;
 
   var params = {
-    TableName: tableName,
+    TableName: tableUsers,
     Key: {
       user_id: requested_user_id,
     },
