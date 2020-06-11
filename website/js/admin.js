@@ -14,11 +14,6 @@ somsiadTyper.authToken.then(function setAuthToken(token) {
 });
 
 $( document ).ready(function() {
-    $('#logOut').click(function() {
-        somsiadTyper.signOut();
-        window.location = "index.html";
-    });
-
     var input = document.getElementById("newMatchDate");
     input.setAttribute("min", formatDate(new Date()));
 

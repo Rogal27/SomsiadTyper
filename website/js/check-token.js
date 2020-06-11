@@ -15,4 +15,9 @@ somsiadTyper.map = somsiadTyper.map || {};
         alert(error);
         window.location.href = '/login.html';
     });
+
+    $('#logOut').click(function() {
+        somsiadTyper.signOut();
+        window.location = "index.html";
+      });
 }(jQuery));
