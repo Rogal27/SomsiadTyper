@@ -567,6 +567,27 @@ Resources:
             Auth:
               Authorizer: CognitoAuthorizer
 
+  GetUserParametersFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      Layers:
+        - !Ref DBTablesLayer
+      CodeUri: handlers/user_profile/user_parameters/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersDynamoDBTable
+      Events:
+        GetUserInfo:
+          Type: Api 
+          Properties:
+            Path: /user_parameters
+            Method: POST
+            RestApiId: !Ref SomsiadTyperApi
+            Auth:
+              Authorizer: CognitoAuthorizer
+
   SetUserProfilePictureFunction:
     Type: AWS::Serverless::Function
     Properties:
