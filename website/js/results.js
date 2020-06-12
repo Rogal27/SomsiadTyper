@@ -56,6 +56,8 @@ function ReadMyMatchesResults(){
     if(contest == null)
         return;
 
+    ReadResultTable();
+
     startLoading();
 
     $.ajax({
