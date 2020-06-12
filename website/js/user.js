@@ -179,7 +179,7 @@ function completeReadMyMatchesResultsRequest(response){
           minutes='0'+minutes;
       if(hours<10)
           hours='0'+hours;
-      var resultTime = hours+":"+minutes+" "+resultDate;
+      var resultTime = hours+":"+minutes+"<br/> "+resultDate;
 
       var row = table.insertRow(1);
 
@@ -193,17 +193,22 @@ function completeReadMyMatchesResultsRequest(response){
       if(element.points == 0 || element.points)
           points = element.points;
 
+      var color;
+      if(points == 3) color = "green";
+      else if(points == 1) color = "orange";
+      else if(points == 0) color = "red";
+
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
       var cell3 = row.insertCell(2);
       var cell4 = row.insertCell(3);
       var cell5 = row.insertCell(4);
 
-      cell1.innerHTML = element.home_team + "-" + element.away_team;
-      cell2.innerHTML = resultTime;
-      cell3.innerHTML = myType;
-      cell4.innerHTML = result;
-      cell5.innerHTML = points;
+      cell1.innerHTML = element.home_team + " - " + element.away_team;
+      cell2.innerHTML = "<center>" + resultTime + "</center>";
+      cell3.innerHTML = "<center>" +  myType + "</center>";
+      cell4.innerHTML = "<center>" + result + "</center>";
+      cell5.innerHTML = "<center style='color:" + color + "'>" + points + "</center>";
   }
 }
 
