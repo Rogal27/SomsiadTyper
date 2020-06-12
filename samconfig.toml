@@ -2,9 +2,10 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "SomsiadTyper"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-7splgan1i87v"
-s3_prefix = "SomsiadTyper"
+stack_name = "somsiadtyper"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-w1xkkivt7986"
+s3_prefix = "somsiadtyper"
 region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND"
+parameter_overrides = "Stage=\"Dev\""
