@@ -74,7 +74,7 @@
         <li class="nav-item active">
           <a class="nav-link" href="results.html">
             <i class="fas fa-poll"></i>
-            <span>Wyniki</span></a
+            <span>Twoje wyniki</span></a
           >
         </li>
       </ul>
@@ -121,6 +121,9 @@
             <div class="row">
               <div class="col-3">
                  <h3 id="name" class="m-2"></h3>
+                 <div id="image_spinner" style="display: none;" class="spinner-border text-primary center" role="status">
+                  <span class="sr-only">Loading...</span>
+                  </div>
                  <image id="profile_photo" class="col-12"></image>
                  <input style="display: none" id="fileInput" accept=".jpg,.jpeg,.png" class="mt-1" type="file" />
                  <button style="display: none;"
@@ -138,6 +141,17 @@
               <div class="col-8">
                 <select onchange="ReadMatchesResults()" id="matchContestSelect" class="form-control col-8">
                 </select>
+                <table id="result_table" class="table mt-2">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Miejsce</th>
+                      <th scope="col">Użytkownik</th>
+                      <th scope="col">Wynik</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
                 <table id="matches_table" class="table mt-2">
                   <thead class="thead-light">
                     <tr>
@@ -189,9 +203,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
