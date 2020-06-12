@@ -374,7 +374,7 @@ function completeReadResultTableRequest(response){
 
         cell1.innerHTML = i+1;
         cell2.innerHTML = "<a href='./user.html?userId=" + element.user_id + "'>" + element.user_name + "</a>"; 
-        cell3.innerHTML = element.user_points;
+        cell3.innerHTML = "<center>" + element.user_points + "</center>";
     }
 }
 
