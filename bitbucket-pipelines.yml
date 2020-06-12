@@ -19,5 +19,6 @@ pipelines:
               AWS_DEFAULT_REGION: 'us-east-1'
               S3_BUCKET: 'aws-sam-cli-managed-default-samclisourcebucket-w1xkkivt7986'
               STACK_NAME: 'somsiadtyper'
+              S3_PREFIX: 'somsiadtyper'
               SAM_TEMPLATE: 'template.yaml'
               CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
