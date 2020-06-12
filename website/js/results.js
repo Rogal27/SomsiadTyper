@@ -48,6 +48,7 @@ function completeReadContestRequest(response){
     }
 
     ReadMyMatchesResults();
+    ReadResultTable();
 }
 
 function ReadMyMatchesResults(){
@@ -129,6 +130,57 @@ function completeReadMyMatchesResultsRequest(response){
         cell3.innerHTML = myType;
         cell4.innerHTML = result;
         cell5.innerHTML = points;
+    }
+}
+
+function ReadResultTable(){
+    var contest = $('#matchContestSelect').val();
+    if(contest == null)
+        return;
+
+    startLoading();
+
+    $.ajax({
+        method: 'POST',
+        url: ApiURL + "/get_results_table",
+        headers: {
+            Authorization: authToken
+        },
+        data:JSON.stringify({
+            contest_id: contest,
+        }),
+        success: completeReadResultTableRequest,
+        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoading();
+            $("#errorLabel").text("Błąd podczas odczytu tabeli wyników");
+            $("#alertDiv").css("display","block");
+        }
+    });
+}
+
+function completeReadResultTableRequest(response){
+    stopLoading();
+
+    var table = document.getElementById('result_table');
+    var rowCount = table.rows.length;
+    for (var i = 1; i < rowCount; i++) {
+        table.deleteRow(1);
+    }
+
+    var size = response.result.length;
+
+    for(var i=size-1; i>=0; i--){
+        element = response.result[i];
+
+        var row = table.insertRow(1);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+
+        cell1.innerHTML = i+1;
+        cell2.innerHTML = "<a href='./user.html?userId=" + element.user_id + "'>" + element.user_name + "</a>"; 
+        cell3.innerHTML = element.user_points;
     }
 }
 
