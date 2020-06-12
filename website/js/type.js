@@ -104,7 +104,7 @@ function completeReadMatchesRequest(response){
             minutes='0'+minutes;
         if(hours<10)
             hours='0'+hours;
-        var resultTime = hours+":"+minutes+" "+resultDate;
+        var resultTime = hours+":"+minutes+"<br/>"+resultDate;
 
         var row = table.insertRow(1);
 
@@ -116,8 +116,8 @@ function completeReadMatchesRequest(response){
 
         cell1.innerHTML = element.match_id;
         cell1.hidden = true;
-        cell2.innerHTML = element.home_team + "-" + element.away_team;
-        cell3.innerHTML = resultTime;
+        cell2.innerHTML = element.home_team + " - " + element.away_team;
+        cell3.innerHTML = "<center>" + resultTime + "</center>";
         cell4.innerHTML = "<input id='" + element.match_id + "-homeScore' type='number' class='form-control' value='" + element.home_team_type + "' />";
         cell5.innerHTML = "<input id='" + element.match_id + "-awayScore' type='number' class='form-control' value='" + element.away_team_type + "' />";
     }
