@@ -60,7 +60,9 @@ exports.lambdaHandler = async (event, context, callback) => {
   var points;
   for (var i = 0; i < resultSearch.Count; i++) {
     const user_bet = resultSearch.Items[i];
-    if (user_bet.home_team_score == home_team_score && user_bet.away_team_score == away_team_score) {
+    if (!user_bet.home_team_score || !user_bet.away_team_score || isNaN(user_bet.home_team_score) || isNaN(user_bet.away_team_score)) {
+      points = 0;
+    } else if (user_bet.home_team_score == home_team_score && user_bet.away_team_score == away_team_score) {
       points = 3;
     } else if (home_team_score == away_team_score && user_bet.home_team_score == user_bet.away_team_score) {
       points = 1;
