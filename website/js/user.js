@@ -25,8 +25,6 @@ $(document).ready(function () {
       for(var i=0; i<array.length; i++)
         binaryString.push(array[i]);
   
-      console.log(binaryString);
-  
     }
     reader.readAsArrayBuffer(this.files[0]);
   
@@ -229,7 +227,6 @@ function SendPhoto(){
   }
   else {
       startLoadingPicture();
-      console.log(input.files[0])
       var reader = new FileReader();
       var array = reader.readAsArrayBuffer(input.files[0]);
       var extension = input.files[0].type.split("/");
