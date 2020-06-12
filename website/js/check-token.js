@@ -41,7 +41,6 @@ somsiadTyper.map = somsiadTyper.map || {};
             window.location.href = '/login.html';
         }
     }).catch(function handleTokenError(error) {
-        alert(error);
         window.location.href = '/login.html';
     });
 

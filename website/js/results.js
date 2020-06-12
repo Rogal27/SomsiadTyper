@@ -6,7 +6,6 @@ somsiadTyper.authToken.then(function setAuthToken(token) {
         window.location.href = '/login.html';
     }
 }).catch(function handleTokenError(error) {
-    alert(error);
     window.location.href = '/login.html';
 });
 
