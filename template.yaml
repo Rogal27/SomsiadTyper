@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   SomsiadTyper
 
-  Sample SAM Template for SomsiadTyper
+  SAM Template for SomsiadTyper
   
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -32,17 +32,17 @@ Parameters:
 
 Resources:
   # S3 buckets ------------------------------------------------------------------------------------
-  TargetBucket:
+  WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub 'somsiadtyperwebsite-${AWS::AccountId}'
+      BucketName: !Sub 'somsiadtyperwebsite-${AWS::StackName}'
       WebsiteConfiguration:
         IndexDocument: index.html
   
-  TargetBucketPolicy:
+  WebsiteBucketPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:
-      Bucket: !Ref TargetBucket
+      Bucket: !Ref WebsiteBucket
       PolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -50,12 +50,12 @@ Resources:
             Effect: Allow
             Principal: "*"
             Action: s3:GetObject
-            Resource: !Sub "arn:aws:s3:::${TargetBucket}/*"
+            Resource: !Sub "arn:aws:s3:::${WebsiteBucket}/*"
   
   UserPhotosBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: 'userprofilephotos-somsiadtyper'
+      BucketName: !Sub 'userprofilephotos-${AWS::StackName}'
       
   UserPhotosBucketPolicy:
     Type: "AWS::S3::BucketPolicy"
@@ -84,7 +84,7 @@ Resources:
     Properties:
       AdminCreateUserConfig:
         AllowAdminCreateUserOnly: False
-      UserPoolName: 'SomsiadTyper'
+      UserPoolName: !Sub 'SomsiadTyper-${AWS::StackName}'
       UsernameAttributes:
         - email
       AutoVerifiedAttributes:
@@ -120,7 +120,7 @@ Resources:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       UserPoolId: !Ref UserPool
-      ClientName: 'SomsiadTyperApp'
+      ClientName: !Sub 'SomsiadTyperApp-${AWS::StackName}'
       GenerateSecret: False
 
   # API gateway -----------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ Resources:
     DependsOn: UserPool
     Type: AWS::Serverless::Api
     Properties:
-      Name: SomsiadTyperApi
+      Name: !Sub SomsiadTyperApi-${AWS::StackName}
       StageName: !Ref Stage
       Cors:
         AllowMethods: "'POST, GET'"
@@ -147,7 +147,7 @@ Resources:
   # we use the web site assets as the source of the function
   # tricking cloudformation to pack up the web site files
   # using the standard cloudformation package process
-  SiteSource:
+  WebsiteSource:
     Type: AWS::Serverless::Function
     Properties:
       Layers: 
@@ -172,7 +172,7 @@ Resources:
       # will upload the assets
       Policies:
         - S3FullAccessPolicy:
-            BucketName: !Ref TargetBucket
+            BucketName: !Ref WebsiteBucket
   
   UserPhotosSource:
     Type: AWS::Serverless::Function
@@ -197,10 +197,10 @@ Resources:
       # the following two lines are required to 
       # ensure that cloudformation will trigger the
       # resource every time you change the bundled files
-      ServiceToken: !GetAtt SiteSource.Arn
-      Version: !Ref "SiteSource.Version"
+      ServiceToken: !GetAtt WebsiteSource.Arn
+      Version: !Ref "WebsiteSource.Version"
       # tell the deployer where to upload the files
-      TargetBucket: !Ref TargetBucket
+      TargetBucket: !Ref WebsiteBucket
       Substitutions:
         FilePattern: "js/config.js"
         Values:
@@ -220,7 +220,7 @@ Resources:
       ServiceToken: !GetAtt UserPhotosSource.Arn
       Version: !Ref "UserPhotosSource.Version"
       # tell the deployer where to upload the files
-      TargetBucket: !Ref UserPhotosBucket      
+      TargetBucket: !Ref UserPhotosBucket
       # # Choose the ACL and caching policies
       # # eg, for directly accessible web site
       # # use public-read and 10 minutes caching
@@ -879,9 +879,11 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  StackName:
+    Value: !Sub "${AWS::StackName}"
   HelloWorldApi:
     Description: "API Gateway endpoint URL for selected stage"
     Value: !Sub "https://${SomsiadTyperApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/"
   DestinationStaticUrl:
     Description: "Static S3 website URL:"
-    Value: !GetAtt TargetBucket.WebsiteURL
+    Value: !GetAtt WebsiteBucket.WebsiteURL
