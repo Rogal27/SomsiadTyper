@@ -24,6 +24,7 @@ $( document ).ready(function() {
 
     ReadContests();
     ReadMatches();
+    ReadResultTable();
 });
 
 
@@ -115,6 +116,8 @@ function completeReadContestRequest(response){
     var rowCount = table.rows.length;
     if(rowCount <= 2) //first row - headers, second row - new match input
         ReadMatches();
+
+    ReadResultTable();
 }
 
 function DeleteContest(id){
@@ -325,6 +328,57 @@ function completeUpdateMatchRequest(){
     ReadMatches();
 }
 
+function ReadResultTable(){
+    var contest = $('#resultContestSelect').val();
+    if(contest == null)
+        return;
+
+    startLoadingResults();
+
+    $.ajax({
+        method: 'POST',
+        url: ApiURL + "/get_results_table",
+        headers: {
+            Authorization: authToken
+        },
+        data:JSON.stringify({
+            contest_id: contest,
+        }),
+        success: completeReadResultTableRequest,
+        error: function ajaxError(jqXHR, textStatus, errorThrown) {
+            stopLoadingResults();
+            $("#errorLabel").text("Błąd podczas odczytu tabeli wyników");
+            $("#alertDiv").css("display","block");
+        }
+    });
+}
+
+function completeReadResultTableRequest(response){
+    stopLoadingResults();
+
+    var table = document.getElementById('result_table');
+    var rowCount = table.rows.length;
+    for (var i = 1; i < rowCount; i++) {
+        table.deleteRow(1);
+    }
+
+    var size = response.result.length;
+
+    for(var i=size-1; i>=0; i--){
+        element = response.result[i];
+
+        var row = table.insertRow(1);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+
+        cell1.innerHTML = i+1;
+        cell2.innerHTML = "<a href='./user.html?userId=" + element.user_id + "'>" + element.user_name + "</a>"; 
+        cell3.innerHTML = element.user_points;
+    }
+}
+
 function startLoadingMatches(){
     var table = document.getElementById('matches_table');
     var rowCount = table.rows.length;
@@ -357,6 +411,20 @@ function startLoadingContests(){
 
 function stopLoadingContests(){
     $("#contestsSpinner").css("display","none");
+}
+
+function startLoadingResults(){
+    var table = document.getElementById('result_table');
+    var rowCount = table.rows.length;
+    for (var i = 1; i < rowCount; i++) {
+        table.deleteRow(1);
+    }
+
+    $("#resultSpinner").css("display","block");
+}
+
+function stopLoadingResults(){
+    $("#resultSpinner").css("display","none");
 }
 
 function formatDate(date){

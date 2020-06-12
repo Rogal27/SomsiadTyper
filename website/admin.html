@@ -337,34 +337,22 @@
                   <!-- Card Content - Collapse -->
                   <div class="collapse show" id="resultsCard">
                     <div class="card-body">
-                      <select id="resultContestSelect" class="form-control col-6">
+                      <select id="resultContestSelect" onchange="ReadResultTable()" class="form-control col-6">
                       </select>
-                      <table class="table mt-2">
+                      <table id="result_table" class="table mt-2">
                         <thead class="thead-light">
                           <tr>
+                            <th scope="col">Miejsce</th>
                             <th scope="col">Adres email</th>
                             <th scope="col">Wynik</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>
-                              BartekTr@test.pl
-                            </td>
-                            <td>
-                              123
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              test@test.pl
-                            </td>
-                            <td>
-                              0
-                            </td>
-                          </tr>
                         </tbody>
                       </table>
+                      <div id="resultSpinner" style="display: none;" class="spinner-border text-primary center" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
                     </div>
                   </div>
                 </div>
