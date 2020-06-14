@@ -1,6 +1,3 @@
-const ApiURL = _config.api.invokeUrl;
-
-
 var authToken;
 somsiadTyper.authToken.then(function setAuthToken(token) {
     if (token) {
@@ -14,10 +11,13 @@ somsiadTyper.authToken.then(function setAuthToken(token) {
 });
 
 $( document ).ready(function() {
-    $('#logOut').click(function() {
-        somsiadTyper.signOut();
-        window.location = "index.html";
-    });
+    var name = localStorage.getItem("name");
+    var role = localStorage.getItem("role");
+
+    if(role != "ADMIN"){
+        window.location = "./type.html";
+        return;
+    }
 
     var input = document.getElementById("newMatchDate");
     input.setAttribute("min", formatDate(new Date()));

@@ -1,5 +1,3 @@
-const ApiURL = _config.api.invokeUrl;
-
 var authToken;
 somsiadTyper.authToken.then(function setAuthToken(token) {
     if (token) {
@@ -13,11 +11,6 @@ somsiadTyper.authToken.then(function setAuthToken(token) {
 });
 
 $( document ).ready(function() {
-    $('#logOut').click(function() {
-        somsiadTyper.signOut();
-        window.location = "index.html";
-    });
-
     ReadContests();
 });
 

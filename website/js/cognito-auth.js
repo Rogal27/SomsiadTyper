@@ -26,6 +26,8 @@ var somsiadTyper = window.somsiadTyper || {};
     }
 
     somsiadTyper.signOut = function signOut() {
+        localStorage.removeItem("name");
+        localStorage.removeItem("role");
         userPool.getCurrentUser().signOut();
     };
 
