@@ -12,10 +12,10 @@ exports.lambdaHandler = async (event, context) => {
 
   console.info("received:", event);
 
-  // var user_role = event.requestContext.authorizer.claims.role;
-  // if(user_role !== "ADMIN"){
-  //   return response.GetResponse(401, { message: "Unauthorized" });
-  // }
+  var user_role = event.requestContext.authorizer.claims.role;
+  if(user_role !== "ADMIN"){
+    return response.GetResponse(401, { message: "Unauthorized" });
+  }
 
   var requestBody = JSON.parse(event.body);
   if (!requestBody) {
