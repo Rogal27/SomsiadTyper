@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "$[STACK_NAME]"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-w1xkkivt7986"
+s3_prefix = "$[STACK_NAME]"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND"
+parameter_overrides = "Stage=\"Dev\""
