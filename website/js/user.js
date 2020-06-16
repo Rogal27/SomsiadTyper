@@ -25,8 +25,6 @@ $(document).ready(function () {
       for(var i=0; i<array.length; i++)
         binaryString.push(array[i]);
   
-      console.log(binaryString);
-  
     }
     reader.readAsArrayBuffer(this.files[0]);
   
@@ -112,12 +110,15 @@ function completeReadContestRequest(response){
   }
 
   ReadMatchesResults();
+  ReadResultTable();
 }
 
 function ReadMatchesResults(){
   var contest = $('#matchContestSelect').val();
   if(contest == null)
       return;
+
+  ReadResultTable();
 
   startLoading();
   var user_id = getUserIdFromURL();
@@ -179,7 +180,7 @@ function completeReadMyMatchesResultsRequest(response){
           minutes='0'+minutes;
       if(hours<10)
           hours='0'+hours;
-      var resultTime = hours+":"+minutes+" "+resultDate;
+      var resultTime = hours+":"+minutes+"<br/> "+resultDate;
 
       var row = table.insertRow(1);
 
@@ -193,17 +194,22 @@ function completeReadMyMatchesResultsRequest(response){
       if(element.points == 0 || element.points)
           points = element.points;
 
+      var color;
+      if(points == 3) color = "green";
+      else if(points == 1) color = "orange";
+      else if(points == 0) color = "red";
+
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
       var cell3 = row.insertCell(2);
       var cell4 = row.insertCell(3);
       var cell5 = row.insertCell(4);
 
-      cell1.innerHTML = element.home_team + "-" + element.away_team;
-      cell2.innerHTML = resultTime;
-      cell3.innerHTML = myType;
-      cell4.innerHTML = result;
-      cell5.innerHTML = points;
+      cell1.innerHTML = element.home_team + " - " + element.away_team;
+      cell2.innerHTML = "<center>" + resultTime + "</center>";
+      cell3.innerHTML = "<center>" +  myType + "</center>";
+      cell4.innerHTML = "<center>" + result + "</center>";
+      cell5.innerHTML = "<center style='color:" + color + "'>" + points + "</center>";
   }
 }
 
@@ -217,10 +223,10 @@ function SendPhoto(){
       alert("W przeglądarce, której używasz nie jest możliwa operacja załączania plików - prosimy skorzystaj z nowszej wersji przeglądarki");
   }
   else if (!input.files[0]) {
-      alert("Załącz swoje zdjęcie przed naciśnięciem aplikuj");
+      alert("Załącz swoje zdjęcie przed naciśnięciem załaduj obraz");
   }
   else {
-      console.log(input.files[0])
+      startLoadingPicture();
       var reader = new FileReader();
       var array = reader.readAsArrayBuffer(input.files[0]);
       var extension = input.files[0].type.split("/");
@@ -235,12 +241,12 @@ function SendPhoto(){
         data:JSON.stringify({
           photo: binaryString,
           photo_type: extension,
-          photo_length: input.files[0].size
+          photo_length: binaryString.length
         }),
         success: completeUploadPictureRequest,
         error: function ajaxError(jqXHR, textStatus, errorThrown) {
-            stopLoading();
-            $("#errorLabel").text("Błąd podczas odczytu wyników");
+            stopLoadingPicture();
+            $("#errorLabel").text("Błąd podczas dodawania zdjęcia");
             $("#alertDiv").css("display","block");
         }
     });
@@ -249,6 +255,58 @@ function SendPhoto(){
 
 function completeUploadPictureRequest(response){
   $("#profile_photo").attr("src", response.photo);
+  stopLoadingPicture();
+}
+
+function ReadResultTable(){
+  var contest = $('#matchContestSelect').val();
+  if(contest == null)
+      return;
+
+  startLoading();
+
+  $.ajax({
+      method: 'POST',
+      url: ApiURL + "/get_results_table",
+      headers: {
+          Authorization: authToken
+      },
+      data:JSON.stringify({
+          contest_id: contest,
+      }),
+      success: completeReadResultTableRequest,
+      error: function ajaxError(jqXHR, textStatus, errorThrown) {
+          stopLoading();
+          $("#errorLabel").text("Błąd podczas odczytu tabeli wyników");
+          $("#alertDiv").css("display","block");
+      }
+  });
+}
+
+function completeReadResultTableRequest(response){
+  stopLoading();
+
+  var table = document.getElementById('result_table');
+  var rowCount = table.rows.length;
+  for (var i = 1; i < rowCount; i++) {
+      table.deleteRow(1);
+  }
+
+  var size = response.result.length;
+
+  for(var i=size-1; i>=0; i--){
+      element = response.result[i];
+
+      var row = table.insertRow(1);
+
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+
+      cell1.innerHTML = i+1;
+      cell2.innerHTML = "<a href='./user.html?userId=" + element.user_id + "'>" + element.user_name + "</a>"; 
+      cell3.innerHTML = "<center>" + element.user_points + "</center>";
+  }
 }
 
 function startLoading(){
@@ -257,4 +315,14 @@ function startLoading(){
 
 function stopLoading(){
   $("#spinner").css("display","none");
+}
+
+function startLoadingPicture(){
+  $("#image_spinner").css("display","block");
+  $("#profile_photo").css("display","none");
+}
+
+function stopLoadingPicture(){
+  $("#image_spinner").css("display","none");
+  $("#profile_photo").css("display","block");
 }

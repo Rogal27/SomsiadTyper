@@ -14,7 +14,7 @@
 
     <!-- Custom fonts for this template-->
     <link
-      href="vendor/fontawesome-free/css/all.min.css"
+      href="js/vendor/fontawesome-free/css/all.min.css"
       rel="stylesheet"
       type="text/css"
     />
@@ -99,7 +99,7 @@
         <li class="nav-item active">
           <a class="nav-link" href="results.html">
             <i class="fas fa-poll"></i>
-            <span>Wyniki</span></a
+            <span>Twoje wyniki</span></a
           >
         </li>
       </ul>
@@ -337,34 +337,22 @@
                   <!-- Card Content - Collapse -->
                   <div class="collapse show" id="resultsCard">
                     <div class="card-body">
-                      <select id="resultContestSelect" class="form-control col-6">
+                      <select id="resultContestSelect" onchange="ReadResultTable()" class="form-control col-6">
                       </select>
-                      <table class="table mt-2">
+                      <table id="result_table" class="table mt-2">
                         <thead class="thead-light">
                           <tr>
+                            <th scope="col">Miejsce</th>
                             <th scope="col">Adres email</th>
-                            <th scope="col">Wynik</th>
+                            <th scope="col"><center>Wynik</center></th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>
-                              BartekTr@test.pl
-                            </td>
-                            <td>
-                              123
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              test@test.pl
-                            </td>
-                            <td>
-                              0
-                            </td>
-                          </tr>
                         </tbody>
                       </table>
+                      <div id="resultSpinner" style="display: none;" class="spinner-border text-primary center" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -395,17 +383,14 @@
     </a>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/vendor/jquery/jquery.min.js"></script>
+    <script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>

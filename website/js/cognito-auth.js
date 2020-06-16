@@ -124,11 +124,10 @@ var somsiadTyper = window.somsiadTyper || {};
         event.preventDefault();
         signin(email, password,
             function signinSuccess() {
-                console.log('Successfully Logged In');
                 window.location.href = 'type.html';
             },
             function signinError(err) {
-                alert(err);
+                alert("Nie udało się zalogować - sprawdź wpisany login oraz hasło i spróbuj ponownie");
             }
         );
     }
@@ -148,14 +147,14 @@ var somsiadTyper = window.somsiadTyper || {};
             }
         };
         var onFailure = function registerFailure(err) {
-            alert(err);
+            alert("Nie udało się zarejestrować - spróbuj ponownie");
         };
         event.preventDefault();
 
         if (password === password2) {
             register(email, password,name, onSuccess, onFailure);
         } else {
-            alert('Passwords do not match');
+            alert('Hasło i jego potwierdzenie nie są takie same!');
         }
     }
 
@@ -165,13 +164,10 @@ var somsiadTyper = window.somsiadTyper || {};
         event.preventDefault();
         verify(email, code,
             function verifySuccess(result) {
-                console.log('call result: ' + result);
-                console.log('Successfully verified');
-                alert('Verification successful. You will now be redirected to the login page.');
                 window.location.href = signinUrl;
             },
             function verifyError(err) {
-                alert(err);
+                alert("Błąd weryfikacji - spróbuj ponownie");
             }
         );
     }
