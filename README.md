@@ -8,12 +8,14 @@ Application uses AWS SAM framework for local testing and easier deployment.
 Resources used by application are defined in `template.yaml` file.
 
 Application enables admin to:
+
 - Create new contest
 - Add new match to contest
 - Delete match from contest
 - Enter finished matches' results
 
 and regular user to:
+
 - Create new account
 - Upload profile picture
 - View other users' profiles
